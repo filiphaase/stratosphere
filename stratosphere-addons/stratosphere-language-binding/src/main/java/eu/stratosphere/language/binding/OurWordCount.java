@@ -129,11 +129,7 @@ public class OurWordCount implements Program, ProgramDescription {
 			
 			Plan plan = wc.getPlan(args);
 			
-			// This will execute the word-count embedded in a local context. replace this line by the commented
-			// succeeding line to send the job to a local installation or to a cluster for execution
 			LocalExecutor.execute(plan);
-//			PlanExecutor ex = new RemoteExecutor("localhost", 6123, "target/pact-examples-0.4-SNAPSHOT-WordCount.jar");
-//			ex.executePlan(plan);
 		}
 
 }

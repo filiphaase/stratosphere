@@ -1,0 +1,13 @@
+package eu.stratosphere.language.binding.protos;
+
+//option java_package = "eu.stratosphere.language.binding.protos";
+option java_outer_classname = "KeyValueProtos";
+
+message KeyValuePair {
+	required string key = 1;
+	required string value = 2;
+}
+
+message KeyValueStream {
+  repeated KeyValuePair record = 1;
+}
