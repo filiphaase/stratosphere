@@ -54,7 +54,7 @@ public class Runner {
 			+ "-" + ((Integer)r.nextInt(1000000000)).toString()
 			+ "-" + ((Integer)r.nextInt(1000000000)).toString()
 			);
-		kvpb.setValue("v-" + r.nextInt(1000000000));
+		kvpb.setValue(5);
 		
 		return kvpb.build();
 	}

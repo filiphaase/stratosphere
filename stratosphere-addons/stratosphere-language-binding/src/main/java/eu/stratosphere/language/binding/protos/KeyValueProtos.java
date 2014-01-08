@@ -26,20 +26,15 @@ public final class KeyValueProtos {
     com.google.protobuf.ByteString
         getKeyBytes();
 
-    // required string value = 2;
+    // required int32 value = 2;
     /**
-     * <code>required string value = 2;</code>
+     * <code>required int32 value = 2;</code>
      */
     boolean hasValue();
     /**
-     * <code>required string value = 2;</code>
+     * <code>required int32 value = 2;</code>
      */
-    java.lang.String getValue();
-    /**
-     * <code>required string value = 2;</code>
-     */
-    com.google.protobuf.ByteString
-        getValueBytes();
+    int getValue();
   }
   /**
    * Protobuf type {@code eu.stratosphere.language.binding.protos.KeyValuePair}
@@ -97,9 +92,9 @@ public final class KeyValueProtos {
               key_ = input.readBytes();
               break;
             }
-            case 18: {
+            case 16: {
               bitField0_ |= 0x00000002;
-              value_ = input.readBytes();
+              value_ = input.readInt32();
               break;
             }
           }
@@ -185,52 +180,25 @@ public final class KeyValueProtos {
       }
     }
 
-    // required string value = 2;
+    // required int32 value = 2;
     public static final int VALUE_FIELD_NUMBER = 2;
-    private java.lang.Object value_;
+    private int value_;
     /**
-     * <code>required string value = 2;</code>
+     * <code>required int32 value = 2;</code>
      */
     public boolean hasValue() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required string value = 2;</code>
+     * <code>required int32 value = 2;</code>
      */
-    public java.lang.String getValue() {
-      java.lang.Object ref = value_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          value_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string value = 2;</code>
-     */
-    public com.google.protobuf.ByteString
-        getValueBytes() {
-      java.lang.Object ref = value_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        value_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public int getValue() {
+      return value_;
     }
 
     private void initFields() {
       key_ = "";
-      value_ = "";
+      value_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -256,7 +224,7 @@ public final class KeyValueProtos {
         output.writeBytes(1, getKeyBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(2, getValueBytes());
+        output.writeInt32(2, value_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -273,7 +241,7 @@ public final class KeyValueProtos {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getValueBytes());
+          .computeInt32Size(2, value_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -393,7 +361,7 @@ public final class KeyValueProtos {
         super.clear();
         key_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        value_ = "";
+        value_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
@@ -453,9 +421,7 @@ public final class KeyValueProtos {
           onChanged();
         }
         if (other.hasValue()) {
-          bitField0_ |= 0x00000002;
-          value_ = other.value_;
-          onChanged();
+          setValue(other.getValue());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -566,76 +532,35 @@ public final class KeyValueProtos {
         return this;
       }
 
-      // required string value = 2;
-      private java.lang.Object value_ = "";
+      // required int32 value = 2;
+      private int value_ ;
       /**
-       * <code>required string value = 2;</code>
+       * <code>required int32 value = 2;</code>
        */
       public boolean hasValue() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required string value = 2;</code>
+       * <code>required int32 value = 2;</code>
        */
-      public java.lang.String getValue() {
-        java.lang.Object ref = value_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          value_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      public int getValue() {
+        return value_;
       }
       /**
-       * <code>required string value = 2;</code>
+       * <code>required int32 value = 2;</code>
        */
-      public com.google.protobuf.ByteString
-          getValueBytes() {
-        java.lang.Object ref = value_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          value_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string value = 2;</code>
-       */
-      public Builder setValue(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+      public Builder setValue(int value) {
+        bitField0_ |= 0x00000002;
         value_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string value = 2;</code>
+       * <code>required int32 value = 2;</code>
        */
       public Builder clearValue() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        value_ = getDefaultInstance().getValue();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string value = 2;</code>
-       */
-      public Builder setValueBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        value_ = value;
+        value_ = 0;
         onChanged();
         return this;
       }
@@ -1358,7 +1283,7 @@ public final class KeyValueProtos {
     java.lang.String[] descriptorData = {
       "\n\016keyValue.proto\022\'eu.stratosphere.langua" +
       "ge.binding.protos\"*\n\014KeyValuePair\022\013\n\003key" +
-      "\030\001 \002(\t\022\r\n\005value\030\002 \002(\t\"W\n\016KeyValueStream\022" +
+      "\030\001 \002(\t\022\r\n\005value\030\002 \002(\005\"W\n\016KeyValueStream\022" +
       "E\n\006record\030\001 \003(\01325.eu.stratosphere.langua" +
       "ge.binding.protos.KeyValuePairB\020B\016KeyVal" +
       "ueProtos"

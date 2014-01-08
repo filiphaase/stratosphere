@@ -32,16 +32,16 @@ while True:
     kv = keyValue_pb2.KeyValuePair()
     kv.ParseFromString(buf[position:position+size])
     print("key "+kv.key)
-    print("value "+kv.value)
+    print "value "+ str(kv.value)
     
     kvs = keyValue_pb2.KeyValueStream()
     kvp = kvs.record.add()
     kvp.key = "key1"
-    kvp.value = "value1"
+    kvp.value = 6;
     
     kvp = kvs.record.add()
     kvp.key = "key2"
-    kvp.value = "value2"
+    kvp.value = 7;
     
     # 2) Reading the keyValue pair from the socket
     outBuf = kvs.SerializeToString()

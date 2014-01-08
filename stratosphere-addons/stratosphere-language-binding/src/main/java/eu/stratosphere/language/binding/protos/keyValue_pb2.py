@@ -13,7 +13,7 @@ from google.protobuf import descriptor_pb2
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='keyValue.proto',
   package='eu.stratosphere.language.binding.protos',
-  serialized_pb='\n\x0ekeyValue.proto\x12\'eu.stratosphere.language.binding.protos\"*\n\x0cKeyValuePair\x12\x0b\n\x03key\x18\x01 \x02(\t\x12\r\n\x05value\x18\x02 \x02(\t\"W\n\x0eKeyValueStream\x12\x45\n\x06record\x18\x01 \x03(\x0b\x32\x35.eu.stratosphere.language.binding.protos.KeyValuePairB\x10\x42\x0eKeyValueProtos')
+  serialized_pb='\n\x0ekeyValue.proto\x12\'eu.stratosphere.language.binding.protos\"*\n\x0cKeyValuePair\x12\x0b\n\x03key\x18\x01 \x02(\t\x12\r\n\x05value\x18\x02 \x02(\x05\"W\n\x0eKeyValueStream\x12\x45\n\x06record\x18\x01 \x03(\x0b\x32\x35.eu.stratosphere.language.binding.protos.KeyValuePairB\x10\x42\x0eKeyValueProtos')
 
 
 
@@ -34,8 +34,8 @@ _KEYVALUEPAIR = _descriptor.Descriptor(
       options=None),
     _descriptor.FieldDescriptor(
       name='value', full_name='eu.stratosphere.language.binding.protos.KeyValuePair.value', index=1,
-      number=2, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      number=2, type=5, cpp_type=1, label=2,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
