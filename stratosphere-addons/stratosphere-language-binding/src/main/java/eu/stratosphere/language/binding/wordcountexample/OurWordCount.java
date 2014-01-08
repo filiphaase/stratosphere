@@ -18,6 +18,8 @@ import eu.stratosphere.api.java.record.operators.MapOperator;
 import eu.stratosphere.api.java.record.operators.ReduceOperator;
 import eu.stratosphere.api.java.record.operators.ReduceOperator.Combinable;
 import eu.stratosphere.client.LocalExecutor;
+import eu.stratosphere.language.binding.protos.KeyValueProtos.KeyValuePair;
+import eu.stratosphere.language.binding.protos.KeyValueProtos.KeyValueStream;
 import eu.stratosphere.types.IntValue;
 import eu.stratosphere.types.Record;
 import eu.stratosphere.types.StringValue;
@@ -64,7 +66,11 @@ public class OurWordCount implements Program, ProgramDescription {
 			
 			@Override
 			public void reduce(Iterator<Record> records, Collector<Record> out) throws Exception {
-				Record element = null;
+				
+				PythonReducer reducer = new PythonReducer();
+				reducer.reduce(records, out);
+				
+				/*Record element = null;
 				int sum = 0;
 				while (records.hasNext()) {
 					element = records.next();
@@ -73,9 +79,9 @@ public class OurWordCount implements Program, ProgramDescription {
 				}
 
 				element.setField(1, new IntValue(sum));
-				out.collect(element);
+				out.collect(element);*/
 			}
-			
+
 			@Override
 			public void combine(Iterator<Record> records, Collector<Record> out) throws Exception {
 				// the logic is the same as in the reduce function, so simply call the reduce method
