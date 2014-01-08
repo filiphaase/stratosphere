@@ -1,4 +1,4 @@
-package eu.stratosphere.language.binding;
+package eu.stratosphere.language.binding.wordcountexample;
 
 import java.io.Serializable;
 import java.util.Iterator;
