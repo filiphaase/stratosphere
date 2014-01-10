@@ -41,18 +41,9 @@ while True:
         kvp.key = text
         kvp.value = 1
         
-    #if sendMinOne:
-    
     # 2) Reading the keyValue pair from the socket
     outBuf = kvs.SerializeToString()
     buf = encoder._VarintBytes(len(outBuf))
     inSock.send(buf)
     inSock.send(outBuf)
-        
-    """else:
-        
-        print "Need to send something for null"
-        buf = encoder._VarintBytes(4294967295)
-        print buf
-        inSock.send(buf)"""
         

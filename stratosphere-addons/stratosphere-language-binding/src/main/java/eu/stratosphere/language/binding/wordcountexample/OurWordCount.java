@@ -1,5 +1,6 @@
 package eu.stratosphere.language.binding.wordcountexample;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -8,6 +9,7 @@ import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.CodedOutputStream;
@@ -36,6 +38,27 @@ import eu.stratosphere.util.Collector;
 
 public class OurWordCount implements Program, ProgramDescription {
 
+	public static class OrigTokenizeLine extends MapFunction implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		@Override
+		public void map(Record record, Collector<Record> collector) {
+			// get the first field (as type StringValue) from the record
+			String line = record.getField(0, StringValue.class).getValue();
+
+			System.out.println("line: " + line);
+			// normalize the line
+			line = line.replaceAll("\\W+", " ").toLowerCase();
+			
+			// tokenize the line
+			StringTokenizer tokenizer = new StringTokenizer(line);
+			while (tokenizer.hasMoreTokens()) {
+				String word = tokenizer.nextToken();
+				// we emit a (word, 1) pair 
+				collector.collect(new Record(new StringValue(word), new IntValue(1)));
+			}
+		}
+	}
 	/**
 	 * Converts a Record containing one string in to multiple string/integer
 	 * pairs. The string is tokenized by whitespaces. For each token a new
@@ -54,9 +77,8 @@ public class OurWordCount implements Program, ProgramDescription {
 		
 		public void open(Configuration parameters) throws Exception {
 			super.open(parameters);
-			System.out.println("open is called[mapper]");
+			System.out.println("[Mapper] Open is called");
 			String[] env = { "PYTHONPATH=src/main/java/eu/stratosphere/language/binding/protos" };
-			System.out.println("port " + PORT);
 			this.pythonProcess = Runtime
 					.getRuntime()
 					.exec("python src/main/java/eu/stratosphere/language/binding/wordcountexample/Mapper.py "
@@ -64,12 +86,12 @@ public class OurWordCount implements Program, ProgramDescription {
 
 			ServerSocket server = new ServerSocket(PORT);
 			this.sSocket = server;
-			System.out.println("Waiting for connection on port " + PORT);
+			System.out.println("[Mapper] Waiting for connection on port " + PORT);
 			Socket socket = server.accept();
 			this.pythonSocket = socket;
 			this.inStream = pythonSocket.getInputStream();
 			this.outStream = pythonSocket.getOutputStream();
-			System.out.println("[mapper]OutputThread: got connection on port " + PORT);
+			System.out.println("[Mapper] OutputThread: got connection on port " + PORT);
 		}
 
 		@Override
@@ -82,7 +104,7 @@ public class OurWordCount implements Program, ProgramDescription {
 			sSocket.close();
 			inStream.close();
 			outStream.close();
-			System.out.println("[mapper]close is called");
+			System.out.println("[Mapper]close is called");
 			super.close();
 		}
 
@@ -90,10 +112,6 @@ public class OurWordCount implements Program, ProgramDescription {
 		public void map(Record record, Collector<Record> collector) {
 			// get the first field (as type StringValue) from the record
 			String line = record.getField(0, StringValue.class).getValue();
-			// BufferedReader input = new BufferedReader(new
-			// InputStreamReader(pythonProcess.getInputStream()));
-			// BufferedReader err = new BufferedReader(new
-			// InputStreamReader(pythonProcess.getErrorStream()));
 
 			try {
 				KeyValuePair.Builder kvBuilder = KeyValuePair.newBuilder();
@@ -101,27 +119,14 @@ public class OurWordCount implements Program, ProgramDescription {
 				kvBuilder.setValue(0);
 				KeyValuePair kv = kvBuilder.build();
 
-				//System.out.println("Sending to Python: " + line + " size: "
-				//		+ line.length());
+				System.out.println("Sending to Python: " + line + " size: "
+						+ line.length());
 
-				CodedInputStream cin = CodedInputStream.newInstance(inStream);
 				kv.writeDelimitedTo(outStream);
 				outStream.flush();
 
-				/*
-				 * int answerSize = cin.readRawVarint32();
-				 * System.out.println("AnswerSize: " + answerSize);
-				 * if(answerSize == -1) return;
-				 * 
-				 * System.out.println("Reading rawBytes now"); byte[] buf =
-				 * cin.readRawBytes(answerSize); KeyValueStream kvs =
-				 * KeyValueStream.parseFrom(buf);
-				 */
 				KeyValueStream kvs = KeyValueStream
 						.parseDelimitedFrom(inStream);
-				//System.out.println("After Reading rawBytes ");
-				//System.out.println("Got KVS: " + kvs);
-				// printKeyValueStream(kvs);
 
 				for (int i = 0; i < kvs.getRecordCount(); i++) {
 					collector.collect(new Record(new StringValue(kvs.getRecord(
@@ -153,11 +158,12 @@ public class OurWordCount implements Program, ProgramDescription {
 		private Process pythonProcess;
 		private InputStream inStream;
 		private OutputStream outStream;
-
+		private PythonReducer reducer;
+		
 		@Override
 		public void open(Configuration parameters) throws Exception {
 			super.open(parameters);
-			System.out.println("[Reducer]open is called reducer");
+			System.out.println("[Reducer] Open is called reducer");
 			String[] env = { "PYTHONPATH=src/main/java/eu/stratosphere/language/binding/protos" };
 			//System.out.println("port " + PORT);
 			this.pythonProcess = Runtime
@@ -167,55 +173,34 @@ public class OurWordCount implements Program, ProgramDescription {
 
 			ServerSocket server = new ServerSocket(PORT);
 			this.sSocket = server;
-			//System.out.println("Waiting for connection on port " + PORT);
+			System.out.println("[Reducer] Waiting for connection on port " + PORT);
 			Socket socket = server.accept();
 			this.pythonSocket = socket;
 			this.inStream = pythonSocket.getInputStream();
 			this.outStream = pythonSocket.getOutputStream();
-			System.out.println("[Reducer] got connection on port " + PORT);
+			
+			this.reducer = new PythonReducer(inStream, outStream);
+			System.out.println("[Reducer] Got connection on port " + PORT);
 		}
 
 		@Override
 		public void close() throws Exception {
-			OutputStream out = pythonSocket.getOutputStream();
-			final CodedOutputStream cout = CodedOutputStream.newInstance(out);
+			System.out.println("[Reducer] Close is called");
 			
-			cout.writeRawVarint32(-1);
-			cout.flush();
-
+			//final CodedOutputStream cout = CodedOutputStream.newInstance(outStream);
+			//cout.writeRawVarint32(-2);
+			
+			pythonProcess.destroy();
 			sSocket.close();
 			inStream.close();
 			outStream.close();
-			System.out.println("[Reducer]close is called");
 			super.close();
 		}
 
 		@Override
 		public void reduce(Iterator<Record> records, Collector<Record> out)
 				throws Exception {
-
-			BufferedReader input = new BufferedReader(new InputStreamReader(pythonProcess.getInputStream()));
-			BufferedReader err = new BufferedReader(new InputStreamReader(pythonProcess.getErrorStream()));
-
-			PythonReducer reducer = new PythonReducer(inStream, outStream);
 			reducer.reduce(records, out);
-
-			/*
-			 * Record element = null; int sum = 0; while (records.hasNext()) {
-			 * element = records.next(); int cnt = element.getField(1,
-			 * IntValue.class).getValue(); sum += cnt; }
-			 * 
-			 * element.setField(1, new IntValue(sum)); out.collect(element);
-			 */
-			
-	        //  Python Output Some Printing
-	       /* String line;
-	        while ((line = input.readLine()) != null) {
-	        	System.err.println("Python: '"+line);
-			}
-	        while ((line = err.readLine()) != null) {
-	        	System.err.println("Python Error: "+line);
-			}*/
 		}
 
 		@Override
@@ -236,7 +221,7 @@ public class OurWordCount implements Program, ProgramDescription {
 
 		FileDataSource source = new FileDataSource(new TextInputFormat(),
 				dataInput, "Input Lines");
-		MapOperator mapper = MapOperator.builder(new TokenizeLine())
+		MapOperator mapper = MapOperator.builder(new OrigTokenizeLine())
 				.input(source).name("Tokenize Lines").build();
 		ReduceOperator reducer = ReduceOperator
 				.builder(CountWords.class, StringValue.class, 0).input(mapper)
