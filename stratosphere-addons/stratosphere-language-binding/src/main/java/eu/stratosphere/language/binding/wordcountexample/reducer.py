@@ -6,7 +6,7 @@ import google.protobuf.internal.encoder as encoder
 import keyValue_pb2
  
 HOST = "localhost"
-INPORT = 8080
+INPORT = 8081
  
 # TODO: Look if AF_INET could be AF_LOCAL and be quicker....
 inSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

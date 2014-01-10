@@ -20,7 +20,13 @@ import eu.stratosphere.util.Collector;
 
 public class PythonReducer {
 	
-	public static final int PORT = 8080;
+	private InputStream inStream;
+	private OutputStream outStream;
+	
+	public PythonReducer(InputStream inStream, OutputStream outStream){
+		this.inStream = inStream;
+		this.outStream = outStream;
+	}
 	
 	private void printKeyValueStream(KeyValueStream kvs){
 		for(int i = 0; i < kvs.getRecordCount(); i++){
@@ -31,24 +37,8 @@ public class PythonReducer {
 	
 	public void reduce(Iterator<Record> records, Collector<Record> collectorOut ) throws Exception{
 		KeyValueStream kvs = getKeyValueStream(records);
-		
-		String[] env =  {"PYTHONPATH=src/main/java/eu/stratosphere/language/binding/protos/"};
-		Process p = Runtime.getRuntime().exec("python src/main/java/eu/stratosphere/language/binding/"
-				+ "wordcountexample/reducer.py", env);
-		BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-		BufferedReader err = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 		KeyValueStream kvsResult = null;
 		
-	    ServerSocket server = new ServerSocket(PORT);
-	    System.out.println("STARTUP: Waiting for connection on port " + PORT);
-	    Socket socket = server.accept();
-	    System.out.println("STARTUP: Got connection on port " + PORT);
-
-        OutputStream out = socket.getOutputStream();
-	    final CodedOutputStream cout = CodedOutputStream.newInstance(out);
-	    
-	    InputStream in = socket.getInputStream();
-   
    		try{
 			/* 
 			 * Maximum size of a key value pair should be:
@@ -57,32 +47,24 @@ public class PythonReducer {
 			 */
         	// For each kvp write the size as int and then the kvp
 	        int size = kvs.getSerializedSize();
-	        System.out.println("SENDING: Size: " + size);
-	    	System.out.println("SENDING: Stream with " + kvs.getRecordCount() + " records");
-	        kvs.writeDelimitedTo(out);
-	        out.flush();
+	        //System.out.println("SENDING: Size: " + size);
+	        //System.out.println("SENDING: Stream with " + kvs.getRecordCount() + " records");
+	        kvs.writeDelimitedTo(outStream);
+	        outStream.flush();
 	        
-	        kvsResult = KeyValueStream.parseDelimitedFrom(in);
+	        kvsResult = KeyValueStream.parseDelimitedFrom(inStream);
 	        	
    		}catch( Exception e){
    			e.printStackTrace();
    		}
    		
-	    System.out.println("Cleaning up");
-        cout.writeRawVarint32(-1);
-        cout.flush();
-        
-        //  Python Output Some Printing
-        String line;
-        while ((line = input.readLine()) != null) {
-        	System.err.println("Python: '"+line);
-		}
-        while ((line = err.readLine()) != null) {
-        	System.err.println("Python Error: "+line);
-		}
+   		//System.out.println("Cleaning up");
+	    //CodedOutputStream cout = CodedOutputStream.newInstance(outStream);
+        //cout.writeRawVarint32(-1);
+        //cout.flush();
         
         if(kvsResult != null){
-            printKeyValueStream(kvsResult);
+        	//printKeyValueStream(kvsResult);
         	
         	// Some Printing
     		for(int i = 0; i < kvsResult.getRecordCount(); i++){
@@ -92,11 +74,10 @@ public class PythonReducer {
     			collectorOut.collect(element);
     		}
         }else{
-        	System.out.println("GETTING: Got kvsResult null, exiting now" );
+        	//System.out.println("GETTING: Got kvsResult null, exiting now" );
         }
 		
-        System.out.println("################# DONE #################");
-		server.close();
+        //System.out.println("################# DONE #################");
 	}
 
 	private KeyValueStream getKeyValueStream(Iterator<Record> records) {

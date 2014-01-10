@@ -26,11 +26,13 @@ while True:
         break
         # 1) Reading the keyValue pair from the socket
     toRead = size + position - READING_BYTES
-    buf += inSock.recv(toRead)  # this is probably inefficient because the buffer sizes changes all the time
+    if toRead > 0:
+        buf += inSock.recv(toRead)  # this is probably inefficient because the buffer sizes changes all the time
+        
     kv = keyValue_pb2.KeyValuePair()
     kv.ParseFromString(buf[position:position + size])
     line = kv.key
-    line.lower()
+    line = line.lower()
     line = re.sub(r"\W+", " ", line)
 
     kvs = keyValue_pb2.KeyValueStream()
@@ -38,11 +40,19 @@ while True:
         kvp = kvs.record.add()
         kvp.key = text
         kvp.value = 1
-
+        
+    #if sendMinOne:
     
-        # 2) Reading the keyValue pair from the socket
-    
+    # 2) Reading the keyValue pair from the socket
     outBuf = kvs.SerializeToString()
     buf = encoder._VarintBytes(len(outBuf))
     inSock.send(buf)
     inSock.send(outBuf)
+        
+    """else:
+        
+        print "Need to send something for null"
+        buf = encoder._VarintBytes(4294967295)
+        print buf
+        inSock.send(buf)"""
+        
