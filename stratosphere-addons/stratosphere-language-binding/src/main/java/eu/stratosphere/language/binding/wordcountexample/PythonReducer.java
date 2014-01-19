@@ -7,7 +7,6 @@ import java.util.Iterator;
 import com.google.protobuf.CodedOutputStream;
 
 import eu.stratosphere.language.binding.protos.KeyValueProtos.KeyValuePair;
-import eu.stratosphere.language.binding.protos.KeyValueProtos.KeyValueStream;
 import eu.stratosphere.types.IntValue;
 import eu.stratosphere.types.Record;
 import eu.stratosphere.types.StringValue;
@@ -17,10 +16,14 @@ public class PythonReducer {
 
 	private InputStream inStream;
 	private OutputStream outStream;
+	
+	private CodedOutputStream cout;
 
 	public PythonReducer(InputStream inStream, OutputStream outStream) {
 		this.inStream = inStream;
 		this.outStream = outStream;
+		
+		this.cout = CodedOutputStream.newInstance(outStream);
 	}
 
 	public void reduce(Iterator<Record> records, Collector<Record> collectorOut)
@@ -43,13 +46,13 @@ public class PythonReducer {
 			outStream.flush();
 		}
 
-		final CodedOutputStream cout = CodedOutputStream.newInstance(outStream);
 		cout.writeRawVarint32(-1);
 		cout.flush();
+		outStream.flush();
 
 		kvpResult = KeyValuePair.parseDelimitedFrom(inStream);
-		System.out.println("[Reducer] Result for " + kvpResult.getKey() + " = "
-				+ kvpResult.getValue());
+//		System.out.println("[Reducer] Result for " + kvpResult.getKey() + " = "
+//				+ kvpResult.getValue());
 		collectorOut.collect(getRecord(kvpResult));
 	}
 
