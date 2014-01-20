@@ -270,6 +270,7 @@ public class OurWordCount2 implements Program, ProgramDescription {
 			}else{
 				this.outStream = pythonProcess.getOutputStream(); // this thing is buffered with 8k
 				this.inStream = pythonProcess.getInputStream(); // this thing is buffered with 8k
+				System.out.println("[Reducer] Opened process with stdin/stdout communication");
 			}
 		
 			ArrayList<Class<?extends Value>> reduceClasses = new ArrayList<Class<? extends Value>>();
