@@ -1,4 +1,4 @@
-package eu.stratosphere.language.binding.wordcountexample;
+package eu.stratosphere.language.binding.oldWC;
 
 import java.io.InputStream;
 import java.io.OutputStream;

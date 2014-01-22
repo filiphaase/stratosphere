@@ -1,11 +1,16 @@
 package eu.stratosphere.language.binding.wordcountexample;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import com.google.protobuf.CodedOutputStream;
@@ -25,11 +30,15 @@ import eu.stratosphere.api.java.record.operators.ReduceOperator;
 import eu.stratosphere.api.java.record.operators.ReduceOperator.Combinable;
 import eu.stratosphere.client.LocalExecutor;
 import eu.stratosphere.configuration.Configuration;
+import eu.stratosphere.language.binding.java.ConnectionType;
+import eu.stratosphere.language.binding.java.Mapper;
+import eu.stratosphere.language.binding.java.Reducer;
 import eu.stratosphere.language.binding.protos.KeyValueProtos.KeyValuePair;
 import eu.stratosphere.language.binding.protos.KeyValueProtos.KeyValueStream;
 import eu.stratosphere.types.IntValue;
 import eu.stratosphere.types.Record;
 import eu.stratosphere.types.StringValue;
+import eu.stratosphere.types.Value;
 import eu.stratosphere.util.Collector;
 
 /*
@@ -63,14 +72,27 @@ import eu.stratosphere.util.Collector;
 
 /*
  * 15.01 FH: 
- * - Building Datatype for Stratosphere Record
+ * 1. Building Datatype for Stratosphere Record
+ * 		Done and prototype is running.
+ * 		Also introduced a fix length size
+ * 		-> But now it's much slower -.-
  * 
- * - Change python interface to python tuples
+ * - Why is it so much slower?
+ * 		Test how much difference it makes with varInt sizes
+ * 		nearly nothing... but java code is cleaner that way, so i let it inside the code for now :D
  * 
- * - Build iterator in python for reducer?
+ * 2. Making the Record conversion somehow dependent on a list of classes and look if it is working
+ * 		done with static list so far
+ * 
+ * 3. Build iterator in Python for reducer?
+ * - Change Python interface to Python tuples -> ended with buggy code 
+ */
+
+/*	16.01 FH: Fix buggy python code from yesterday
+ * 	-> Fixed it, reducer now running with python utils class
  */
 		
-public class OurWordCount implements Program, ProgramDescription {
+public class PythonWordCount implements Program, ProgramDescription {
 
 	public static class OrigTokenizeLine extends MapFunction implements Serializable {
 		private static final long serialVersionUID = 1L;
@@ -119,6 +141,7 @@ public class OurWordCount implements Program, ProgramDescription {
 			reduce(records, out);
 		}
 	}
+	
 	/**
 	 * Converts a Record containing one string in to multiple string/integer
 	 * pairs. The string is tokenized by whitespaces. For each token a new
@@ -128,76 +151,34 @@ public class OurWordCount implements Program, ProgramDescription {
 	public static class TokenizeLine extends MapFunction implements
 			Serializable {
 		private static final long serialVersionUID = 1L;
+		// Some so far hardcoded values, which will be replaced in the future
+		// Just made them static that they are written in italic :D
 		public static final int PORT = 8080;
-		private Socket pythonSocket;
-		private ServerSocket sSocket;
-		private Process pythonProcess;
-		private InputStream inStream;
-		private OutputStream outStream;
+		public static final String MAPSCRIPTPATH = "python src/main/java/eu/stratosphere/language/binding/wordcountexample/WordCountMapper.py";
+		public static final String[] ENV = { "PYTHONPATH=src/main/java/eu/stratosphere/language/binding/protos/:src/main/java/eu/stratosphere/language/binding/python/" };
+		public static final Class<?>[] MAPCLASSES = { StringValue.class };
+		
+		private Mapper mapper;
 		
 		public void open(Configuration parameters) throws Exception {
 			super.open(parameters);
-			System.out.println("[Mapper] Open is called");
-			String[] env = { "PYTHONPATH=src/main/java/eu/stratosphere/language/binding/protos" };
-			this.pythonProcess = Runtime
-					.getRuntime()
-					.exec("python src/main/java/eu/stratosphere/language/binding/wordcountexample/Mapper.py "
-							+ PORT, env);
-
-			ServerSocket server = new ServerSocket(PORT);
-			this.sSocket = server;
-			System.out.println("[Mapper] Waiting for connection on port " + PORT);
-			Socket socket = server.accept();
-			this.pythonSocket = socket;
-			this.inStream = pythonSocket.getInputStream();
-			this.outStream = pythonSocket.getOutputStream();
-			System.out.println("[Mapper] OutputThread: got connection on port " + PORT);
+			ArrayList<Class<?extends Value>> classes = new ArrayList<Class<? extends Value>>();
+			for(int i = 0; i < MAPCLASSES.length; i++){
+				classes.add((Class<? extends Value>) MAPCLASSES[i]);
+			}
+			mapper = new Mapper(MAPSCRIPTPATH, classes, ConnectionType.STDPIPES);
+			mapper.open();
 		}
 
 		@Override
 		public void close() throws Exception {
-			OutputStream out = pythonSocket.getOutputStream();
-			final CodedOutputStream cout = CodedOutputStream.newInstance(out);
-			cout.writeRawVarint32(-1);
-			cout.flush();
-
-			sSocket.close();
-			inStream.close();
-			outStream.close();
-			System.out.println("[Mapper]close is called");
+			mapper.close();
 			super.close();
 		}
 
 		@Override
-		public void map(Record record, Collector<Record> collector) {
-			// get the first field (as type StringValue) from the record
-			String line = record.getField(0, StringValue.class).getValue();
-
-			try {
-				KeyValuePair.Builder kvBuilder = KeyValuePair.newBuilder();
-				kvBuilder.setKey(line);
-				kvBuilder.setValue(0);
-				KeyValuePair kv = kvBuilder.build();
-
-//				System.out.println("Sending to Python: " + line + " size: "
-//						+ line.length());
-
-				kv.writeDelimitedTo(outStream);
-				outStream.flush();
-
-				KeyValueStream kvs = KeyValueStream
-						.parseDelimitedFrom(inStream);
-
-				for (int i = 0; i < kvs.getRecordCount(); i++) {
-					collector.collect(new Record(new StringValue(kvs.getRecord(
-							i).getKey()), new IntValue(kvs.getRecord(i)
-							.getValue())));
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
+		public void map(Record record, Collector<Record> collector) throws Exception{
+			mapper.map(record, collector); 
 		}
 	}
 
@@ -206,62 +187,36 @@ public class OurWordCount implements Program, ProgramDescription {
 	 * at position <code>1</code> in the record. The other fields are not
 	 * modified.
 	 */
-//	@Combinable
+	//@Combinable
 	@ConstantFields(0)
 	public static class CountWords extends ReduceFunction implements
 			Serializable {
-
 		private static final long serialVersionUID = 1L;
-		public static final int PORT = 8081;
-		private Socket pythonSocket;
-		private ServerSocket sSocket;
-		private Process pythonProcess;
-		private InputStream inStream;
-		private OutputStream outStream;
-		private PythonReducer reducer;
 		
-		private final boolean useSockets = false;
+		// Some so far hardcoded values, which will be replaced in the future
+		// Just made them static that they are written in italic :D
+		public static final int PORT = 8081;
+		public static final String REDUCESCRIPTPATH = "python src/main/java/eu/stratosphere/language/binding/wordcountexample/WordCountReducer.py";
+		public static final String[] ENV = { "PYTHONPATH=src/main/java/eu/stratosphere/language/binding/protos/:src/main/java/eu/stratosphere/language/binding/python/" };
+		public static final Class<?>[] REDUCECLASSES = { StringValue.class, IntValue.class };
+		
+		private Reducer reducer;
+		
+		@SuppressWarnings("unchecked")
 		@Override
 		public void open(Configuration parameters) throws Exception {
 			super.open(parameters);
-			System.out.println("[Reducer] Open is called reducer");
-			String[] env = { "PYTHONPATH=src/main/java/eu/stratosphere/language/binding/protos" };
-			//System.out.println("port " + PORT);
-			this.pythonProcess = Runtime
-					.getRuntime()
-					.exec("python src/main/java/eu/stratosphere/language/binding/wordcountexample/reducer.py "
-							+ PORT, env);
-
-			if(useSockets){
-				ServerSocket server = new ServerSocket(PORT);
-				this.sSocket = server;
-				System.out.println("[Reducer] Waiting for connection on port " + PORT);
-				Socket socket = server.accept();
-				this.pythonSocket = socket;
-				this.inStream = pythonSocket.getInputStream();
-				this.outStream = pythonSocket.getOutputStream();
-			}else{
-				this.outStream = pythonProcess.getOutputStream(); // this thing is buffered with 8k
-				this.inStream = pythonProcess.getInputStream(); // this thing is buffered with 8k
+			ArrayList<Class<?extends Value>> reduceClasses = new ArrayList<Class<? extends Value>>();
+			for(int i = 0; i < REDUCECLASSES.length; i++){
+				reduceClasses.add((Class<? extends Value>) REDUCECLASSES[i]);
 			}
-			
-			this.reducer = new PythonReducer(inStream, outStream);
-			System.out.println("[Reducer] Got connection on port " + PORT);
+			reducer = new Reducer(REDUCESCRIPTPATH, reduceClasses, ConnectionType.STDPIPES);
+			reducer.open();
 		}
 
 		@Override
 		public void close() throws Exception {
-			System.out.println("[Reducer] Close is called");
-			
-			//final CodedOutputStream cout = CodedOutputStream.newInstance(outStream);
-			//cout.writeRawVarint32(-2);
-			
-			pythonProcess.destroy();
-			if(useSockets){
-				sSocket.close();
-			}
-			inStream.close();
-			outStream.close();
+			reducer.close();
 			super.close();
 		}
 
@@ -269,6 +224,7 @@ public class OurWordCount implements Program, ProgramDescription {
 		public void reduce(Iterator<Record> records, Collector<Record> out)
 				throws Exception {
 			reducer.reduce(records, out);
+			
 		}
 
 		@Override
@@ -289,8 +245,9 @@ public class OurWordCount implements Program, ProgramDescription {
 
 		FileDataSource source = new FileDataSource(new TextInputFormat(),
 				dataInput, "Input Lines");
-		MapOperator mapper = MapOperator.builder(new OrigTokenizeLine())
-				.input(source).name("Tokenize Lines").build();
+		MapOperator mapper = MapOperator.builder(new TokenizeLine())
+				.input(source).name("Tokenize Lines")
+				.build();
 		ReduceOperator reducer = ReduceOperator
 				.builder(CountWords.class, StringValue.class, 0).input(mapper)
 				.name("Count Words").build();
@@ -309,9 +266,9 @@ public class OurWordCount implements Program, ProgramDescription {
 	public String getDescription() {
 		return "Parameters: [numSubStasks] [input] [output]";
 	}
-
+	
 	public static void main(String[] args) throws Exception {
-		OurWordCount wc = new OurWordCount();
+		PythonWordCount wc = new PythonWordCount();
 
 		if (args.length < 3) {
 			System.err.println(wc.getDescription());

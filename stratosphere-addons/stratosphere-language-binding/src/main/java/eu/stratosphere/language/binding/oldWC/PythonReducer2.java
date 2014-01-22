@@ -1,9 +1,11 @@
-package eu.stratosphere.language.binding.wordcountexample2;
+package eu.stratosphere.language.binding.oldWC;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import com.google.protobuf.CodedInputStream;
 
 import eu.stratosphere.language.binding.protos.StratosphereRecordProtoBuffers.ProtoRecordSize;
 import eu.stratosphere.language.binding.protos.StratosphereRecordProtoBuffers.ProtoStratosphereRecord;
@@ -47,23 +49,17 @@ public class PythonReducer2 {
 		sendSize(-1);
 		outStream.flush();
 
-		ProtoStratosphereRecord psr = ProtoStratosphereRecord.parseDelimitedFrom(inStream);
-		
-		Record r = getRecord(psr);
-		collectorOut.collect(r);
-		
-		// We don't need this for the reducer so far
-		/*int size = getSize();
-		if(size != -1){
-			byte[] b = new byte[size];
-			inStream.read(b, 0, size);
-			result = ProtoStratosphereRecord.parseFrom(b);
-			
-			collectorOut.collect(getRecord(result));
-		}*/
+		int size;
+		while( (size = getSize()) != -1){
+			byte[] buf = new byte[size];
+			inStream.read(buf);
+			ProtoStratosphereRecord psr = ProtoStratosphereRecord.parseFrom(buf);
+			Record r = getRecord(psr);
+			collectorOut.collect(r);
+		}
 	}
 
-	private void sendSize(int serializedSize) throws Exception{
+	public void sendSize(int serializedSize) throws Exception{
 		ProtoRecordSize size = ProtoRecordSize.newBuilder()
 				.setValue(serializedSize)
 				.build();
@@ -71,14 +67,13 @@ public class PythonReducer2 {
 		outStream.flush();
 	}
 	
-	private int getSize() throws Exception{
-		byte[] b = new byte[5];
-		inStream.read(b, 0, 5);
-		
-		ProtoRecordSize prs = ProtoRecordSize.parseFrom(b);
-		return prs.getValue();
+	public int getSize() throws Exception{
+		byte[] buf = new byte[5];
+		inStream.read(buf);
+		ProtoRecordSize size =ProtoRecordSize.parseFrom(buf);
+		return size.getValue();
 	}
-
+	
 	private ProtoStratosphereRecord getProtoStratosphereRecord(Record r) {
 		ProtoStratosphereRecord.Builder psrb=  ProtoStratosphereRecord.newBuilder();
 		
