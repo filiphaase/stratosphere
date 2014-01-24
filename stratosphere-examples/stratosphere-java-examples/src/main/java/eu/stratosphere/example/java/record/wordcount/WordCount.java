@@ -62,7 +62,7 @@ public class WordCount implements Program, ProgramDescription {
 			StringTokenizer tokenizer = new StringTokenizer(line);
 			while (tokenizer.hasMoreTokens()) {
 				String word = tokenizer.nextToken();
-
+				
 				// we emit a (word, 1) pair 
 				collector.collect(new Record(new StringValue(word), new IntValue(1)));
 			}
