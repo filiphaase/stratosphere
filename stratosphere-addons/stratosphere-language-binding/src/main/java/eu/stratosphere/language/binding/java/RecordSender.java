@@ -17,8 +17,6 @@ import eu.stratosphere.types.Value;
  * Class for serializing and sending java-records to a subprocess.
  * sendAllRecords() must be used for sending multiple records
  * sendSingleRecord() if an operator call only has a single record to sent(Map-Operator) 
- * 
- * @author Filip Haase
  */
 public class RecordSender {
 
@@ -38,7 +36,7 @@ public class RecordSender {
 		}
 		// After all records for a single map/reduce... call are sent,
 		// send the signal to tell the sub-process that no records will be sent anymore
-		sendSize(AbstractOperator.SIGNAL_SINGLE_CALL_DONE);
+		sendSize(ProtobufTupleStreamer.SIGNAL_SINGLE_CALL_DONE);
 		outStream.flush();
 	}
 

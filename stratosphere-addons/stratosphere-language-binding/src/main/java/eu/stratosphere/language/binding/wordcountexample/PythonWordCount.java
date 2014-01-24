@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import eu.stratosphere.api.common.Plan;
 import eu.stratosphere.api.common.Program;
 import eu.stratosphere.api.common.ProgramDescription;
@@ -19,8 +22,8 @@ import eu.stratosphere.api.java.record.operators.ReduceOperator;
 import eu.stratosphere.client.LocalExecutor;
 import eu.stratosphere.configuration.Configuration;
 import eu.stratosphere.language.binding.java.ConnectionType;
-import eu.stratosphere.language.binding.java.Mapper;
-import eu.stratosphere.language.binding.java.Reducer;
+import eu.stratosphere.language.binding.java.ProtobufTupleStreamer;
+import eu.stratosphere.nephele.jobmanager.JobManager;
 import eu.stratosphere.types.IntValue;
 import eu.stratosphere.types.Record;
 import eu.stratosphere.types.StringValue;
@@ -42,11 +45,10 @@ public class PythonWordCount implements Program, ProgramDescription {
 		// Some so far hardcoded values, which will be replaced in the future
 		// Just made them static that they are written in italic :D
 		public static final int PORT = 8080;
-		public static final String MAPSCRIPTPATH = "python src/main/java/eu/stratosphere/language/binding/wordcountexample/WordCountMapper.py";
-		public static final String[] ENV = { "PYTHONPATH=src/main/java/eu/stratosphere/language/binding/protos/:src/main/java/eu/stratosphere/language/binding/python/" };
+		public static final String MAPSCRIPTPATH = "python src/main/python/eu/stratosphere/language/binding/wordcountexample/WordCountMapper.py";
 		public static final Class<?>[] MAPCLASSES = { StringValue.class };
 		
-		private Mapper mapper;
+		private ProtobufTupleStreamer streamer;
 		
 		@SuppressWarnings("unchecked")
 		public void open(Configuration parameters) throws Exception {
@@ -55,21 +57,21 @@ public class PythonWordCount implements Program, ProgramDescription {
 			for(int i = 0; i < MAPCLASSES.length; i++){
 				classes.add((Class<? extends Value>) MAPCLASSES[i]);
 			}
-			mapper = new Mapper(MAPSCRIPTPATH, classes, ConnectionType.STDPIPES);
+			streamer = new ProtobufTupleStreamer(MAPSCRIPTPATH, classes, ConnectionType.STDPIPES);
 			// Example for sockets:
 			// mapper = new Mapper(MAPSCRIPTPATH, 8080, classes, ConnectionType.SOCKETS);
-			mapper.open();
+			streamer.open();
 		}
 
 		@Override
 		public void close() throws Exception {
-			mapper.close();
+			streamer.close();
 			super.close();
 		}
 
 		@Override
 		public void map(Record record, Collector<Record> collector) throws Exception{
-			mapper.map(record, collector); 
+			streamer.streamSingleRecord(record, collector); 
 		}
 	}
 
@@ -87,11 +89,10 @@ public class PythonWordCount implements Program, ProgramDescription {
 		// Some so far hardcoded values, which will be replaced in the future
 		// Just made them static that they are written in italic :D
 		public static final int PORT = 8081;
-		public static final String REDUCESCRIPTPATH = "python src/main/java/eu/stratosphere/language/binding/wordcountexample/WordCountReducer.py";
-		public static final String[] ENV = { "PYTHONPATH=src/main/java/eu/stratosphere/language/binding/protos/:src/main/java/eu/stratosphere/language/binding/python/" };
+		public static final String REDUCESCRIPTPATH = "python src/main/python/eu/stratosphere/language/binding/wordcountexample/WordCountReducer.py";
 		public static final Class<?>[] REDUCECLASSES = { StringValue.class, IntValue.class };
 		
-		private Reducer reducer;
+		private ProtobufTupleStreamer streamer;
 		
 		@SuppressWarnings("unchecked")
 		@Override
@@ -101,23 +102,22 @@ public class PythonWordCount implements Program, ProgramDescription {
 			for(int i = 0; i < REDUCECLASSES.length; i++){
 				reduceClasses.add((Class<? extends Value>) REDUCECLASSES[i]);
 			}
-			reducer = new Reducer(REDUCESCRIPTPATH, reduceClasses, ConnectionType.STDPIPES);
+			streamer = new ProtobufTupleStreamer(REDUCESCRIPTPATH, reduceClasses, ConnectionType.STDPIPES);
 			// Example for sockets:
 			// reducer = new Reducer(REDUCESCRIPTPATH, 8081, reduceClasses, ConnectionType.SOCKETS);
-			reducer.open();
+			streamer.open();
 		}
 
 		@Override
 		public void close() throws Exception {
-			reducer.close();
+			streamer.close();
 			super.close();
 		}
 
 		@Override
 		public void reduce(Iterator<Record> records, Collector<Record> out)
 				throws Exception {
-			reducer.reduce(records, out);
-			
+			streamer.streamMultipleRecords(records, out);
 		}
 
 		@Override
@@ -160,6 +160,8 @@ public class PythonWordCount implements Program, ProgramDescription {
 		return "Parameters: [numSubStasks] [input] [output]";
 	}
 	
+	private static final Log LOG = LogFactory.getLog(JobManager.class);
+	
 	public static void main(String[] args) throws Exception {
 		PythonWordCount wc = new PythonWordCount();
 
@@ -172,7 +174,7 @@ public class PythonWordCount implements Program, ProgramDescription {
 
 		long ts1 = System.currentTimeMillis();
 		LocalExecutor.execute(plan);
-		System.out.println("Needed: " + (System.currentTimeMillis() - ts1)/1000.0f + "s");
+		LOG.debug("Needed: " + (System.currentTimeMillis() - ts1)/1000.0f + "s");
 	}
 
 }

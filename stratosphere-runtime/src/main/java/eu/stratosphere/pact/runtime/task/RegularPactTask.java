@@ -287,15 +287,11 @@ public class RegularPactTask<S extends Function, OT> extends AbstractTask implem
 				return;
 			}
 			
-			long ts = System.currentTimeMillis(); 
 			// pre main-function initialization
 			initialize();
-			System.out.println("Time in regular pact tasc initialize(): " + (System.currentTimeMillis()-ts)/1000.0);
 	
-			ts = System.currentTimeMillis();
 			// the work goes here
 			run();
-			System.out.println("Time in regular pact tasc run(): " + (System.currentTimeMillis()-ts)/1000.0);
 		}
 		finally {
 			// clean up in any case!
