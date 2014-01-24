@@ -55,7 +55,6 @@ public class WordCount implements Program, ProgramDescription {
 			// get the first field (as type StringValue) from the record
 			String line = record.getField(0, StringValue.class).getValue();
 
-			System.out.println("line: " + line);
 			// normalize the line
 			line = line.replaceAll("\\W+", " ").toLowerCase();
 			
@@ -63,6 +62,7 @@ public class WordCount implements Program, ProgramDescription {
 			StringTokenizer tokenizer = new StringTokenizer(line);
 			while (tokenizer.hasMoreTokens()) {
 				String word = tokenizer.nextToken();
+
 				// we emit a (word, 1) pair 
 				collector.collect(new Record(new StringValue(word), new IntValue(1)));
 			}
