@@ -13,6 +13,13 @@ import eu.stratosphere.types.Record;
 import eu.stratosphere.types.StringValue;
 import eu.stratosphere.types.Value;
 
+/**
+ * Class for serializing and sending java-records to a subprocess.
+ * sendAllRecords() must be used for sending multiple records
+ * sendSingleRecord() if an operator call only has a single record to sent(Map-Operator) 
+ * 
+ * @author Filip Haase
+ */
 public class RecordSender {
 
 	private OutputStream outStream;
@@ -29,10 +36,18 @@ public class RecordSender {
 			Record element = records.next();
 			sendSingleRecord(element);
 		}
+		// After all records for a single map/reduce... call are sent,
+		// send the signal to tell the sub-process that no records will be sent anymore
 		sendSize(AbstractOperator.SIGNAL_SINGLE_CALL_DONE);
 		outStream.flush();
 	}
 
+	/**
+	 * Send a single record to the sub-process and do not send any signal afterwards.
+	 * This is used by the map-operator. Since we know there that we always only sent a single
+	 * record and not multiple records in a mapper, we don't need an extra signal for telling the
+	 * python process that this were all records.
+	 */
 	public void sendSingleRecord(Record record) throws Exception{
 		ProtoStratosphereRecord psr = getProtoStratosphereRecord(record);
 		sendSize(psr.getSerializedSize());
@@ -48,7 +63,12 @@ public class RecordSender {
 		outStream.flush();
 	}
 	
-	private ProtoStratosphereRecord getProtoStratosphereRecord(Record r) {
+	
+	/**
+	 * Builds a protobuf-record from the java-record to send it to the subprocess
+	 * Curently one int and strings are supported
+	 */
+	private ProtoStratosphereRecord getProtoStratosphereRecord(Record r) throws Exception {
 		ProtoStratosphereRecord.Builder psrb=  ProtoStratosphereRecord.newBuilder();
 		
 		for(int i = 0; i < inputClasses.size(); i++){
@@ -62,6 +82,8 @@ public class RecordSender {
 						.setValueType(ProtoValueType.IntegerValue32)
 						.setInt32Val(r.getField(i, IntValue.class).getValue()));	
 							
+			}else{
+				throw new Exception("Currently unimplemented value-type in the Record"); 
 			}
 		}
 		return psrb.build();

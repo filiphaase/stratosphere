@@ -10,6 +10,16 @@ import java.util.ArrayList;
 
 import eu.stratosphere.types.Value;
 
+/**
+ * General class for any operators of the java-language binding framework
+ * Implements the whole logic for calling the subprocess(python so far)
+ * and setting up the connection and implements an open() and close() function.
+ * 
+ * The operator which implements this abstract class only needs to write something
+ * like a run() function where he uses the receiver and sender for streaming records
+ * 
+ * @author Filip Haase
+ */
 public abstract class AbstractOperator {
 
 	public static final int SIGNAL_SINGLE_CALL_DONE = -1;
@@ -44,20 +54,30 @@ public abstract class AbstractOperator {
 	}
 	
 	public void open() throws Exception{
-		pythonProcess = Runtime.getRuntime().exec(pythonFilePath, ENV);
+		if(port == -1){
+			pythonProcess = Runtime.getRuntime().exec(pythonFilePath, ENV);
+		}else{
+			pythonProcess = Runtime.getRuntime().exec(pythonFilePath + " " + port, ENV);
+		}
 		err = new BufferedReader(new InputStreamReader(pythonProcess.getErrorStream()));
 		System.out.println("Proto-AbstractOperator - open() called");
 		
-		if(connectionType == ConnectionType.SOCKETS){
+		switch(connectionType){
+		case STDPIPES:
+			outputStream = pythonProcess.getOutputStream(); // this thing is buffered with 8k
+			inputStream = pythonProcess.getInputStream(); // this thing is buffered with 8k
+			System.out.println("Proto-AbstractOperator - started connection via stdin/stdout");
+			break;
+		case SOCKETS:
+			// Currently not in the python code
 			serverSocket = new ServerSocket(port);
 			Socket pythonSocket = serverSocket.accept();
 			inputStream = pythonSocket.getInputStream();
 			outputStream = pythonSocket.getOutputStream();
 			System.out.println("Proto-AbstractOperator - initialized connection over port " + port);
-		}else{
-			outputStream = pythonProcess.getOutputStream(); // this thing is buffered with 8k
-			inputStream = pythonProcess.getInputStream(); // this thing is buffered with 8k
-			System.out.println("Proto-AbstractOperator - started connection via stdin/stdout");
+			break;
+		default:
+			throw new Exception("Currently not implemented connection type, use STDPIPES");
 		}
 		
 		sender = new RecordSender(outputStream, inputRecordClasses);

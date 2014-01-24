@@ -21,7 +21,7 @@ public class RecordReceiver {
 	
 	public void receive(Collector<Record> collector) throws Exception{
 		int size;
-		while( (size = getSize()) != AbstractOperator.SIGNAL_SINGLE_CALL_DONE){
+		while( (size = getSize()) != AbstractOperator.SIGNAL_ALL_CALLS_DONE){
 			byte[] buffer = new byte[size];
 			inStream.read(buffer);
 			ProtoStratosphereRecord psr = ProtoStratosphereRecord.parseFrom(buffer);

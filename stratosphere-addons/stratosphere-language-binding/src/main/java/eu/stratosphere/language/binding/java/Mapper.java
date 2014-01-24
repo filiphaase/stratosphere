@@ -20,6 +20,7 @@ public class Mapper extends AbstractOperator {
 		super(pythonFilePath, outputRecordClasses, connectionType);
 	}
 
+	
 	public void map(Record record, Collector<Record> collector) throws Exception {
 		sender.sendSingleRecord(record);
 		receiver.receive(collector);

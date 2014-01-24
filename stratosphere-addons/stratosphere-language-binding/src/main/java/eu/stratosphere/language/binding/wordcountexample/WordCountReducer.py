@@ -1,5 +1,5 @@
 from ProtoUtils import ConnectionType
-from ProtoReducer import *
+from ProtoReducer import Reducer
 import sys
 
 sys.stderr = open('pythonReducerError.txt', 'w')
@@ -14,7 +14,5 @@ def count(iter, collector):
         
     if(element != None):
         collector.collect((element[0], int(sum)))
-        
-conn = ConnectionType.STDPIPES
-reducer = Reducer(conn)
-reducer.reduce(count)
+    
+Reducer(ConnectionType.STDPIPES).reduce(count)

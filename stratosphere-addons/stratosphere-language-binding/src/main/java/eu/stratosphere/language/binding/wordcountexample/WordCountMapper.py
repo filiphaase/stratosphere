@@ -1,5 +1,5 @@
 from ProtoUtils import ConnectionType
-from ProtoMapper import *
+from ProtoMapper import Mapper
 import sys
 import re
 
