@@ -1,4 +1,4 @@
-from ProtoUtils import ConnectionType
+from ProtoUtils import STDPipeConnection
 from ProtoReducer import Reducer
 import sys
 
@@ -14,5 +14,5 @@ def count(iter, collector):
         
     if(element != None):
         collector.collect((element[0], int(sum)))
-    
-Reducer(ConnectionType.STDPIPES).reduce(count)
+connection = STDPipeConnection()
+Reducer(connection).reduce(count)

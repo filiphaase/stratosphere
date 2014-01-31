@@ -1,8 +1,8 @@
-package eu.stratosphere.language.binding.java;
+package eu.stratosphere.language.binding.java.Streaming;
 
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import eu.stratosphere.language.binding.protos.StratosphereRecordProtoBuffers.ProtoRecordSize;
 import eu.stratosphere.language.binding.protos.StratosphereRecordProtoBuffers.ProtoStratosphereRecord;
@@ -21,10 +21,10 @@ import eu.stratosphere.types.Value;
 public class RecordSender {
 
 	private OutputStream outStream;
-	private ArrayList<Class<? extends Value>> inputClasses;
+	private List<Class<? extends Value>> inputClasses;
 	
 	public RecordSender(OutputStream outStream,
-			ArrayList<Class<? extends Value>> inputClasses) {
+			List<Class<? extends Value>> inputClasses) {
 		this.inputClasses = inputClasses;
 		this.outStream = outStream;
 	}
@@ -36,7 +36,7 @@ public class RecordSender {
 		}
 		// After all records for a single map/reduce... call are sent,
 		// send the signal to tell the sub-process that no records will be sent anymore
-		sendSize(ProtobufTupleStreamer.SIGNAL_SINGLE_CALL_DONE);
+		sendSize(ProtobufPythonStreamer.SIGNAL_SINGLE_CALL_DONE);
 		outStream.flush();
 	}
 
@@ -52,6 +52,7 @@ public class RecordSender {
 		psr.writeTo(outStream);
 		outStream.flush();
 	}
+	
 	
 	public void sendSize(int serializedSize) throws Exception{
 		ProtoRecordSize size = ProtoRecordSize.newBuilder()

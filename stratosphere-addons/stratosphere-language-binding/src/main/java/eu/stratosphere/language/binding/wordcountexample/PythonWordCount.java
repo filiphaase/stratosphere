@@ -21,8 +21,9 @@ import eu.stratosphere.api.java.record.operators.MapOperator;
 import eu.stratosphere.api.java.record.operators.ReduceOperator;
 import eu.stratosphere.client.LocalExecutor;
 import eu.stratosphere.configuration.Configuration;
-import eu.stratosphere.language.binding.java.ConnectionType;
-import eu.stratosphere.language.binding.java.ProtobufTupleStreamer;
+import eu.stratosphere.language.binding.java.Streaming.ConnectionType;
+import eu.stratosphere.language.binding.java.Streaming.ProtobufPythonStreamer;
+import eu.stratosphere.language.binding.java.Streaming.ProtobufTupleStreamer;
 import eu.stratosphere.nephele.jobmanager.JobManager;
 import eu.stratosphere.types.IntValue;
 import eu.stratosphere.types.Record;
@@ -45,7 +46,7 @@ public class PythonWordCount implements Program, ProgramDescription {
 		// Some so far hardcoded values, which will be replaced in the future
 		// Just made them static that they are written in italic :D
 		public static final int PORT = 8080;
-		public static final String MAPSCRIPTPATH = "python src/main/python/eu/stratosphere/language/binding/wordcountexample/WordCountMapper.py";
+		public static final String MAPSCRIPTPATH = "src/main/python/eu/stratosphere/language/binding/wordcountexample/WordCountMapper.py";
 		public static final Class<?>[] MAPCLASSES = { StringValue.class };
 		
 		private ProtobufTupleStreamer streamer;
@@ -57,7 +58,7 @@ public class PythonWordCount implements Program, ProgramDescription {
 			for(int i = 0; i < MAPCLASSES.length; i++){
 				classes.add((Class<? extends Value>) MAPCLASSES[i]);
 			}
-			streamer = new ProtobufTupleStreamer(MAPSCRIPTPATH, classes, ConnectionType.STDPIPES);
+			streamer = new ProtobufTupleStreamer(MAPSCRIPTPATH, ConnectionType.STDPIPES, classes);
 			// Example for sockets:
 			// mapper = new Mapper(MAPSCRIPTPATH, 8080, classes, ConnectionType.SOCKETS);
 			streamer.open();
@@ -89,7 +90,7 @@ public class PythonWordCount implements Program, ProgramDescription {
 		// Some so far hardcoded values, which will be replaced in the future
 		// Just made them static that they are written in italic :D
 		public static final int PORT = 8081;
-		public static final String REDUCESCRIPTPATH = "python src/main/python/eu/stratosphere/language/binding/wordcountexample/WordCountReducer.py";
+		public static final String REDUCESCRIPTPATH = "src/main/python/eu/stratosphere/language/binding/wordcountexample/WordCountReducer.py";
 		public static final Class<?>[] REDUCECLASSES = { StringValue.class, IntValue.class };
 		
 		private ProtobufTupleStreamer streamer;
@@ -102,7 +103,7 @@ public class PythonWordCount implements Program, ProgramDescription {
 			for(int i = 0; i < REDUCECLASSES.length; i++){
 				reduceClasses.add((Class<? extends Value>) REDUCECLASSES[i]);
 			}
-			streamer = new ProtobufTupleStreamer(REDUCESCRIPTPATH, reduceClasses, ConnectionType.STDPIPES);
+			streamer = new ProtobufTupleStreamer(REDUCESCRIPTPATH, ConnectionType.STDPIPES, reduceClasses);
 			// Example for sockets:
 			// reducer = new Reducer(REDUCESCRIPTPATH, 8081, reduceClasses, ConnectionType.SOCKETS);
 			streamer.open();
@@ -174,7 +175,7 @@ public class PythonWordCount implements Program, ProgramDescription {
 
 		long ts1 = System.currentTimeMillis();
 		LocalExecutor.execute(plan);
-		LOG.debug("Needed: " + (System.currentTimeMillis() - ts1)/1000.0f + "s");
+		System.out.println("Needed: " + (System.currentTimeMillis() - ts1)/1000.0f + "s");
 	}
 
 }

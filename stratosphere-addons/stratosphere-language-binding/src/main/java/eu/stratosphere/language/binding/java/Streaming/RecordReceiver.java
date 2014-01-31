@@ -1,4 +1,4 @@
-package eu.stratosphere.language.binding.java;
+package eu.stratosphere.language.binding.java.Streaming;
 
 import java.io.InputStream;
 
@@ -21,7 +21,7 @@ public class RecordReceiver {
 	
 	public void receive(Collector<Record> collector) throws Exception{
 		int size;
-		while( (size = getSize()) != ProtobufTupleStreamer.SIGNAL_ALL_CALLS_DONE){
+		while( (size = getSize()) != ProtobufPythonStreamer.SIGNAL_ALL_CALLS_DONE){
 			byte[] buffer = new byte[size];
 			inStream.read(buffer);
 			ProtoStratosphereRecord psr = ProtoStratosphereRecord.parseFrom(buffer);

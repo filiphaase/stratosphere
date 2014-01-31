@@ -13,27 +13,46 @@ ConnectionType = enum(STDPIPES=1, PIPES=2, SOCKETS=3)
 SIGNAL_SINGLE_CALL_DONE = 4294967295;
 SIGNAL_ALL_CALLS_DONE = 4294967294;
 
-class SocketConnection(object):
+class Connection(object):
+    def __init__(self, send_func, recv_func):
+        self.__send_func = send_func
+        self.__recv_func = recv_func
+        
+    def send(self, buffer):
+        self.__send_func(buffer)
+        
+    def receive(self, size):
+        return self.__recv_func(size)
+    
+    # Reads a size from the connection and returns it's value
+    def readSize(self):
+        size = stratosphereRecord_pb2.ProtoRecordSize()
+        sizeBuf = self.receive(5)
+        size.ParseFromString(sizeBuf)
+        return size.value
+    
+    def sendSize(self, givenSize):
+        size = stratosphereRecord_pb2.ProtoRecordSize()
+        size.value = givenSize
+        self.send(size.SerializeToString())
+    
+class SocketConnection(Connection):
+    
     def __init__(self, host, port):
         self.__sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.__sock.connect((host, port))
+        self.__sock.connect((host, port)) 
+        super(SocketConnection, self).__init__(self.__sock.send, self.__sock.recv)       
+
+class STDPipeConnection(Connection):
     
-    def send(self, buffer):
-        self.__sock.send(buffer)
+    def __init__(self): 
+        super(STDPipeConnection, self).__init__(self.inner_send, sys.stdin.read) 
         
-    def receive(self, size):
-        return self.__sock.recv(size)
-        
-class STDPipeConnection(object):
-    def __init__(self):
-        pass
-    
-    def send(self, buffer):
+    def inner_send(self, buffer):
         sys.stdout.write(buffer)
-        sys.stdout.flush()
-        
-    def receive(self, size):
-        return sys.stdin.read(size)
+        sys.stdout.flush()    
+            
+            
         
 """
     Class for receiving protobuf records and parsing them into python tuple.
@@ -58,7 +77,7 @@ class Iterator(object):
     
     def __iter__(self): 
         while(True):
-            size = self.readSize()
+            size = self.__connection.readSize()
             # If we are done with this map/reduce/... record-collection we get a -1 from java
             if size == SIGNAL_SINGLE_CALL_DONE:
                 break
@@ -72,7 +91,7 @@ class Iterator(object):
     
     # Function for reading a single record, should only be used by the Map-Operator
     def readSingleRecord(self):
-        size = self.readSize()
+        size = self.__connection.readSize()
         if size == SIGNAL_ALL_CALLS_DONE:
             self.finished = True
             return None
@@ -86,12 +105,7 @@ class Iterator(object):
         record.ParseFromString(buf)
         return self.getTuple(record)
     
-    # Reads a size from the connection and returns it's value
-    def readSize(self):
-        size = stratosphereRecord_pb2.ProtoRecordSize()
-        sizeBuf = self.__connection.receive(5)
-        size.ParseFromString(sizeBuf)
-        return size.value
+    
     
     # Function which gets the ProtoStratosphereRecord (Record representation of the protocol buffer classes)
     # and returns the corresponding tuple
@@ -128,15 +142,11 @@ class Collector(object):
         
         #encoder._EncodeVarint(sys.stdout.write, len(recordBuf))
         #sys.stdout.write(recordBuf)
-        
-        size = stratosphereRecord_pb2.ProtoRecordSize()
-        size.value = len(recordBuf)
-        self.__connection.send(size.SerializeToString() + recordBuf)
+        self.__connection.sendSize(len(recordBuf))
+        self.__connection.send(recordBuf)
 
     def finish(self):
-        size = stratosphereRecord_pb2.ProtoRecordSize()
-        size.value = SIGNAL_ALL_CALLS_DONE
-        self.__connection.send(size.SerializeToString())
+        self.__connection.sendSize(SIGNAL_ALL_CALLS_DONE)
 
     # Function which gets the a python tuple and returns a 
     # ProtoStratosphereRecord (Record representation of the protocol buffer classes)
@@ -153,3 +163,23 @@ class Collector(object):
             else:
                 raise BaseException("A currently not implemented valueType")
         return result
+    
+"""class SocketConnection(object):
+    def __init__(self, host, port):
+        self.__sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.__sock.connect((host, port))
+    
+    def send(self, buffer):
+        self.__sock.send(buffer)
+        
+    def receive(self, size):
+        return self.__sock.recv(size)
+        
+class STDPipeConnection(object):
+    def __init__(self):
+        pass
+    
+h
+        
+    def receive(self, size):
+        return sys.stdin.read(size)"""

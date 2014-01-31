@@ -1,4 +1,4 @@
-from ProtoUtils import ConnectionType
+from ProtoUtils import STDPipeConnection
 from ProtoMapper import Mapper
 import sys
 import re
@@ -9,4 +9,5 @@ def split(line, collector):
     filteredLine = re.sub(r"\W+", " ", line[0].lower()) 
     [collector.collect((s,1)) for s in filteredLine.split()]
         
-Mapper(ConnectionType.STDPIPES).map(split)
+connection = STDPipeConnection()
+Mapper(connection).map(split)

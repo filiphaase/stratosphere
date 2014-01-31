@@ -7,19 +7,8 @@ import os
 """
 class Reducer(object):
     
-    def __init__(self, conn):
-        self.__connectionType = conn
+    def __init__(self, connection):
         self.f = open('pythonReducerOut.txt', 'w')
-    
-        # For sockets the same object should be used for iterator and collector,
-        # therefore we are initializing a connection object here and give it to iterator and collector    
-        if conn == ConnectionType.SOCKETS:
-            connection = SocketConnection("localhost", int(sys.argv[1]))
-        elif conn == ConnectionType.STDPIPES:
-            connection = STDPipeConnection()
-        else:
-            raise BaseException("Connection-type which is not implemented so far")
-        
         self.__iter = Iterator(self.f, connection)
         self.__collector = Collector(self.f, connection)
     

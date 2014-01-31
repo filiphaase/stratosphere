@@ -1,0 +1,52 @@
+package eu.stratosphere.language.binding.protos;
+
+option java_outer_classname = "StratospherePlan";
+
+message ProtoPlan{
+
+	enum ValueType{
+		StringValue = 0;
+		IntValue = 1;
+	}
+
+	enum VertexType{
+		Map = 0;
+		Reduce = 1;
+		Join = 2;
+		Cross = 3;
+		CoGroup = 4;
+		Union = 5;
+		TextInputFormat = 6;
+		CsvInputFormat = 7;
+		// Do we need this two in input and output here?
+		DelimitedInputFormat = 8;
+		FileInputFormat = 9;
+		JDBCInputFormat = 10;
+		CsvOutputFormat = 11;
+		DelimitedOutputFormat = 12;
+		FileOutputFormat = 13;
+		BulkIteration = 14;
+		DeltaIteration = 15;
+	}
+
+	message KeyValuePair{
+		required string key = 1;
+		required string value = 2;
+	}
+
+	message KeyTypePair{
+		required string key = 1;
+		required ValueType value = 2;
+	}
+
+	message Vertex{
+		required VertexType type = 1;
+		repeated int32 inputs = 2[packed = true];
+		repeated ValueType outputTypes = 3;
+		repeated KeyValuePair params = 4;
+		// TODO remove and handle differently
+		repeated KeyTypePair paramTypes = 5;
+	}
+
+	repeated Vertex vertices = 1;
+}
