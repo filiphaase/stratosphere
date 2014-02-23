@@ -21,14 +21,23 @@ import eu.stratosphere.types.Value;
 public class RecordSender {
 
 	private OutputStream outStream;
-	private List<Class<? extends Value>> inputClasses;
+	private List<Class<? extends Value>> inputClasses1;
+	private List<Class<? extends Value>> inputClasses2;
 	
 	public RecordSender(OutputStream outStream,
 			List<Class<? extends Value>> inputClasses) {
-		this.inputClasses = inputClasses;
+		this.inputClasses1 = inputClasses;
 		this.outStream = outStream;
 	}
 	
+	public RecordSender(OutputStream outputStream,
+			List<Class<? extends Value>> inputRecordClasses,
+			List<Class<? extends Value>> secondInputRecordClasses) {
+		this.inputClasses1 = inputRecordClasses;
+		this.inputClasses2 = secondInputRecordClasses;
+		this.outStream = outputStream;
+	}
+
 	public void sendAllRecords(Iterator<Record> records) throws Exception{
 		while (records.hasNext()) {
 			Record element = records.next();
@@ -47,12 +56,30 @@ public class RecordSender {
 	 * python process that this were all records.
 	 */
 	public void sendSingleRecord(Record record) throws Exception{
-		ProtoStratosphereRecord psr = getProtoStratosphereRecord(record);
-		sendSize(psr.getSerializedSize());
-		psr.writeTo(outStream);
-		outStream.flush();
+		sendSingleRecord(record, this.inputClasses1);
 	}
 	
+	// Mhh... using int here is kinda ugly, change it
+	public void sendSingleRecord(Record record, int classNumber) throws Exception{
+		if(classNumber == 0){
+			System.out.println("sending from class 0");
+			sendSingleRecord(record, this.inputClasses1);
+		}else{
+			System.out.println("sending from class 1");
+			sendSingleRecord(record, this.inputClasses2);
+		}
+	}
+	
+	public void sendSingleRecord(Record record, List<Class<? extends Value>> classes) throws Exception{
+		//System.out.println("in Send single record classes: " + classes.get(0));
+		ProtoStratosphereRecord psr = getProtoStratosphereRecord(record, classes);
+		System.out.println("Sending size: " + psr.getSerializedSize());
+		sendSize(psr.getSerializedSize());
+		System.out.println("psr: " + psr);
+		psr.writeTo(outStream);
+		outStream.flush();
+		System.out.println("flushed");
+	}
 	
 	public void sendSize(int serializedSize) throws Exception{
 		ProtoRecordSize size = ProtoRecordSize.newBuilder()
@@ -67,7 +94,7 @@ public class RecordSender {
 	 * Builds a protobuf-record from the java-record to send it to the subprocess
 	 * Curently one int and strings are supported
 	 */
-	private ProtoStratosphereRecord getProtoStratosphereRecord(Record r) throws Exception {
+	private ProtoStratosphereRecord getProtoStratosphereRecord(Record r, List<Class<? extends Value>> inputClasses) throws Exception {
 		ProtoStratosphereRecord.Builder psrb=  ProtoStratosphereRecord.newBuilder();
 		
 		for(int i = 0; i < inputClasses.size(); i++){

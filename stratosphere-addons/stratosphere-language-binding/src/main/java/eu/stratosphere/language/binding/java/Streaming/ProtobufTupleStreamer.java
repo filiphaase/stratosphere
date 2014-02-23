@@ -17,18 +17,43 @@ public class ProtobufTupleStreamer extends ProtobufPythonStreamer {
 		super(pythonFilePath, connectionType, classes);
 	}
 	
+	public ProtobufTupleStreamer(String scriptPath,
+			ConnectionType connectionType,
+			List<Class<? extends Value>> classes1,
+			List<Class<? extends Value>> classes2) {
+		super(scriptPath, connectionType, classes1, classes2);
+		System.out.println("Constructor with two classes: " + classes1 + " ; " + classes2);
+	}
+
 	public void open() throws Exception{
 		super.open();
-		sender = new RecordSender(outputStream, inputRecordClasses);
+		if(secondInputRecordClasses ==null){
+			sender = new RecordSender(outputStream, inputRecordClasses);
+		}else{
+			System.out.println("Opening sender with second inputRecordClasses! : " + secondInputRecordClasses);
+			sender = new RecordSender(outputStream, inputRecordClasses, secondInputRecordClasses);
+		}
 		receiver = new RecordReceiver(inputStream);
 	}
 
 	/**
 	 * Sends a single record to the sub-process (without and signal afterwards) 
-	 * and directly starts to receive records afterwards
+	 * and directly starts to receive records afterwards used for MAP
 	 */
 	public void streamSingleRecord(Record record, Collector<Record> collector) throws Exception {
         sender.sendSingleRecord(record);
+        receiver.receive(collector);
+	}
+	
+	/**
+	 * Sends two records to the sub-process (without and signal afterwards) 
+	 * and directly starts to receive records afterwards, used for JOIN
+	 */
+	public void streamTwoRecord(Record record1, Record record2, Collector<Record> collector) throws Exception {
+		System.out.println("Sending record1: " + record1);
+        sender.sendSingleRecord(record1, 0);
+		System.out.println("Sending record2: " + record2);
+        sender.sendSingleRecord(record2, 1);
         receiver.receive(collector);
 	}
 	
@@ -44,4 +69,44 @@ public class ProtobufTupleStreamer extends ProtobufPythonStreamer {
     public void sendID(int id) throws Exception{
     	sender.sendSize(id);
     }
+
+	public void streamTwoIterators(Iterator<Record> records1,
+			Iterator<Record> records2, Collector<Record> out) throws Exception{
+		//boolean done[] = { false, false};
+		int i;
+		while((i = receiver.getSize()) != SIGNAL_SINGLE_CALL_DONE){
+			// Send next record from one of the iterators
+			System.out.println("StreamTwoIterators: Iterator number " + i + " !");
+		
+			// -3 is signal for iterater1 , -4 signal for iterator2
+			if( i == -3 || i == -4){
+				Iterator<Record> iter = null;
+				if( i == -4){
+					iter = records1;
+					i = 0;
+				}else if ( i == -3){
+					iter = records2;
+					i = 1;
+				}
+				System.out.println("Iter: " + iter);
+				if(iter != null && iter.hasNext()){
+					System.out.println("Sending record");
+					sender.sendSingleRecord(iter.next(), i);
+				}else{
+					System.out.println("Sending signal single call done");
+					// Send signal that this iterator is done
+					sender.sendSize(SIGNAL_SINGLE_CALL_DONE);
+				}
+			}else{
+				System.out.println("Receiving record with size: " + i);
+				receiver.receiveSingleRecord(out, i);
+			}
+		}
+		System.out.println("CoGroup DONE!");
+		//sender.sendSize(SIGNAL_ALL_CALLS_DONE);
+	}
+
+	public void sendDone() throws Exception {
+		sender.sendSize(SIGNAL_ALL_CALLS_DONE);
+	}
 }

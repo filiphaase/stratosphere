@@ -18,6 +18,7 @@ public class PlanSender {
 				.build();
 		size.writeTo(outStream);
 		outStream.flush();
+		System.out.println("Sent ID");
 	}
 	
 }

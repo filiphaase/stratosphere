@@ -19,14 +19,18 @@ public class RecordReceiver {
 		this.inStream = inStream;
 	}
 	
+	public void receiveSingleRecord(Collector<Record> collector, int size) throws Exception{
+		byte[] buffer = new byte[size];
+		inStream.read(buffer);
+		ProtoStratosphereRecord psr = ProtoStratosphereRecord.parseFrom(buffer);
+		System.out.println("Received single psr: " + psr);
+		Record record = getRecord(psr);
+		collector.collect(record);
+	}
 	public void receive(Collector<Record> collector) throws Exception{
 		int size;
 		while( (size = getSize()) != ProtobufPythonStreamer.SIGNAL_ALL_CALLS_DONE){
-			byte[] buffer = new byte[size];
-			inStream.read(buffer);
-			ProtoStratosphereRecord psr = ProtoStratosphereRecord.parseFrom(buffer);
-			Record record = getRecord(psr);
-			collector.collect(record);
+			receiveSingleRecord(collector, size);
 		}	
 	}
 	

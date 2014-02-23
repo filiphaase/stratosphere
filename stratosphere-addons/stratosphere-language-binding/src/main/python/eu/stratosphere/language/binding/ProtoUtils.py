@@ -10,8 +10,8 @@ def enum(**enums):
     return type('Enum', (), enums)        
 ConnectionType = enum(STDPIPES=1, PIPES=2, SOCKETS=3)
 
-SIGNAL_SINGLE_CALL_DONE = 4294967295;
-SIGNAL_ALL_CALLS_DONE = 4294967294;
+SIGNAL_SINGLE_CALL_DONE = -1;
+SIGNAL_ALL_CALLS_DONE = -2;
 
 class Connection(object):
     def __init__(self, send_func, recv_func):
@@ -64,10 +64,11 @@ class STDPipeConnection(Connection):
 """
 class Iterator(object):
         
-    def __init__(self, f, connection):
+    def __init__(self, f, connection, preIndex = None):
         self.finished = False
         self.f = f
         self.__connection = connection
+        self.__preIndex = preIndex
         
     def log(self,s):
         self.f.write(str(s) + "\n")
@@ -77,7 +78,13 @@ class Iterator(object):
     
     def __iter__(self): 
         while(True):
+            self.log("calling iterator function")
+            if(self.__preIndex != None):
+                self.__connection.sendSize(self.__preIndex)
+            self.log("sent " + str(self.__preIndex))
+                
             size = self.__connection.readSize()
+            self.log("gotSize " + str(size))
             # If we are done with this map/reduce/... record-collection we get a -1 from java
             if size == SIGNAL_SINGLE_CALL_DONE:
                 break
@@ -144,6 +151,9 @@ class Collector(object):
         #sys.stdout.write(recordBuf)
         self.__connection.sendSize(len(recordBuf))
         self.__connection.send(recordBuf)
+
+    def finishSingleCall(self):
+        self.__connection.sendSize(SIGNAL_SINGLE_CALL_DONE)
 
     def finish(self):
         self.__connection.sendSize(SIGNAL_ALL_CALLS_DONE)

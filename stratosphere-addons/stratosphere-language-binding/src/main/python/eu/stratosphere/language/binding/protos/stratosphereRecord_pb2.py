@@ -13,7 +13,7 @@ from google.protobuf import descriptor_pb2
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='stratosphereRecord.proto',
   package='eu.stratosphere.language.binding.protos',
-  serialized_pb='\n\x18stratosphereRecord.proto\x12\'eu.stratosphere.language.binding.protos\" \n\x0fProtoRecordSize\x12\r\n\x05value\x18\x01 \x02(\x07\"\xd4\x03\n\x17ProtoStratosphereRecord\x12[\n\x06values\x18\x01 \x03(\x0b\x32K.eu.stratosphere.language.binding.protos.ProtoStratosphereRecord.ProtoValue\x1a\xdd\x01\n\nProtoValue\x12\x62\n\tvalueType\x18\x01 \x02(\x0e\x32O.eu.stratosphere.language.binding.protos.ProtoStratosphereRecord.ProtoValueType\x12\x11\n\tstringVal\x18\x02 \x01(\t\x12\x10\n\x08int32Val\x18\x03 \x01(\x05\x12\x10\n\x08int64Val\x18\x04 \x01(\x03\x12\x11\n\tdoubleVal\x18\x05 \x01(\x01\x12\x10\n\x08\x66loatVal\x18\x06 \x01(\x02\x12\x0f\n\x07\x62oolVal\x18\x07 \x01(\x08\"|\n\x0eProtoValueType\x12\x0f\n\x0bStringValue\x10\x00\x12\x12\n\x0eIntegerValue32\x10\x01\x12\x12\n\x0eIntegerValue64\x10\x02\x12\x0f\n\x0b\x44oubleValue\x10\x03\x12\x0e\n\nFloatValue\x10\x04\x12\x10\n\x0c\x42ooleanValue\x10\x05\x42 B\x1eStratosphereRecordProtoBuffers')
+  serialized_pb='\n\x18stratosphereRecord.proto\x12\'eu.stratosphere.language.binding.protos\" \n\x0fProtoRecordSize\x12\r\n\x05value\x18\x01 \x02(\x0f\"\xd4\x03\n\x17ProtoStratosphereRecord\x12[\n\x06values\x18\x01 \x03(\x0b\x32K.eu.stratosphere.language.binding.protos.ProtoStratosphereRecord.ProtoValue\x1a\xdd\x01\n\nProtoValue\x12\x62\n\tvalueType\x18\x01 \x02(\x0e\x32O.eu.stratosphere.language.binding.protos.ProtoStratosphereRecord.ProtoValueType\x12\x11\n\tstringVal\x18\x02 \x01(\t\x12\x10\n\x08int32Val\x18\x03 \x01(\x05\x12\x10\n\x08int64Val\x18\x04 \x01(\x03\x12\x11\n\tdoubleVal\x18\x05 \x01(\x01\x12\x10\n\x08\x66loatVal\x18\x06 \x01(\x02\x12\x0f\n\x07\x62oolVal\x18\x07 \x01(\x08\"|\n\x0eProtoValueType\x12\x0f\n\x0bStringValue\x10\x00\x12\x12\n\x0eIntegerValue32\x10\x01\x12\x12\n\x0eIntegerValue64\x10\x02\x12\x0f\n\x0b\x44oubleValue\x10\x03\x12\x0e\n\nFloatValue\x10\x04\x12\x10\n\x0c\x42ooleanValue\x10\x05\x42 B\x1eStratosphereRecordProtoBuffers')
 
 
 
@@ -64,7 +64,7 @@ _PROTORECORDSIZE = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='value', full_name='eu.stratosphere.language.binding.protos.ProtoRecordSize.value', index=0,
-      number=1, type=7, cpp_type=3, label=2,
+      number=1, type=15, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,

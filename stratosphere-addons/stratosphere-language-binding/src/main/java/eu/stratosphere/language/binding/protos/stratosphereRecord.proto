@@ -5,7 +5,7 @@ option java_outer_classname = "StratosphereRecordProtoBuffers";
 
 //As test for a fixed size length sending
 message ProtoRecordSize{
-	required fixed32 value = 1;
+	required sfixed32 value = 1;
 }
 
 message ProtoStratosphereRecord{

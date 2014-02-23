@@ -36,7 +36,8 @@ public class ProtobufPythonStreamer{
 	
 	private final String pythonFilePath;
 	protected final ConnectionType connectionType;
-	protected final List<Class<?extends Value>> inputRecordClasses;
+	protected List<Class<?extends Value>> inputRecordClasses;
+	protected List<Class<?extends Value>> secondInputRecordClasses = null;
 	
 	protected InputStream inputStream;
 	protected OutputStream outputStream;
@@ -51,13 +52,22 @@ public class ProtobufPythonStreamer{
 		this.inputRecordClasses = classes;
 	}
 	
+	/**
+	 * Used for operators with two different "input-streams" like join/group/co-group
+	 */
+	public ProtobufPythonStreamer(String pythonFilePath, ConnectionType connectionType,
+			List<Class<?extends Value>> classes1, List<Class<?extends Value>> classes2){
+		this(pythonFilePath, connectionType, classes1);
+		this.secondInputRecordClasses = classes2;
+	}
+	
 	public void open() throws Exception{
 		if(connectionType == ConnectionType.SOCKETS){
 			pythonProcess = Runtime.getRuntime().exec("python " + pythonFilePath, ENV);
 		}else{
 			pythonProcess = Runtime.getRuntime().exec("python " + pythonFilePath + " " + PORT, ENV);
 		}
-		err = new BufferedReader(new InputStreamReader(pythonProcess.getErrorStream()));
+		//err = new BufferedReader(new InputStreamReader(pythonProcess.getErrorStream()));
 		LOG.debug("Proto-AbstractOperator - open() called");
 		
 		switch(connectionType){
@@ -81,12 +91,14 @@ public class ProtobufPythonStreamer{
 	
 	public void close() throws Exception{
 		LOG.debug("Proto-AbstractOperator - close() called");
+		
 		// Send signal to the python process that it is done
 		//if(sender != null)
 			//sender.sendSize(SIGNAL_ALL_CALLS_DONE);
 		/*String line;
 		while ((line = err.readLine()) != null) {
 			LOG.error("Python Error: "+line);
+			System.out.println("Python Error: "+line);
 		}*/
 		
 		pythonProcess.destroy();

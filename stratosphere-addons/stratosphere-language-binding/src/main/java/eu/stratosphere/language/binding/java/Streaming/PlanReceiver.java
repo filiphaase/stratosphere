@@ -11,10 +11,17 @@ import eu.stratosphere.api.common.operators.FileDataSink;
 import eu.stratosphere.api.common.operators.FileDataSource;
 import eu.stratosphere.api.common.operators.GenericDataSink;
 import eu.stratosphere.api.common.operators.Operator;
+import eu.stratosphere.api.java.record.functions.CoGroupFunction;
 import eu.stratosphere.api.java.record.io.CsvOutputFormat;
 import eu.stratosphere.api.java.record.io.TextInputFormat;
+import eu.stratosphere.api.java.record.operators.CoGroupOperator;
+import eu.stratosphere.api.java.record.operators.CrossOperator;
+import eu.stratosphere.api.java.record.operators.JoinOperator;
 import eu.stratosphere.api.java.record.operators.MapOperator;
 import eu.stratosphere.api.java.record.operators.ReduceOperator;
+import eu.stratosphere.language.binding.java.operators.PyCoGroupFunction;
+import eu.stratosphere.language.binding.java.operators.PyCrossFunction;
+import eu.stratosphere.language.binding.java.operators.PyJoinFunction;
 import eu.stratosphere.language.binding.java.operators.PyMapFunction;
 import eu.stratosphere.language.binding.java.operators.PyReduceFunction;
 import eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan;
@@ -51,7 +58,7 @@ public class PlanReceiver {
 		return size.getValue();
 	}
 	
-	public List<Class<?extends Value>> getInputClasses(Vertex vertex){
+	public List<Class<?extends Value>> getOutputClasses(Vertex vertex){
 		if(vertex.getOutputTypesCount()== 0){
 			return null;
 		}
@@ -76,12 +83,15 @@ public class PlanReceiver {
 	
 	private Plan getPlan(ProtoPlan protoPlan, String scriptPath, ConnectionType connection){
 		Operator[] operators = new Operator[protoPlan.getVerticesCount()];
+		@SuppressWarnings("unchecked")
+		List<Class<?extends Value>> classes[] = new List[protoPlan.getVerticesCount()];
 		
 		for(int i = 0; i < protoPlan.getVerticesCount(); i++){
 			Vertex vertex = protoPlan.getVertices(i);
 			Map<String, String> params = new HashMap<String, String>();
-			VertexType type = vertex.getType();
-			List<Class<?extends Value>> classes = getInputClasses(vertex);
+			VertexType type = vertex.getType(); 
+			List<Integer> in = vertex.getInputsList();
+			classes[i] = getOutputClasses(vertex);
 			
 			for (int j = 0; j < vertex.getParamsCount(); j++){
 				KeyValuePair param = vertex.getParams(j);
@@ -95,15 +105,39 @@ public class PlanReceiver {
 						params.get("filePath"));
 					break;
 				case Map:
-					PyMapFunction mapFunction = new PyMapFunction(scriptPath, connection, classes, i);
+					PyMapFunction mapFunction = new PyMapFunction(scriptPath, connection, classes[in.get(0)], i);
 					operators[i] = MapOperator.builder(mapFunction)
-						.input(operators[vertex.getInputs(0)])
+						.input(operators[in.get(0)])
 						.build();
 					break;
 				case Reduce:
-					PyReduceFunction reduceFunction = new PyReduceFunction(scriptPath, connection, classes, i);
+					PyReduceFunction reduceFunction = new PyReduceFunction(scriptPath, connection, classes[in.get(0)], i);
 					operators[i] = ReduceOperator.builder(reduceFunction, StringValue.class, 0)
-							.input(operators[vertex.getInputs(0)])
+							.input(operators[in.get(0)])
+							.build();
+					break;
+					
+				case Join:
+					PyJoinFunction joinFunction = new PyJoinFunction(scriptPath, connection, classes[in.get(0)], classes[in.get(1)], i);
+					operators[i] = JoinOperator.builder(joinFunction, StringValue.class, 0, 0)
+							.input1(operators[in.get(0)])
+							.input2(operators[in.get(1)])
+							.build();
+					break;
+
+				case Cross:
+					PyCrossFunction crossFunction = new PyCrossFunction(scriptPath, connection, classes[in.get(0)], classes[in.get(1)], i);
+					operators[i] = CrossOperator.builder(crossFunction)
+							.input1(operators[in.get(0)])
+							.input2(operators[in.get(1)])
+							.build();
+					break;
+					
+				case CoGroup:
+					PyCoGroupFunction coGroup = new PyCoGroupFunction(scriptPath, connection, classes[in.get(0)], classes[in.get(1)], i);
+					operators[i] = CoGroupOperator.builder(coGroup, StringValue.class, 0, 0)
+							.input1(operators[in.get(0)])
+							.input2(operators[in.get(1)])
 							.build();
 					break;
 				case CsvOutputFormat:

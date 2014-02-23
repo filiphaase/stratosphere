@@ -11,13 +11,13 @@ public final class StratosphereRecordProtoBuffers {
   public interface ProtoRecordSizeOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // required fixed32 value = 1;
+    // required sfixed32 value = 1;
     /**
-     * <code>required fixed32 value = 1;</code>
+     * <code>required sfixed32 value = 1;</code>
      */
     boolean hasValue();
     /**
-     * <code>required fixed32 value = 1;</code>
+     * <code>required sfixed32 value = 1;</code>
      */
     int getValue();
   }
@@ -78,7 +78,7 @@ public final class StratosphereRecordProtoBuffers {
             }
             case 13: {
               bitField0_ |= 0x00000001;
-              value_ = input.readFixed32();
+              value_ = input.readSFixed32();
               break;
             }
           }
@@ -121,17 +121,17 @@ public final class StratosphereRecordProtoBuffers {
     }
 
     private int bitField0_;
-    // required fixed32 value = 1;
+    // required sfixed32 value = 1;
     public static final int VALUE_FIELD_NUMBER = 1;
     private int value_;
     /**
-     * <code>required fixed32 value = 1;</code>
+     * <code>required sfixed32 value = 1;</code>
      */
     public boolean hasValue() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required fixed32 value = 1;</code>
+     * <code>required sfixed32 value = 1;</code>
      */
     public int getValue() {
       return value_;
@@ -157,7 +157,7 @@ public final class StratosphereRecordProtoBuffers {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeFixed32(1, value_);
+        output.writeSFixed32(1, value_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -170,7 +170,7 @@ public final class StratosphereRecordProtoBuffers {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeFixed32Size(1, value_);
+          .computeSFixed32Size(1, value_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -376,22 +376,22 @@ public final class StratosphereRecordProtoBuffers {
       }
       private int bitField0_;
 
-      // required fixed32 value = 1;
+      // required sfixed32 value = 1;
       private int value_ ;
       /**
-       * <code>required fixed32 value = 1;</code>
+       * <code>required sfixed32 value = 1;</code>
        */
       public boolean hasValue() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required fixed32 value = 1;</code>
+       * <code>required sfixed32 value = 1;</code>
        */
       public int getValue() {
         return value_;
       }
       /**
-       * <code>required fixed32 value = 1;</code>
+       * <code>required sfixed32 value = 1;</code>
        */
       public Builder setValue(int value) {
         bitField0_ |= 0x00000001;
@@ -400,7 +400,7 @@ public final class StratosphereRecordProtoBuffers {
         return this;
       }
       /**
-       * <code>required fixed32 value = 1;</code>
+       * <code>required sfixed32 value = 1;</code>
        */
       public Builder clearValue() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -2412,7 +2412,7 @@ public final class StratosphereRecordProtoBuffers {
     java.lang.String[] descriptorData = {
       "\n\030stratosphereRecord.proto\022\'eu.stratosph" +
       "ere.language.binding.protos\" \n\017ProtoReco" +
-      "rdSize\022\r\n\005value\030\001 \002(\007\"\324\003\n\027ProtoStratosph" +
+      "rdSize\022\r\n\005value\030\001 \002(\017\"\324\003\n\027ProtoStratosph" +
       "ereRecord\022[\n\006values\030\001 \003(\0132K.eu.stratosph" +
       "ere.language.binding.protos.ProtoStratos" +
       "phereRecord.ProtoValue\032\335\001\n\nProtoValue\022b\n" +
