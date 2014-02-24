@@ -42,13 +42,13 @@ public class PlanReceiver {
 		this.inStream = inStream;
 	}
 
-	public Plan receivePlan(String scriptPath, ConnectionType connection) throws Exception{
+	public Plan receivePlan(String scriptPath, ConnectionType connection, String pythonCode) throws Exception{
 		int size = getSize();
 		byte[] buffer = new byte[size];
 		inStream.read(buffer);
 		ProtoPlan pp = ProtoPlan.parseFrom(buffer);
 		System.out.println(pp);
-		return getPlan(pp, scriptPath, connection);	
+		return getPlan(pp, scriptPath, connection, pythonCode);	
 	}
 	
 	public int getSize() throws Exception{
@@ -81,7 +81,7 @@ public class PlanReceiver {
 		return result;
 	}
 	
-	private Plan getPlan(ProtoPlan protoPlan, String scriptPath, ConnectionType connection){
+	private Plan getPlan(ProtoPlan protoPlan, String scriptPath, ConnectionType connection, String pythonCode){
 		Operator[] operators = new Operator[protoPlan.getVerticesCount()];
 		@SuppressWarnings("unchecked")
 		List<Class<?extends Value>> classes[] = new List[protoPlan.getVerticesCount()];
@@ -153,6 +153,7 @@ public class PlanReceiver {
 				default:
 					throw new RuntimeException("Not implemented Vertex/Operatortype");
 			}
+			operators[i].setParameter(ProtobufTupleStreamer.CONFIG_PYTHON_FILE, pythonCode);
 		}
 		
 		Plan result = new Plan((GenericDataSink)operators[protoPlan.getVerticesCount()-1], "Word Count Python Example");

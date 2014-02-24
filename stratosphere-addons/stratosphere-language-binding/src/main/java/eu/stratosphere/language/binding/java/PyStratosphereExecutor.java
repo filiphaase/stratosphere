@@ -1,7 +1,13 @@
 package eu.stratosphere.language.binding.java;
 
+import java.io.File;
+import java.nio.charset.Charset;
+
+import com.google.common.io.Files;
+
 import eu.stratosphere.api.common.Plan;
 import eu.stratosphere.client.LocalExecutor;
+import eu.stratosphere.client.RemoteExecutor;
 import eu.stratosphere.language.binding.java.Streaming.ConnectionType;
 import eu.stratosphere.language.binding.java.Streaming.ProtobufPlanStreamer;
 
@@ -23,12 +29,14 @@ public class PyStratosphereExecutor {
 			System.out.println(call);
 			System.exit(1);			
 		}
+		
+		String pythonCode = Files.toString(new File(path), Charset.defaultCharset());
 
 		// Use The Plan Streamer to execute the python program and get back the stratosphere plan
 		ProtobufPlanStreamer streamer = new ProtobufPlanStreamer(path, connectionType);
 		streamer.open();
 		streamer.streamSignalGetPlan();
-		Plan plan = streamer.receivePlan(path);
+		Plan plan = streamer.receivePlan(path, pythonCode);
 		streamer.close();
 		
 		// Execute it

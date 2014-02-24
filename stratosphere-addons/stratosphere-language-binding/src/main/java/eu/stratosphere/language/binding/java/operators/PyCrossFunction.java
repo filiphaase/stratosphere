@@ -36,7 +36,7 @@ public class PyCrossFunction extends CrossFunction implements Serializable{
 		public void open(Configuration parameters) throws Exception {
 			super.open(parameters);
 			System.out.println("Open CrossFunction");
-			streamer = new ProtobufTupleStreamer(scriptPath, connectionType, classes1, classes2);
+			streamer = new ProtobufTupleStreamer(parameters, connectionType, classes1, classes2);
 			System.out.println("Open CrossFunction1");
 			streamer.open();
 			System.out.println("Open CrossFunction2");

@@ -1,28 +1,30 @@
 package eu.stratosphere.language.binding.java.Streaming;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import eu.stratosphere.configuration.Configuration;
 import eu.stratosphere.types.Record;
 import eu.stratosphere.types.Value;
 import eu.stratosphere.util.Collector;
 
 public class ProtobufTupleStreamer extends ProtobufPythonStreamer {
 
+	public final static String CONFIG_PYTHON_FILE = "param.pythonCode";
 	private RecordReceiver receiver;
 	private RecordSender sender;
 	
-	public ProtobufTupleStreamer(String pythonFilePath,
-			ConnectionType connectionType, List<Class<?extends Value>> classes) {
-		super(pythonFilePath, connectionType, classes);
+	public ProtobufTupleStreamer(Configuration conf,
+			ConnectionType connectionType, List<Class<?extends Value>> classes) throws IOException{
+		super(conf.getString(CONFIG_PYTHON_FILE, ""), connectionType, classes);
 	}
 	
-	public ProtobufTupleStreamer(String scriptPath,
+	public ProtobufTupleStreamer(Configuration conf,
 			ConnectionType connectionType,
 			List<Class<? extends Value>> classes1,
-			List<Class<? extends Value>> classes2) {
-		super(scriptPath, connectionType, classes1, classes2);
-		System.out.println("Constructor with two classes: " + classes1 + " ; " + classes2);
+			List<Class<? extends Value>> classes2) throws IOException{
+		super(conf.getString(CONFIG_PYTHON_FILE, ""), connectionType, classes1, classes2);
 	}
 
 	public void open() throws Exception{
@@ -30,7 +32,6 @@ public class ProtobufTupleStreamer extends ProtobufPythonStreamer {
 		if(secondInputRecordClasses ==null){
 			sender = new RecordSender(outputStream, inputRecordClasses);
 		}else{
-			System.out.println("Opening sender with second inputRecordClasses! : " + secondInputRecordClasses);
 			sender = new RecordSender(outputStream, inputRecordClasses, secondInputRecordClasses);
 		}
 		receiver = new RecordReceiver(inputStream);
@@ -50,9 +51,7 @@ public class ProtobufTupleStreamer extends ProtobufPythonStreamer {
 	 * and directly starts to receive records afterwards, used for JOIN
 	 */
 	public void streamTwoRecord(Record record1, Record record2, Collector<Record> collector) throws Exception {
-		System.out.println("Sending record1: " + record1);
         sender.sendSingleRecord(record1, 0);
-		System.out.println("Sending record2: " + record2);
         sender.sendSingleRecord(record2, 1);
         receiver.receive(collector);
 	}
@@ -76,7 +75,6 @@ public class ProtobufTupleStreamer extends ProtobufPythonStreamer {
 		int i;
 		while((i = receiver.getSize()) != SIGNAL_SINGLE_CALL_DONE){
 			// Send next record from one of the iterators
-			System.out.println("StreamTwoIterators: Iterator number " + i + " !");
 		
 			// -3 is signal for iterater1 , -4 signal for iterator2
 			if( i == -3 || i == -4){

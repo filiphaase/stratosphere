@@ -58,7 +58,7 @@ public class PythonWordCount implements Program, ProgramDescription {
 			for(int i = 0; i < MAPCLASSES.length; i++){
 				classes.add((Class<? extends Value>) MAPCLASSES[i]);
 			}
-			streamer = new ProtobufTupleStreamer(MAPSCRIPTPATH, ConnectionType.STDPIPES, classes);
+			//streamer = new ProtobufTupleStreamer(MAPSCRIPTPATH, ConnectionType.STDPIPES, classes);
 			// Example for sockets:
 			// mapper = new Mapper(MAPSCRIPTPATH, 8080, classes, ConnectionType.SOCKETS);
 			streamer.open();
@@ -103,7 +103,7 @@ public class PythonWordCount implements Program, ProgramDescription {
 			for(int i = 0; i < REDUCECLASSES.length; i++){
 				reduceClasses.add((Class<? extends Value>) REDUCECLASSES[i]);
 			}
-			streamer = new ProtobufTupleStreamer(REDUCESCRIPTPATH, ConnectionType.STDPIPES, reduceClasses);
+			//streamer = new ProtobufTupleStreamer(REDUCESCRIPTPATH, ConnectionType.STDPIPES, reduceClasses);
 			// Example for sockets:
 			// reducer = new Reducer(REDUCESCRIPTPATH, 8081, reduceClasses, ConnectionType.SOCKETS);
 			streamer.open();

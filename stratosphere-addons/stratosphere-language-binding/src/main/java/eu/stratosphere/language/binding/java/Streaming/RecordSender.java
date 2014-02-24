@@ -62,10 +62,8 @@ public class RecordSender {
 	// Mhh... using int here is kinda ugly, change it
 	public void sendSingleRecord(Record record, int classNumber) throws Exception{
 		if(classNumber == 0){
-			System.out.println("sending from class 0");
 			sendSingleRecord(record, this.inputClasses1);
 		}else{
-			System.out.println("sending from class 1");
 			sendSingleRecord(record, this.inputClasses2);
 		}
 	}
@@ -73,12 +71,9 @@ public class RecordSender {
 	public void sendSingleRecord(Record record, List<Class<? extends Value>> classes) throws Exception{
 		//System.out.println("in Send single record classes: " + classes.get(0));
 		ProtoStratosphereRecord psr = getProtoStratosphereRecord(record, classes);
-		System.out.println("Sending size: " + psr.getSerializedSize());
 		sendSize(psr.getSerializedSize());
-		System.out.println("psr: " + psr);
 		psr.writeTo(outStream);
 		outStream.flush();
-		System.out.println("flushed");
 	}
 	
 	public void sendSize(int serializedSize) throws Exception{

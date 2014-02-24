@@ -32,7 +32,7 @@ public class PyReduceFunction extends ReduceFunction implements Serializable{
 		@Override
 		public void open(Configuration parameters) throws Exception {
 			super.open(parameters);
-			streamer = new ProtobufTupleStreamer(scriptPath, connectionType, classes);
+			streamer = new ProtobufTupleStreamer(parameters, connectionType, classes);
 			streamer.open();
 			streamer.sendID(id);
 		}

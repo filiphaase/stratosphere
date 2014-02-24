@@ -9,7 +9,7 @@ def log(s):
     f.write(str(s) + "\n")
 sys.stderr = open("pythonPlanError.txt", "w")
 
-inputPath = r"file:///home/filip/Documents/stratosphere/hamlet1000.txt"
+inputPath = r"file:///home/filip/Documents/stratosphere/hamlet10.txt"
 outputPath = r"file:///home/filip/Documents/stratosphere/resultPlan.txt"
 
 def split(record, collector):
@@ -27,9 +27,9 @@ def count(iter, collector):
     if(record != None):
         collector.collect((record[0], int(sum)))
 
-TextInputFormat(inputPath).map(split, [ValueType.String]) \
+TextInputFormat(inputPath).map(split, [ValueType.String, ValueType.Int]) \
     .reduce(count, [ValueType.String, ValueType.Int]) \
-    .outputCSV(outputPath, [ValueType.String, ValueType.Int]) \
+    .outputCSV(outputPath) \
     .execute()
     
 """ Longer version

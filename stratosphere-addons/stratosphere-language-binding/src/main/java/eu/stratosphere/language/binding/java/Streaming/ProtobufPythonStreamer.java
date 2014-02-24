@@ -1,15 +1,20 @@
 package eu.stratosphere.language.binding.java.Streaming;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import com.google.common.io.Files;
 
 import eu.stratosphere.types.Value;
 
@@ -45,9 +50,19 @@ public class ProtobufPythonStreamer{
 	private ServerSocket serverSocket;
 	private BufferedReader err;
 	
-	public ProtobufPythonStreamer(String pythonFilePath, ConnectionType connectionType,
-			List<Class<?extends Value>> classes){
-		this.pythonFilePath = pythonFilePath;
+	public ProtobufPythonStreamer(String pythonScript, ConnectionType connectionType) throws IOException{
+		this.pythonFilePath = pythonScript;
+		this.connectionType = connectionType;
+		this.inputRecordClasses = null;
+	}
+	
+	
+	public ProtobufPythonStreamer(String pythonCode, ConnectionType connectionType,
+			List<Class<?extends Value>> classes) throws IOException{
+		File temp = File.createTempFile("stratosphere-tmp-python-code", ".tmp.py");
+		Files.append(pythonCode, temp, Charset.defaultCharset());
+		this.pythonFilePath = temp.getAbsolutePath();
+		System.out.println("New Path to tmpPythonFile: " + pythonFilePath);
 		this.connectionType = connectionType;
 		this.inputRecordClasses = classes;
 	}
@@ -55,19 +70,22 @@ public class ProtobufPythonStreamer{
 	/**
 	 * Used for operators with two different "input-streams" like join/group/co-group
 	 */
-	public ProtobufPythonStreamer(String pythonFilePath, ConnectionType connectionType,
-			List<Class<?extends Value>> classes1, List<Class<?extends Value>> classes2){
-		this(pythonFilePath, connectionType, classes1);
+	public ProtobufPythonStreamer(String pythonCode, ConnectionType connectionType,
+			List<Class<?extends Value>> classes1, List<Class<?extends Value>> classes2) throws IOException{
+		this(pythonCode, connectionType, classes1);
 		this.secondInputRecordClasses = classes2;
 	}
 	
 	public void open() throws Exception{
+		System.out.println("------- Executing: " + pythonFilePath);
+		System.out.println("-------> File content: " + Files.toString(new File(pythonFilePath), Charset.defaultCharset()));
 		if(connectionType == ConnectionType.SOCKETS){
 			pythonProcess = Runtime.getRuntime().exec("python " + pythonFilePath, ENV);
 		}else{
 			pythonProcess = Runtime.getRuntime().exec("python " + pythonFilePath + " " + PORT, ENV);
 		}
-		//err = new BufferedReader(new InputStreamReader(pythonProcess.getErrorStream()));
+		System.out.println("exec done");
+		err = new BufferedReader(new InputStreamReader(pythonProcess.getErrorStream()));
 		LOG.debug("Proto-AbstractOperator - open() called");
 		
 		switch(connectionType){
@@ -91,6 +109,7 @@ public class ProtobufPythonStreamer{
 	
 	public void close() throws Exception{
 		LOG.debug("Proto-AbstractOperator - close() called");
+		System.out.println("Close called");
 		
 		// Send signal to the python process that it is done
 		//if(sender != null)

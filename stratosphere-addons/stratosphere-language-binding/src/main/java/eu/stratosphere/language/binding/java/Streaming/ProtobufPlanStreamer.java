@@ -1,5 +1,7 @@
 package eu.stratosphere.language.binding.java.Streaming;
 
+import java.io.IOException;
+
 import eu.stratosphere.api.common.Plan;
 
 public class ProtobufPlanStreamer extends ProtobufPythonStreamer {
@@ -8,8 +10,8 @@ public class ProtobufPlanStreamer extends ProtobufPythonStreamer {
 	private PlanSender planSender;
 
 	public ProtobufPlanStreamer(String pythonFilePath,
-			ConnectionType connectionType) {
-		super(pythonFilePath, connectionType, null);
+			ConnectionType connectionType) throws IOException{
+		super(pythonFilePath, connectionType);
 	}
 	
 	public void open() throws Exception{
@@ -26,7 +28,7 @@ public class ProtobufPlanStreamer extends ProtobufPythonStreamer {
     	planSender.sendID(id);
     }
 
-	public Plan receivePlan(String scriptPath) throws Exception{
-		return planReceiver.receivePlan(scriptPath, connectionType);	
+	public Plan receivePlan(String scriptPath, String pythonCode) throws Exception{
+		return planReceiver.receivePlan(scriptPath, connectionType, pythonCode);	
 	}
 }
