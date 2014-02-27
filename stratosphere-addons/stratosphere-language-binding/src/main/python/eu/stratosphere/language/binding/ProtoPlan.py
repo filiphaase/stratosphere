@@ -38,18 +38,25 @@ class Plan(object):
             otherwise we have to execute the given vertex number
             The code is easier if we have the vertices always sorted here (according to the id)
         """
+        log("in execute")
         self.__connection = STDPipeConnection()
+        log("setup stdpipe connection")
         vertexInd = self.__connection.readSize()
+        log("got size: "+ str(vertexInd))
         self.__vertices.sort()
+        log("sorted")
         
         if vertexInd == -1:
+            log("in sending plan back")
             #Setup protoplan
             self.__protoPlan = ProtoPlan()
             
             for vertex in self.__vertices:
                 #Adding it to the plan, therefore we give a new vertex refernce to the function
                 vertex.fillVertex(self.__protoPlan.vertices.add())
+            log("really sending plan back")
             self.sendPlan(self.__connection)
+            log("sent plan")
         else:
             vertex = self.__vertices[vertexInd]
             

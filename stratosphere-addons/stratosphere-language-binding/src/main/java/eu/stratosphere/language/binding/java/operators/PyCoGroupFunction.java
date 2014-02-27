@@ -36,18 +36,13 @@ public class PyCoGroupFunction extends CoGroupFunction implements Serializable{
 	public void open(Configuration parameters) throws Exception {
 		super.open(parameters);
 	
-		System.out.println("Open CoGroupFunc");
 		streamer = new ProtobufTupleStreamer(parameters, connectionType, classes1, classes2);
-		System.out.println("Open CoGroupFunc1");
 		streamer.open();
-		System.out.println("Open CoGroupFunc2");
 		streamer.sendID(id);
-		System.out.println("Open CoGroupFunc3");
 	}
 
 	@Override
 	public void close() throws Exception {
-		System.out.println("Close CoGroupFunction");
 		streamer.sendDone();
 		streamer.close();
 		super.close();
@@ -56,7 +51,6 @@ public class PyCoGroupFunction extends CoGroupFunction implements Serializable{
 	@Override
 	public void coGroup(Iterator<Record> records1, Iterator<Record> records2,
 			Collector<Record> out) throws Exception {
-		System.out.println("Called coGroup()");
 		streamer.streamTwoIterators(records1, records2, out);
 	}
 

@@ -1,10 +1,17 @@
 package eu.stratosphere.language.binding.java.Streaming;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.management.RuntimeErrorException;
+
+import com.google.common.io.Files;
 
 import eu.stratosphere.api.common.Plan;
 import eu.stratosphere.api.common.operators.FileDataSink;
@@ -42,13 +49,13 @@ public class PlanReceiver {
 		this.inStream = inStream;
 	}
 
-	public Plan receivePlan(String scriptPath, ConnectionType connection, String pythonCode) throws Exception{
+	public Plan receivePlan(String scriptPath, ConnectionType connection, String pythonCode, String frameworkPath) throws Exception{
 		int size = getSize();
 		byte[] buffer = new byte[size];
 		inStream.read(buffer);
 		ProtoPlan pp = ProtoPlan.parseFrom(buffer);
 		System.out.println(pp);
-		return getPlan(pp, scriptPath, connection, pythonCode);	
+		return getPlan(pp, scriptPath, connection, pythonCode, frameworkPath);	
 	}
 	
 	public int getSize() throws Exception{
@@ -81,10 +88,38 @@ public class PlanReceiver {
 		return result;
 	}
 	
-	private Plan getPlan(ProtoPlan protoPlan, String scriptPath, ConnectionType connection, String pythonCode){
+	private Plan getPlan(ProtoPlan protoPlan, String scriptPath, ConnectionType connection, String pythonCode, String frameworkPath) throws IOException{
+
+		System.out.println("in getPlan(), frameworkPath: " + frameworkPath);
+		ArrayList<File> inputFiles= getListOfFrameworkInputFiles(frameworkPath);
+		System.out.println("inputFiles: " + inputFiles);
+		    
+		String names[] = new String[inputFiles.size()];
+		String contents[] = new String[inputFiles.size()];
+		for (int i = 0; i < inputFiles.size(); i++){
+			names[i] = inputFiles.get(i).getName();
+			contents[i] = Files.toString(inputFiles.get(i), Charset.defaultCharset());
+		}
+		
 		Operator[] operators = new Operator[protoPlan.getVerticesCount()];
 		@SuppressWarnings("unchecked")
 		List<Class<?extends Value>> classes[] = new List[protoPlan.getVerticesCount()];
+		String namesConfString = null;
+		String contentsConfString = null;
+		
+		if(names != null && contents != null){
+			StringBuilder sb = new StringBuilder();
+			for(String n :names)
+				sb.append(n + ProtobufPythonStreamer.CONFIG_PYTHON_FRAMEWORK_LIST_DELIMITER);
+			sb.deleteCharAt(sb.length() - 1);
+			namesConfString = sb.toString();
+
+			sb = new StringBuilder();
+			for(String c :contents)
+				sb.append(c + ProtobufPythonStreamer.CONFIG_PYTHON_FRAMEWORK_LIST_DELIMITER);
+			sb.deleteCharAt(sb.length() - 1);
+			contentsConfString = sb.toString();
+		}
 		
 		for(int i = 0; i < protoPlan.getVerticesCount(); i++){
 			Vertex vertex = protoPlan.getVertices(i);
@@ -153,10 +188,31 @@ public class PlanReceiver {
 				default:
 					throw new RuntimeException("Not implemented Vertex/Operatortype");
 			}
-			operators[i].setParameter(ProtobufTupleStreamer.CONFIG_PYTHON_FILE, pythonCode);
+			operators[i].setParameter(ProtobufPythonStreamer.CONFIG_PYTHON_FILE, pythonCode);
+			operators[i].setParameter(ProtobufPythonStreamer.CONFIG_PYTHON_FRAMEWORK_CONTENTS, contentsConfString);
+			operators[i].setParameter(ProtobufPythonStreamer.CONFIG_PYTHON_FRAMEWORK_NAMES, namesConfString);
 		}
 		
 		Plan result = new Plan((GenericDataSink)operators[protoPlan.getVerticesCount()-1], "Word Count Python Example");
 		return result;
+	}
+
+	private ArrayList<File> getListOfFrameworkInputFiles(String frameworkPath) {
+		File folder = new File(frameworkPath);
+		ArrayList<File> resultFiles = new ArrayList<File>();
+		File[] filesInFolder = folder.listFiles();
+		
+		for (int i = 0; i < filesInFolder.length; i++) {
+			String fileName = filesInFolder[i].getName();
+			if (filesInFolder[i].isFile() && fileName.endsWith(".py")) {
+				resultFiles.add(filesInFolder[i]);
+			} else if (filesInFolder[i].isDirectory()) {
+				if(!fileName.equals("wordcountexample")){
+					resultFiles.addAll(getListOfFrameworkInputFiles(frameworkPath + fileName + "/"));
+				}
+		    }
+		}
+		
+		return resultFiles;
 	}
 }

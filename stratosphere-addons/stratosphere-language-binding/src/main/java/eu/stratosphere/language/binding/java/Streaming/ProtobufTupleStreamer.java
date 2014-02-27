@@ -11,20 +11,19 @@ import eu.stratosphere.util.Collector;
 
 public class ProtobufTupleStreamer extends ProtobufPythonStreamer {
 
-	public final static String CONFIG_PYTHON_FILE = "param.pythonCode";
 	private RecordReceiver receiver;
 	private RecordSender sender;
 	
 	public ProtobufTupleStreamer(Configuration conf,
 			ConnectionType connectionType, List<Class<?extends Value>> classes) throws IOException{
-		super(conf.getString(CONFIG_PYTHON_FILE, ""), connectionType, classes);
+		super(conf, connectionType, classes);
 	}
 	
 	public ProtobufTupleStreamer(Configuration conf,
 			ConnectionType connectionType,
 			List<Class<? extends Value>> classes1,
 			List<Class<? extends Value>> classes2) throws IOException{
-		super(conf.getString(CONFIG_PYTHON_FILE, ""), connectionType, classes1, classes2);
+		super(conf, connectionType, classes1, classes2);
 	}
 
 	public void open() throws Exception{

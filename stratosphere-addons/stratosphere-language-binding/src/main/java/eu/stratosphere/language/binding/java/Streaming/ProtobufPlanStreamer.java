@@ -10,8 +10,8 @@ public class ProtobufPlanStreamer extends ProtobufPythonStreamer {
 	private PlanSender planSender;
 
 	public ProtobufPlanStreamer(String pythonFilePath,
-			ConnectionType connectionType) throws IOException{
-		super(pythonFilePath, connectionType);
+			ConnectionType connectionType, String[] env) throws IOException{
+		super(pythonFilePath, connectionType, env);
 	}
 	
 	public void open() throws Exception{
@@ -28,7 +28,12 @@ public class ProtobufPlanStreamer extends ProtobufPythonStreamer {
     	planSender.sendID(id);
     }
 
+    // Just here for testing convenience... TODO delete
 	public Plan receivePlan(String scriptPath, String pythonCode) throws Exception{
-		return planReceiver.receivePlan(scriptPath, connectionType, pythonCode);	
+		return planReceiver.receivePlan(scriptPath, connectionType, pythonCode, null);	
+	}
+	
+	public Plan receivePlan(String scriptPath, String pythonCode, String frameworkPath) throws Exception{
+		return planReceiver.receivePlan(scriptPath, connectionType, pythonCode, frameworkPath);	
 	}
 }

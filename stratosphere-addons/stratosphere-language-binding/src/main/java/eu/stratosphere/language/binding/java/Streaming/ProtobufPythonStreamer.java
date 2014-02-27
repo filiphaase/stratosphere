@@ -9,7 +9,10 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.List;
+
+import eu.stratosphere.configuration.Configuration;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,12 +38,17 @@ public class ProtobufPythonStreamer{
 	// Signal that plan should be sent back
 	public static final int SIGNAL_GET_PLAN = -1;
 	
-	private static final String[] ENV = { "PYTHONPATH=src/main/python/eu/stratosphere/language/binding/protos/:src/main/python/eu/stratosphere/language/binding/" };
+	public final static String CONFIG_PYTHON_FILE = "param.pythonCode";
+	public final static String CONFIG_PYTHON_FRAMEWORK_NAMES = "param.pythonFrameworkNames";
+	public final static String CONFIG_PYTHON_FRAMEWORK_CONTENTS = "param.pythonFrameworkContents";
+	public final static String CONFIG_PYTHON_FRAMEWORK_LIST_DELIMITER = Character.toString((char)8);
+	
 	private static final int PORT = 49562;
 	private static final Log LOG = LogFactory.getLog(ProtobufPythonStreamer.class);
 	
-	private final String pythonFilePath;
+	private String[] environment;
 	protected final ConnectionType connectionType;
+	private String pythonFilePath;
 	protected List<Class<?extends Value>> inputRecordClasses;
 	protected List<Class<?extends Value>> secondInputRecordClasses = null;
 	
@@ -50,46 +58,69 @@ public class ProtobufPythonStreamer{
 	private ServerSocket serverSocket;
 	private BufferedReader err;
 	
-	public ProtobufPythonStreamer(String pythonScript, ConnectionType connectionType) throws IOException{
+	//Used for things like plan streamer
+	public ProtobufPythonStreamer(String pythonScript, ConnectionType connectionType, String[] env) throws IOException{
 		this.pythonFilePath = pythonScript;
 		this.connectionType = connectionType;
 		this.inputRecordClasses = null;
+		this.environment = env;
 	}
 	
-	
-	public ProtobufPythonStreamer(String pythonCode, ConnectionType connectionType,
+	public ProtobufPythonStreamer(Configuration conf, ConnectionType connectionType,
 			List<Class<?extends Value>> classes) throws IOException{
+		this.loadPythonFilesIntoTmp(conf);
+		this.connectionType = connectionType;
+		this.inputRecordClasses = classes;
+	}
+	/**
+	 * Used for operators with two different "input-streams" like join/group/co-group
+	 */
+	public ProtobufPythonStreamer(Configuration conf, ConnectionType connectionType,
+			List<Class<?extends Value>> classes1, List<Class<?extends Value>> classes2) throws IOException{
+		this(conf, connectionType, classes1);
+		this.secondInputRecordClasses = classes2;
+	}
+	
+	public void loadPythonFilesIntoTmp(Configuration conf) throws IOException{
+		
+		// Read and write the python file
+		String pythonCode = conf.getString(ProtobufTupleStreamer.CONFIG_PYTHON_FILE, "");
 		File temp = File.createTempFile("stratosphere-tmp-python-code", ".tmp.py");
 		Files.append(pythonCode, temp, Charset.defaultCharset());
 		this.pythonFilePath = temp.getAbsolutePath();
 		System.out.println("New Path to tmpPythonFile: " + pythonFilePath);
-		this.connectionType = connectionType;
-		this.inputRecordClasses = classes;
-	}
-	
-	/**
-	 * Used for operators with two different "input-streams" like join/group/co-group
-	 */
-	public ProtobufPythonStreamer(String pythonCode, ConnectionType connectionType,
-			List<Class<?extends Value>> classes1, List<Class<?extends Value>> classes2) throws IOException{
-		this(pythonCode, connectionType, classes1);
-		this.secondInputRecordClasses = classes2;
+		
+		// Read and write the python files from the framework 
+		File tempDir = Files.createTempDir();
+		this.environment  = new String[]{"PYTHONPATH="+tempDir.getAbsolutePath()};
+		String[] fileNames = conf.getString(CONFIG_PYTHON_FRAMEWORK_NAMES, "")
+				.split(CONFIG_PYTHON_FRAMEWORK_LIST_DELIMITER);
+		String[] contents = conf.getString(CONFIG_PYTHON_FRAMEWORK_CONTENTS, "")
+				.split(CONFIG_PYTHON_FRAMEWORK_LIST_DELIMITER);
+		
+		for(int i = 0; i < fileNames.length; i++){
+			String path = tempDir.getAbsolutePath() + "/" + fileNames[i];
+			Files.append(contents[i], new File(path), Charset.defaultCharset());
+			System.out.println("Written tmp file: " + path);
+		}
 	}
 	
 	public void open() throws Exception{
-		System.out.println("------- Executing: " + pythonFilePath);
-		System.out.println("-------> File content: " + Files.toString(new File(pythonFilePath), Charset.defaultCharset()));
+		System.out.println("------- Executing file path in ProtobufStreamer.open(): " + pythonFilePath);
+//		System.out.println("-------> File content: " + Files.toString(new File(pythonFilePath), Charset.defaultCharset()));
+		System.out.println("with env: " + Arrays.toString(environment));
 		if(connectionType == ConnectionType.SOCKETS){
-			pythonProcess = Runtime.getRuntime().exec("python " + pythonFilePath, ENV);
+			pythonProcess = Runtime.getRuntime().exec("python " + pythonFilePath, environment);
 		}else{
-			pythonProcess = Runtime.getRuntime().exec("python " + pythonFilePath + " " + PORT, ENV);
+			pythonProcess = Runtime.getRuntime().exec("python " + pythonFilePath + " " + PORT, environment);
 		}
 		System.out.println("exec done");
-		err = new BufferedReader(new InputStreamReader(pythonProcess.getErrorStream()));
-		LOG.debug("Proto-AbstractOperator - open() called");
-		
+		//err = new BufferedReader(new InputStreamReader(pythonProcess.getErrorStream()));
+		//LOG.debug("Proto-AbstractOperator - open() called");
+		System.out.println("Getting streams");
 		switch(connectionType){
 		case STDPIPES:
+			System.out.println("Getting stdpipes");
 			outputStream = pythonProcess.getOutputStream(); // this thing is buffered with 8k
 			inputStream = pythonProcess.getInputStream(); // this thing is buffered with 8k
 			LOG.debug("Proto-AbstractOperator - started connection via stdin/stdout");
