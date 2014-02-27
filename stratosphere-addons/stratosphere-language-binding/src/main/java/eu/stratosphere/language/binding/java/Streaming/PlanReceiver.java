@@ -49,12 +49,21 @@ public class PlanReceiver {
 		this.inStream = inStream;
 	}
 
+	/**
+	 * Function get's receives and parses a plan from the subprocess
+	 * 
+	 * @param scriptPath
+	 * @param connection
+	 * @param pythonCode
+	 * @param frameworkPath
+	 * @return
+	 * @throws Exception
+	 */
 	public Plan receivePlan(String scriptPath, ConnectionType connection, String pythonCode, String frameworkPath) throws Exception{
 		int size = getSize();
 		byte[] buffer = new byte[size];
 		inStream.read(buffer);
 		ProtoPlan pp = ProtoPlan.parseFrom(buffer);
-		System.out.println(pp);
 		return getPlan(pp, scriptPath, connection, pythonCode, frameworkPath);	
 	}
 	
@@ -88,32 +97,43 @@ public class PlanReceiver {
 		return result;
 	}
 	
+	/**
+	 * This function really constructs the stratosphere Plan from the data received from the subprocess
+	 * 
+	 * Therefore a 
+	 */
 	private Plan getPlan(ProtoPlan protoPlan, String scriptPath, ConnectionType connection, String pythonCode, String frameworkPath) throws IOException{
 
-		System.out.println("in getPlan(), frameworkPath: " + frameworkPath);
-		ArrayList<File> inputFiles= getListOfFrameworkInputFiles(frameworkPath);
-		System.out.println("inputFiles: " + inputFiles);
-		    
+		@SuppressWarnings("unchecked")
+		// Array used to save output classes of each operator, that way the output types
+		// of any operator are automatically used as input types for the next operator
+		List<Class<?extends Value>> classes[] = new List[protoPlan.getVerticesCount()];
+		// Array used for all operators of the plan, the operators are received sorted on the id
+		// therefore the ids correspond to the operator position in the array
+		Operator[] operators = new Operator[protoPlan.getVerticesCount()];
+		
+		// First Build the strings we need to give to each process over the configuration
+		// This are: 
+		// 	- code of python-file(given as parameter pythonCode)
+		// 	- The framework files, therefore we make a comma-separated list of the names
+		//  	and a comma-separated list of the code inside of them
+		String namesConfString = null;
+		String contentsConfString = null;
+		ArrayList<File> inputFiles= getListOfFrameworkInputFiles(frameworkPath);	    
 		String names[] = new String[inputFiles.size()];
 		String contents[] = new String[inputFiles.size()];
+		// Read the names and the content of the framework files
 		for (int i = 0; i < inputFiles.size(); i++){
 			names[i] = inputFiles.get(i).getName();
 			contents[i] = Files.toString(inputFiles.get(i), Charset.defaultCharset());
 		}
-		
-		Operator[] operators = new Operator[protoPlan.getVerticesCount()];
-		@SuppressWarnings("unchecked")
-		List<Class<?extends Value>> classes[] = new List[protoPlan.getVerticesCount()];
-		String namesConfString = null;
-		String contentsConfString = null;
-		
+		// Construct comma seperated Strings
 		if(names != null && contents != null){
 			StringBuilder sb = new StringBuilder();
 			for(String n :names)
 				sb.append(n + ProtobufPythonStreamer.CONFIG_PYTHON_FRAMEWORK_LIST_DELIMITER);
 			sb.deleteCharAt(sb.length() - 1);
 			namesConfString = sb.toString();
-
 			sb = new StringBuilder();
 			for(String c :contents)
 				sb.append(c + ProtobufPythonStreamer.CONFIG_PYTHON_FRAMEWORK_LIST_DELIMITER);
@@ -121,6 +141,7 @@ public class PlanReceiver {
 			contentsConfString = sb.toString();
 		}
 		
+		// Now we iterate over the vertices and construct a plan from them
 		for(int i = 0; i < protoPlan.getVerticesCount(); i++){
 			Vertex vertex = protoPlan.getVertices(i);
 			Map<String, String> params = new HashMap<String, String>();
@@ -128,12 +149,13 @@ public class PlanReceiver {
 			List<Integer> in = vertex.getInputsList();
 			classes[i] = getOutputClasses(vertex);
 			
+			// Get additional params for the vertex
 			for (int j = 0; j < vertex.getParamsCount(); j++){
 				KeyValuePair param = vertex.getParams(j);
 				params.put(param.getKey(), param.getValue());
 			}
 	
-			System.out.println(type + "InputClasses: " + classes);
+			// For each operator construct a object of the correct class and save it into the array 
 			switch(type){
 				case TextInputFormat:
 					operators[i] = new FileDataSource(new TextInputFormat(), 
@@ -193,7 +215,9 @@ public class PlanReceiver {
 			operators[i].setParameter(ProtobufPythonStreamer.CONFIG_PYTHON_FRAMEWORK_NAMES, namesConfString);
 		}
 		
-		Plan result = new Plan((GenericDataSink)operators[protoPlan.getVerticesCount()-1], "Word Count Python Example");
+		// Currently only one data sink is taken, should be handled differently in the future
+		// and multiple data sinks should be supported
+		Plan result = new Plan((GenericDataSink)operators[protoPlan.getVerticesCount()-1], "Python-language-binding");
 		return result;
 	}
 
@@ -202,11 +226,13 @@ public class PlanReceiver {
 		ArrayList<File> resultFiles = new ArrayList<File>();
 		File[] filesInFolder = folder.listFiles();
 		
+		// Go recursively through the framework folder and add all files to the result if they are .py files
 		for (int i = 0; i < filesInFolder.length; i++) {
 			String fileName = filesInFolder[i].getName();
 			if (filesInFolder[i].isFile() && fileName.endsWith(".py")) {
 				resultFiles.add(filesInFolder[i]);
 			} else if (filesInFolder[i].isDirectory()) {
+				// Remove this again, it's only here because wordcount example is in the same directory currently
 				if(!fileName.equals("wordcountexample")){
 					resultFiles.addAll(getListOfFrameworkInputFiles(frameworkPath + fileName + "/"));
 				}

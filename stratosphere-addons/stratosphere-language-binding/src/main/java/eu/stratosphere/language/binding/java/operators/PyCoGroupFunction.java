@@ -16,7 +16,6 @@ public class PyCoGroupFunction extends CoGroupFunction implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private transient ProtobufTupleStreamer streamer;
-	private String scriptPath;
 	private ConnectionType connectionType;
 	private List<Class<? extends Value>> classes1;
 	private List<Class<? extends Value>> classes2;
@@ -25,7 +24,6 @@ public class PyCoGroupFunction extends CoGroupFunction implements Serializable{
 	public PyCoGroupFunction(String scriptPath, ConnectionType connectionType, 
 			List<Class<? extends Value>> classes1, List<Class<? extends Value>> classes2,
 			int id){
-		this.scriptPath = scriptPath;
 		this.connectionType = connectionType;
 		this.classes1 = classes1;
 		this.classes2 = classes2;
@@ -35,7 +33,6 @@ public class PyCoGroupFunction extends CoGroupFunction implements Serializable{
 	@Override
 	public void open(Configuration parameters) throws Exception {
 		super.open(parameters);
-	
 		streamer = new ProtobufTupleStreamer(parameters, connectionType, classes1, classes2);
 		streamer.open();
 		streamer.sendID(id);

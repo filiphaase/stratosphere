@@ -23,7 +23,6 @@ public class RecordReceiver {
 		byte[] buffer = new byte[size];
 		inStream.read(buffer);
 		ProtoStratosphereRecord psr = ProtoStratosphereRecord.parseFrom(buffer);
-		System.out.println("Received single psr: " + psr);
 		Record record = getRecord(psr);
 		collector.collect(record);
 	}

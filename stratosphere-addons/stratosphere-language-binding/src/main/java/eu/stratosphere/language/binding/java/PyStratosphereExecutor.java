@@ -15,83 +15,36 @@ public class PyStratosphereExecutor implements Program{
 
 	public static void main(String args[]) throws Exception{
 		
-		String call = "Call with PyStratosphereExecutor [PythonPath] [STDPIPES/SOCKETS]";
-		if(args.length < 2){
-			System.out.println(call);
-			System.exit(1);
-		}
-		String path = args[0];
-		ConnectionType connectionType = null;
-		if(args[1].equals("STDPIPES")){
-			connectionType = ConnectionType.STDPIPES;
-		}else if(args[1].equals("SOCKETS")){
-			connectionType = ConnectionType.SOCKETS;
-		}else{
-			System.out.println(call);
-			System.exit(1);			
-		}
-		
-		// TODO: Over commandlne (bash script)
-		String frameworkPath = "/home/filip/workspaceDIMA/stratosphere/stratosphere-addons/stratosphere-language-binding/src/main/python/eu/stratosphere/language/binding/";
-		String[] env = { ("PYTHONPATH=" + frameworkPath + ":" + frameworkPath + "protos/")};
-		String pythonCode = Files.toString(new File(path), Charset.defaultCharset());
-
-		System.out.println("Custruct Streamer");
-		// Use The Plan Streamer to execute the python program and get back the stratosphere plan
-		ProtobufPlanStreamer streamer = new ProtobufPlanStreamer(path, connectionType, env);
-		System.out.println("-> constructed");
-		streamer.open();
-		System.out.println("Openened streamer");
-		streamer.streamSignalGetPlan();
-		System.out.println("Streamed Signal");
-		Plan plan = streamer.receivePlan(path, pythonCode, frameworkPath);
-		streamer.close();
-		
-		// Execute it
+		PyStratosphereExecutor pse = new PyStratosphereExecutor();
 		long ts1 = System.currentTimeMillis();
-		LocalExecutor.execute(plan);
+		LocalExecutor.execute(pse.getPlan(args));
 		System.out.println("Needed: " + (System.currentTimeMillis() - ts1)/1000.0f + "s");
 	}
 
 	@Override
 	public Plan getPlan(String... args) {
 		try{
-			System.out.println("Called getPlan()");
-			for(String arg : args)
-				System.out.println("Arg: " + arg);
-			
-			String call = "Call with PyStratosphereExecutor [PythonPath] [STDPIPES/SOCKETS]";
-			if(args.length < 2){
+			// Read arguments
+			String call = "Call with PyStratosphereExecutor [PythonFilePath] [PythonFrameworkPath]";
+			if(args.length != 2){
 				System.out.println(call);
 				System.exit(1);
 			}
-			String path = args[0];
-			ConnectionType connectionType = null;
-			if(args[1].equals("STDPIPES")){
-				connectionType = ConnectionType.STDPIPES;
-			}else if(args[1].equals("SOCKETS")){
-				connectionType = ConnectionType.SOCKETS;
-			}else{
-				System.out.println(call);
-				System.exit(1);			
-			}
+			String filePath = args[0];
+			String frameworkPath = args[1];
+			// Python part of framework only supports STDPIPES completely right now
+			ConnectionType connectionType = ConnectionType.STDPIPES;
 			
-			// TODO: Over commandlne (bash script)
-			String frameworkPath = "/home/filip/workspaceDIMA/stratosphere/stratosphere-addons/stratosphere-language-binding/src/main/python/eu/stratosphere/language/binding/";
+			// Build the 
 			String[] env = { ("PYTHONPATH=" + frameworkPath + ":" + frameworkPath + "protos/")};
-			String pythonCode = Files.toString(new File(path), Charset.defaultCharset());
+			String pythonCode = Files.toString(new File(filePath), Charset.defaultCharset());
 
-			System.out.println("Custruct Streamer");
 			// Use The Plan Streamer to execute the python program and get back the stratosphere plan
-			ProtobufPlanStreamer streamer = new ProtobufPlanStreamer(path, connectionType, env);
-			System.out.println("-> constructed");
+			ProtobufPlanStreamer streamer = new ProtobufPlanStreamer(filePath, connectionType, env);
 			streamer.open();
-			System.out.println("Openened streamer");
 			streamer.streamSignalGetPlan();
-			System.out.println("Streamed Signal");
-			Plan plan = streamer.receivePlan(path, pythonCode, frameworkPath);
+			Plan plan = streamer.receivePlan(filePath, pythonCode, frameworkPath);
 			streamer.close();
-			System.out.println("Done with getPlan()");
 			return plan;
 		}catch(Exception e){
 			throw new RuntimeException(e);

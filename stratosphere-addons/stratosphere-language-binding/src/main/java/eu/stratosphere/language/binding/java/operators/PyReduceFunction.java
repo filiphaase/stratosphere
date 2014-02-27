@@ -17,13 +17,11 @@ public class PyReduceFunction extends ReduceFunction implements Serializable{
 		private static final long serialVersionUID = 1L;
 		
 		private transient ProtobufTupleStreamer streamer;
-		private String scriptPath;
 		private ConnectionType connectionType;
 		private List<Class<? extends Value>> classes;
 		private int id;
 		
 		public PyReduceFunction(String scriptPath, ConnectionType connectionType, List<Class<? extends Value>> classes, int id){
-			this.scriptPath = scriptPath;
 			this.connectionType = connectionType;
 			this.classes = classes;
 			this.id = id;
