@@ -1,7 +1,6 @@
 package eu.stratosphere.language.binding.java.operators;
 
 import java.io.Serializable;
-import java.util.List;
 
 import eu.stratosphere.api.java.record.functions.JoinFunction;
 import eu.stratosphere.configuration.Configuration;
@@ -16,12 +15,12 @@ public class PyJoinFunction extends JoinFunction implements Serializable{
 		
 		private transient ProtobufTupleStreamer streamer;
 		private ConnectionType connectionType;
-		private List<Class<? extends Value>> classes1;
-		private List<Class<? extends Value>> classes2;
+		private Class<? extends Value>[] classes1;
+		private Class<? extends Value>[] classes2;
 		private int id;
 		
 		public PyJoinFunction(String scriptPath, ConnectionType connectionType, 
-				List<Class<? extends Value>> classes1, List<Class<? extends Value>> classes2,
+				Class<? extends Value>[] classes1, Class<? extends Value>[] classes2,
 				int id){
 			this.connectionType = connectionType;
 			this.classes1 = classes1;

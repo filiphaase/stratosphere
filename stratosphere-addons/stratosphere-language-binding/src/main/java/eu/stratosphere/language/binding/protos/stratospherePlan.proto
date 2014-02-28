@@ -34,18 +34,12 @@ message ProtoPlan{
 		required string value = 2;
 	}
 
-	message KeyTypePair{
-		required string key = 1;
-		required ValueType value = 2;
-	}
-
 	message Vertex{
 		required VertexType type = 1;
 		repeated int32 inputs = 2[packed = true];
 		repeated ValueType outputTypes = 3;
 		repeated KeyValuePair params = 4;
-		// TODO remove and handle differently
-		repeated KeyTypePair paramTypes = 5;
+		//repeated TypeIndexPair paramTypes = 5;
 	}
 
 	repeated Vertex vertices = 1;

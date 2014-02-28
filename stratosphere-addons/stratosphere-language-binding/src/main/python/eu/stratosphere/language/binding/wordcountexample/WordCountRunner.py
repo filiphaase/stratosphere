@@ -28,8 +28,8 @@ def count(iter, collector):
         collector.collect((record[0], int(sum)))
 
 TextInputFormat(inputPath).map(split, [ValueType.String, ValueType.Int]) \
-    .reduce(count, [ValueType.String, ValueType.Int]) \
-    .outputCSV(outputPath) \
+    .reduce(count, [ValueType.String, ValueType.Int]).key(0) \
+    .outputCSV(outputPath, [0,1]).fieldDelimiter(",") \
     .execute()
     
 """ Longer version

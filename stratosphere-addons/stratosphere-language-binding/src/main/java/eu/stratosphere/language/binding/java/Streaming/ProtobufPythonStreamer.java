@@ -46,8 +46,8 @@ public class ProtobufPythonStreamer{
 	private String[] environment;
 	private String pythonFilePath;
 	protected final ConnectionType connectionType;
-	protected List<Class<?extends Value>> inputRecordClasses;
-	protected List<Class<?extends Value>> secondInputRecordClasses = null;
+	protected Class<? extends Value>[] inputRecordClasses;
+	protected Class<? extends Value>[] secondInputRecordClasses = null;
 	
 	protected InputStream inputStream;
 	protected OutputStream outputStream;
@@ -64,7 +64,7 @@ public class ProtobufPythonStreamer{
 	}
 	
 	public ProtobufPythonStreamer(Configuration conf, ConnectionType connectionType,
-			List<Class<?extends Value>> classes) throws IOException{
+			Class<? extends Value>[] classes) throws IOException{
 		this.loadPythonFilesIntoTemp(conf);
 		this.connectionType = connectionType;
 		this.inputRecordClasses = classes;
@@ -74,7 +74,7 @@ public class ProtobufPythonStreamer{
 	 * Used for operators with two different "input-streams" like join/group/co-group
 	 */
 	public ProtobufPythonStreamer(Configuration conf, ConnectionType connectionType,
-			List<Class<?extends Value>> classes1, List<Class<?extends Value>> classes2) throws IOException{
+			Class<? extends Value>[] classes1, Class<? extends Value>[] classes2) throws IOException{
 		this(conf, connectionType, classes1);
 		this.secondInputRecordClasses = classes2;
 	}

@@ -88,6 +88,13 @@ class Vertex(object):
     curNumVertices = 0
     
     def __init__(self, vertexType, parent1 = None, parent2 = None, params = {}, function = None, types = []):
+        self.CONST_PARAM_FILE_PATH = "filePath"
+        self.CONST_PARAM_FIELD_DELIMITER = "fieldDelimiter"
+        self.CONST_PARAM_RECORD_DELIMITER = "recordDelimiter"
+        self.CONST_PARAM_KEY_INDEX_1 = "keyIndex1"
+        self.CONST_PARAM_KEY_INDEX_2 = "keyIndex2"
+        self.CONST_PARAM_INDEX_LIST = "indexList"
+        
         self.ind = Vertex.curNumVertices
         Vertex.curNumVertices += 1
         
@@ -124,25 +131,25 @@ class Vertex(object):
         mapVertex = Vertex(ProtoPlan.Map, parent1=self, function = f, types = valueTypes)
         return mapVertex
         
-    def reduce(self, f, valueTypes):
+    def reduce(self, f, valueTypes, keyInd = 0):
         reduceVertex = Vertex(ProtoPlan.Reduce, parent1=self,  function = f, types = valueTypes)
-        return reduceVertex
+        return reduceVertex.key(keyInd)
     
-    def join(self, otherParent, f, valueTypes):
+    def join(self, otherParent, f, valueTypes, keyInd1 = 0, keyInd2 = 1):
         joinVertex = Vertex(ProtoPlan.Join, parent1=self, parent2=otherParent, function = f, types = valueTypes )
-        return joinVertex
+        return joinVertex.keys(keyInd1, keyInd2)
     
     def cross(self, otherParent, f, valueTypes):
         crossVertex = Vertex(ProtoPlan.Cross, parent1=self, parent2=otherParent, function = f, types = valueTypes )
         return crossVertex
 
-    def coGroup(self, otherParent, f, valueTypes):
+    def coGroup(self, otherParent, f, valueTypes, keyInd1 = 0, keyInd2 = 1):
         coGroupVertex = Vertex(ProtoPlan.CoGroup, parent1=self, parent2=otherParent, function = f, types = valueTypes )
-        return coGroupVertex
+        return coGroupVertex.keys(keyInd1, keyInd2)
     
-    def outputCSV(self, filePath, delimiter = "/n", fieldDelimiter = " "):
-        outputVertex = Vertex(ProtoPlan.CsvOutputFormat, parent1=self, params = {"filePath": filePath, "delimiter" : delimiter, "fieldDelimiter" : fieldDelimiter})
-        return outputVertex
+    def outputCSV(self, filePath, indices, recordDelimiter = '\n', fieldDelimiter = " "):
+        outputVertex = Vertex(ProtoPlan.CsvOutputFormat, parent1=self)
+        return outputVertex.file(filePath).indices(indices).fieldDelimiter(fieldDelimiter).recordDelimiter(recordDelimiter)
     
     def fillVertex(self, newVertex):
          newVertex.type = self.vertexType
@@ -174,7 +181,32 @@ class Vertex(object):
     def execute(self):
         log("executing now")
         self.plan.execute()
-             
+        
+    def key(self, ind):
+        self.__params[self.CONST_PARAM_KEY_INDEX_1] = str(ind)
+        return self
+
+    def keys(self, ind1, ind2):
+        self.__params[self.CONST_PARAM_KEY_INDEX_1] = str(ind1)
+        self.__params[self.CONST_PARAM_KEY_INDEX_2] = str(ind2)
+        return self
+    
+    def file(self, path):
+        self.__params[self.CONST_PARAM_FILE_PATH] = path
+        return self
+    
+    def fieldDelimiter(self, delimiter):
+        self.__params[self.CONST_PARAM_FIELD_DELIMITER] = delimiter
+        return self
+        
+    def recordDelimiter(self, delimiter):
+        self.__params[self.CONST_PARAM_RECORD_DELIMITER] = delimiter
+        return self
+    
+    def indices(self, indices):
+        self.__params[self.CONST_PARAM_INDEX_LIST] = ','.join(str(i) for i in indices)
+        return self
+            
 class TextInputFormat(Vertex):    
     def __init__(self, inputPath):
         super(TextInputFormat, self).__init__(ProtoPlan.TextInputFormat, types = [ValueType.String], params = {"filePath": inputPath})

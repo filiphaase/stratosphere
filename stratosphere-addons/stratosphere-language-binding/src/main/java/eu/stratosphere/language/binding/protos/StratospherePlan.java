@@ -1078,583 +1078,6 @@ public final class StratospherePlan {
       // @@protoc_insertion_point(class_scope:eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair)
     }
 
-    public interface KeyTypePairOrBuilder
-        extends com.google.protobuf.MessageOrBuilder {
-
-      // required string key = 1;
-      /**
-       * <code>required string key = 1;</code>
-       */
-      boolean hasKey();
-      /**
-       * <code>required string key = 1;</code>
-       */
-      java.lang.String getKey();
-      /**
-       * <code>required string key = 1;</code>
-       */
-      com.google.protobuf.ByteString
-          getKeyBytes();
-
-      // required .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType value = 2;
-      /**
-       * <code>required .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType value = 2;</code>
-       */
-      boolean hasValue();
-      /**
-       * <code>required .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType value = 2;</code>
-       */
-      eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType getValue();
-    }
-    /**
-     * Protobuf type {@code eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair}
-     */
-    public static final class KeyTypePair extends
-        com.google.protobuf.GeneratedMessage
-        implements KeyTypePairOrBuilder {
-      // Use KeyTypePair.newBuilder() to construct.
-      private KeyTypePair(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-        super(builder);
-        this.unknownFields = builder.getUnknownFields();
-      }
-      private KeyTypePair(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-      private static final KeyTypePair defaultInstance;
-      public static KeyTypePair getDefaultInstance() {
-        return defaultInstance;
-      }
-
-      public KeyTypePair getDefaultInstanceForType() {
-        return defaultInstance;
-      }
-
-      private final com.google.protobuf.UnknownFieldSet unknownFields;
-      @java.lang.Override
-      public final com.google.protobuf.UnknownFieldSet
-          getUnknownFields() {
-        return this.unknownFields;
-      }
-      private KeyTypePair(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        initFields();
-        int mutable_bitField0_ = 0;
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-            com.google.protobuf.UnknownFieldSet.newBuilder();
-        try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              default: {
-                if (!parseUnknownField(input, unknownFields,
-                                       extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
-              case 10: {
-                bitField0_ |= 0x00000001;
-                key_ = input.readBytes();
-                break;
-              }
-              case 16: {
-                int rawValue = input.readEnum();
-                eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType value = eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType.valueOf(rawValue);
-                if (value == null) {
-                  unknownFields.mergeVarintField(2, rawValue);
-                } else {
-                  bitField0_ |= 0x00000002;
-                  value_ = value;
-                }
-                break;
-              }
-            }
-          }
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(this);
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(
-              e.getMessage()).setUnfinishedMessage(this);
-        } finally {
-          this.unknownFields = unknownFields.build();
-          makeExtensionsImmutable();
-        }
-      }
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return eu.stratosphere.language.binding.protos.StratospherePlan.internal_static_eu_stratosphere_language_binding_protos_ProtoPlan_KeyTypePair_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return eu.stratosphere.language.binding.protos.StratospherePlan.internal_static_eu_stratosphere_language_binding_protos_ProtoPlan_KeyTypePair_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair.class, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair.Builder.class);
-      }
-
-      public static com.google.protobuf.Parser<KeyTypePair> PARSER =
-          new com.google.protobuf.AbstractParser<KeyTypePair>() {
-        public KeyTypePair parsePartialFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
-          return new KeyTypePair(input, extensionRegistry);
-        }
-      };
-
-      @java.lang.Override
-      public com.google.protobuf.Parser<KeyTypePair> getParserForType() {
-        return PARSER;
-      }
-
-      private int bitField0_;
-      // required string key = 1;
-      public static final int KEY_FIELD_NUMBER = 1;
-      private java.lang.Object key_;
-      /**
-       * <code>required string key = 1;</code>
-       */
-      public boolean hasKey() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required string key = 1;</code>
-       */
-      public java.lang.String getKey() {
-        java.lang.Object ref = key_;
-        if (ref instanceof java.lang.String) {
-          return (java.lang.String) ref;
-        } else {
-          com.google.protobuf.ByteString bs = 
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            key_ = s;
-          }
-          return s;
-        }
-      }
-      /**
-       * <code>required string key = 1;</code>
-       */
-      public com.google.protobuf.ByteString
-          getKeyBytes() {
-        java.lang.Object ref = key_;
-        if (ref instanceof java.lang.String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          key_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-
-      // required .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType value = 2;
-      public static final int VALUE_FIELD_NUMBER = 2;
-      private eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType value_;
-      /**
-       * <code>required .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType value = 2;</code>
-       */
-      public boolean hasValue() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType value = 2;</code>
-       */
-      public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType getValue() {
-        return value_;
-      }
-
-      private void initFields() {
-        key_ = "";
-        value_ = eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType.StringValue;
-      }
-      private byte memoizedIsInitialized = -1;
-      public final boolean isInitialized() {
-        byte isInitialized = memoizedIsInitialized;
-        if (isInitialized != -1) return isInitialized == 1;
-
-        if (!hasKey()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
-        if (!hasValue()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
-        memoizedIsInitialized = 1;
-        return true;
-      }
-
-      public void writeTo(com.google.protobuf.CodedOutputStream output)
-                          throws java.io.IOException {
-        getSerializedSize();
-        if (((bitField0_ & 0x00000001) == 0x00000001)) {
-          output.writeBytes(1, getKeyBytes());
-        }
-        if (((bitField0_ & 0x00000002) == 0x00000002)) {
-          output.writeEnum(2, value_.getNumber());
-        }
-        getUnknownFields().writeTo(output);
-      }
-
-      private int memoizedSerializedSize = -1;
-      public int getSerializedSize() {
-        int size = memoizedSerializedSize;
-        if (size != -1) return size;
-
-        size = 0;
-        if (((bitField0_ & 0x00000001) == 0x00000001)) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeBytesSize(1, getKeyBytes());
-        }
-        if (((bitField0_ & 0x00000002) == 0x00000002)) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeEnumSize(2, value_.getNumber());
-        }
-        size += getUnknownFields().getSerializedSize();
-        memoizedSerializedSize = size;
-        return size;
-      }
-
-      private static final long serialVersionUID = 0L;
-      @java.lang.Override
-      protected java.lang.Object writeReplace()
-          throws java.io.ObjectStreamException {
-        return super.writeReplace();
-      }
-
-      public static eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair parseFrom(
-          com.google.protobuf.ByteString data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return PARSER.parseFrom(data);
-      }
-      public static eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair parseFrom(
-          com.google.protobuf.ByteString data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return PARSER.parseFrom(data, extensionRegistry);
-      }
-      public static eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair parseFrom(byte[] data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return PARSER.parseFrom(data);
-      }
-      public static eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair parseFrom(
-          byte[] data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return PARSER.parseFrom(data, extensionRegistry);
-      }
-      public static eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair parseFrom(java.io.InputStream input)
-          throws java.io.IOException {
-        return PARSER.parseFrom(input);
-      }
-      public static eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair parseFrom(
-          java.io.InputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        return PARSER.parseFrom(input, extensionRegistry);
-      }
-      public static eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair parseDelimitedFrom(java.io.InputStream input)
-          throws java.io.IOException {
-        return PARSER.parseDelimitedFrom(input);
-      }
-      public static eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair parseDelimitedFrom(
-          java.io.InputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        return PARSER.parseDelimitedFrom(input, extensionRegistry);
-      }
-      public static eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair parseFrom(
-          com.google.protobuf.CodedInputStream input)
-          throws java.io.IOException {
-        return PARSER.parseFrom(input);
-      }
-      public static eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair parseFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        return PARSER.parseFrom(input, extensionRegistry);
-      }
-
-      public static Builder newBuilder() { return Builder.create(); }
-      public Builder newBuilderForType() { return newBuilder(); }
-      public static Builder newBuilder(eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair prototype) {
-        return newBuilder().mergeFrom(prototype);
-      }
-      public Builder toBuilder() { return newBuilder(this); }
-
-      @java.lang.Override
-      protected Builder newBuilderForType(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        Builder builder = new Builder(parent);
-        return builder;
-      }
-      /**
-       * Protobuf type {@code eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair}
-       */
-      public static final class Builder extends
-          com.google.protobuf.GeneratedMessage.Builder<Builder>
-         implements eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePairOrBuilder {
-        public static final com.google.protobuf.Descriptors.Descriptor
-            getDescriptor() {
-          return eu.stratosphere.language.binding.protos.StratospherePlan.internal_static_eu_stratosphere_language_binding_protos_ProtoPlan_KeyTypePair_descriptor;
-        }
-
-        protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-            internalGetFieldAccessorTable() {
-          return eu.stratosphere.language.binding.protos.StratospherePlan.internal_static_eu_stratosphere_language_binding_protos_ProtoPlan_KeyTypePair_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                  eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair.class, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair.Builder.class);
-        }
-
-        // Construct using eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair.newBuilder()
-        private Builder() {
-          maybeForceBuilderInitialization();
-        }
-
-        private Builder(
-            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-          super(parent);
-          maybeForceBuilderInitialization();
-        }
-        private void maybeForceBuilderInitialization() {
-          if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          }
-        }
-        private static Builder create() {
-          return new Builder();
-        }
-
-        public Builder clear() {
-          super.clear();
-          key_ = "";
-          bitField0_ = (bitField0_ & ~0x00000001);
-          value_ = eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType.StringValue;
-          bitField0_ = (bitField0_ & ~0x00000002);
-          return this;
-        }
-
-        public Builder clone() {
-          return create().mergeFrom(buildPartial());
-        }
-
-        public com.google.protobuf.Descriptors.Descriptor
-            getDescriptorForType() {
-          return eu.stratosphere.language.binding.protos.StratospherePlan.internal_static_eu_stratosphere_language_binding_protos_ProtoPlan_KeyTypePair_descriptor;
-        }
-
-        public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair getDefaultInstanceForType() {
-          return eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair.getDefaultInstance();
-        }
-
-        public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair build() {
-          eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair result = buildPartial();
-          if (!result.isInitialized()) {
-            throw newUninitializedMessageException(result);
-          }
-          return result;
-        }
-
-        public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair buildPartial() {
-          eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair result = new eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair(this);
-          int from_bitField0_ = bitField0_;
-          int to_bitField0_ = 0;
-          if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-            to_bitField0_ |= 0x00000001;
-          }
-          result.key_ = key_;
-          if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-            to_bitField0_ |= 0x00000002;
-          }
-          result.value_ = value_;
-          result.bitField0_ = to_bitField0_;
-          onBuilt();
-          return result;
-        }
-
-        public Builder mergeFrom(com.google.protobuf.Message other) {
-          if (other instanceof eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair) {
-            return mergeFrom((eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair)other);
-          } else {
-            super.mergeFrom(other);
-            return this;
-          }
-        }
-
-        public Builder mergeFrom(eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair other) {
-          if (other == eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair.getDefaultInstance()) return this;
-          if (other.hasKey()) {
-            bitField0_ |= 0x00000001;
-            key_ = other.key_;
-            onChanged();
-          }
-          if (other.hasValue()) {
-            setValue(other.getValue());
-          }
-          this.mergeUnknownFields(other.getUnknownFields());
-          return this;
-        }
-
-        public final boolean isInitialized() {
-          if (!hasKey()) {
-            
-            return false;
-          }
-          if (!hasValue()) {
-            
-            return false;
-          }
-          return true;
-        }
-
-        public Builder mergeFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-          eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair parsedMessage = null;
-          try {
-            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair) e.getUnfinishedMessage();
-            throw e;
-          } finally {
-            if (parsedMessage != null) {
-              mergeFrom(parsedMessage);
-            }
-          }
-          return this;
-        }
-        private int bitField0_;
-
-        // required string key = 1;
-        private java.lang.Object key_ = "";
-        /**
-         * <code>required string key = 1;</code>
-         */
-        public boolean hasKey() {
-          return ((bitField0_ & 0x00000001) == 0x00000001);
-        }
-        /**
-         * <code>required string key = 1;</code>
-         */
-        public java.lang.String getKey() {
-          java.lang.Object ref = key_;
-          if (!(ref instanceof java.lang.String)) {
-            java.lang.String s = ((com.google.protobuf.ByteString) ref)
-                .toStringUtf8();
-            key_ = s;
-            return s;
-          } else {
-            return (java.lang.String) ref;
-          }
-        }
-        /**
-         * <code>required string key = 1;</code>
-         */
-        public com.google.protobuf.ByteString
-            getKeyBytes() {
-          java.lang.Object ref = key_;
-          if (ref instanceof String) {
-            com.google.protobuf.ByteString b = 
-                com.google.protobuf.ByteString.copyFromUtf8(
-                    (java.lang.String) ref);
-            key_ = b;
-            return b;
-          } else {
-            return (com.google.protobuf.ByteString) ref;
-          }
-        }
-        /**
-         * <code>required string key = 1;</code>
-         */
-        public Builder setKey(
-            java.lang.String value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-          key_ = value;
-          onChanged();
-          return this;
-        }
-        /**
-         * <code>required string key = 1;</code>
-         */
-        public Builder clearKey() {
-          bitField0_ = (bitField0_ & ~0x00000001);
-          key_ = getDefaultInstance().getKey();
-          onChanged();
-          return this;
-        }
-        /**
-         * <code>required string key = 1;</code>
-         */
-        public Builder setKeyBytes(
-            com.google.protobuf.ByteString value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-          key_ = value;
-          onChanged();
-          return this;
-        }
-
-        // required .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType value = 2;
-        private eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType value_ = eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType.StringValue;
-        /**
-         * <code>required .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType value = 2;</code>
-         */
-        public boolean hasValue() {
-          return ((bitField0_ & 0x00000002) == 0x00000002);
-        }
-        /**
-         * <code>required .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType value = 2;</code>
-         */
-        public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType getValue() {
-          return value_;
-        }
-        /**
-         * <code>required .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType value = 2;</code>
-         */
-        public Builder setValue(eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType value) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          bitField0_ |= 0x00000002;
-          value_ = value;
-          onChanged();
-          return this;
-        }
-        /**
-         * <code>required .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType value = 2;</code>
-         */
-        public Builder clearValue() {
-          bitField0_ = (bitField0_ & ~0x00000002);
-          value_ = eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType.StringValue;
-          onChanged();
-          return this;
-        }
-
-        // @@protoc_insertion_point(builder_scope:eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair)
-      }
-
-      static {
-        defaultInstance = new KeyTypePair(true);
-        defaultInstance.initFields();
-      }
-
-      // @@protoc_insertion_point(class_scope:eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair)
-    }
-
     public interface VertexOrBuilder
         extends com.google.protobuf.MessageOrBuilder {
 
@@ -1699,71 +1122,46 @@ public final class StratospherePlan {
       // repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;
       /**
        * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+       *
+       * <pre>
+       *repeated TypeIndexPair paramTypes = 5;
+       * </pre>
        */
       java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair> 
           getParamsList();
       /**
        * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+       *
+       * <pre>
+       *repeated TypeIndexPair paramTypes = 5;
+       * </pre>
        */
       eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair getParams(int index);
       /**
        * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+       *
+       * <pre>
+       *repeated TypeIndexPair paramTypes = 5;
+       * </pre>
        */
       int getParamsCount();
       /**
        * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+       *
+       * <pre>
+       *repeated TypeIndexPair paramTypes = 5;
+       * </pre>
        */
       java.util.List<? extends eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePairOrBuilder> 
           getParamsOrBuilderList();
       /**
        * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+       *
+       * <pre>
+       *repeated TypeIndexPair paramTypes = 5;
+       * </pre>
        */
       eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePairOrBuilder getParamsOrBuilder(
-          int index);
-
-      // repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;
-      /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-       *
-       * <pre>
-       * TODO remove and handle differently
-       * </pre>
-       */
-      java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair> 
-          getParamTypesList();
-      /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-       *
-       * <pre>
-       * TODO remove and handle differently
-       * </pre>
-       */
-      eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair getParamTypes(int index);
-      /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-       *
-       * <pre>
-       * TODO remove and handle differently
-       * </pre>
-       */
-      int getParamTypesCount();
-      /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-       *
-       * <pre>
-       * TODO remove and handle differently
-       * </pre>
-       */
-      java.util.List<? extends eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePairOrBuilder> 
-          getParamTypesOrBuilderList();
-      /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-       *
-       * <pre>
-       * TODO remove and handle differently
-       * </pre>
-       */
-      eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePairOrBuilder getParamTypesOrBuilder(
           int index);
     }
     /**
@@ -1890,14 +1288,6 @@ public final class StratospherePlan {
                 params_.add(input.readMessage(eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair.PARSER, extensionRegistry));
                 break;
               }
-              case 42: {
-                if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
-                  paramTypes_ = new java.util.ArrayList<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair>();
-                  mutable_bitField0_ |= 0x00000010;
-                }
-                paramTypes_.add(input.readMessage(eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair.PARSER, extensionRegistry));
-                break;
-              }
             }
           }
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -1914,9 +1304,6 @@ public final class StratospherePlan {
           }
           if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
             params_ = java.util.Collections.unmodifiableList(params_);
-          }
-          if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
-            paramTypes_ = java.util.Collections.unmodifiableList(paramTypes_);
           }
           this.unknownFields = unknownFields.build();
           makeExtensionsImmutable();
@@ -2017,12 +1404,20 @@ public final class StratospherePlan {
       private java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair> params_;
       /**
        * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+       *
+       * <pre>
+       *repeated TypeIndexPair paramTypes = 5;
+       * </pre>
        */
       public java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair> getParamsList() {
         return params_;
       }
       /**
        * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+       *
+       * <pre>
+       *repeated TypeIndexPair paramTypes = 5;
+       * </pre>
        */
       public java.util.List<? extends eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePairOrBuilder> 
           getParamsOrBuilderList() {
@@ -2030,78 +1425,34 @@ public final class StratospherePlan {
       }
       /**
        * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+       *
+       * <pre>
+       *repeated TypeIndexPair paramTypes = 5;
+       * </pre>
        */
       public int getParamsCount() {
         return params_.size();
       }
       /**
        * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+       *
+       * <pre>
+       *repeated TypeIndexPair paramTypes = 5;
+       * </pre>
        */
       public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair getParams(int index) {
         return params_.get(index);
       }
       /**
        * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+       *
+       * <pre>
+       *repeated TypeIndexPair paramTypes = 5;
+       * </pre>
        */
       public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePairOrBuilder getParamsOrBuilder(
           int index) {
         return params_.get(index);
-      }
-
-      // repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;
-      public static final int PARAMTYPES_FIELD_NUMBER = 5;
-      private java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair> paramTypes_;
-      /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-       *
-       * <pre>
-       * TODO remove and handle differently
-       * </pre>
-       */
-      public java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair> getParamTypesList() {
-        return paramTypes_;
-      }
-      /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-       *
-       * <pre>
-       * TODO remove and handle differently
-       * </pre>
-       */
-      public java.util.List<? extends eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePairOrBuilder> 
-          getParamTypesOrBuilderList() {
-        return paramTypes_;
-      }
-      /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-       *
-       * <pre>
-       * TODO remove and handle differently
-       * </pre>
-       */
-      public int getParamTypesCount() {
-        return paramTypes_.size();
-      }
-      /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-       *
-       * <pre>
-       * TODO remove and handle differently
-       * </pre>
-       */
-      public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair getParamTypes(int index) {
-        return paramTypes_.get(index);
-      }
-      /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-       *
-       * <pre>
-       * TODO remove and handle differently
-       * </pre>
-       */
-      public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePairOrBuilder getParamTypesOrBuilder(
-          int index) {
-        return paramTypes_.get(index);
       }
 
       private void initFields() {
@@ -2109,7 +1460,6 @@ public final class StratospherePlan {
         inputs_ = java.util.Collections.emptyList();
         outputTypes_ = java.util.Collections.emptyList();
         params_ = java.util.Collections.emptyList();
-        paramTypes_ = java.util.Collections.emptyList();
       }
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
@@ -2122,12 +1472,6 @@ public final class StratospherePlan {
         }
         for (int i = 0; i < getParamsCount(); i++) {
           if (!getParams(i).isInitialized()) {
-            memoizedIsInitialized = 0;
-            return false;
-          }
-        }
-        for (int i = 0; i < getParamTypesCount(); i++) {
-          if (!getParamTypes(i).isInitialized()) {
             memoizedIsInitialized = 0;
             return false;
           }
@@ -2154,9 +1498,6 @@ public final class StratospherePlan {
         }
         for (int i = 0; i < params_.size(); i++) {
           output.writeMessage(4, params_.get(i));
-        }
-        for (int i = 0; i < paramTypes_.size(); i++) {
-          output.writeMessage(5, paramTypes_.get(i));
         }
         getUnknownFields().writeTo(output);
       }
@@ -2197,10 +1538,6 @@ public final class StratospherePlan {
         for (int i = 0; i < params_.size(); i++) {
           size += com.google.protobuf.CodedOutputStream
             .computeMessageSize(4, params_.get(i));
-        }
-        for (int i = 0; i < paramTypes_.size(); i++) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(5, paramTypes_.get(i));
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
@@ -2311,7 +1648,6 @@ public final class StratospherePlan {
         private void maybeForceBuilderInitialization() {
           if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
             getParamsFieldBuilder();
-            getParamTypesFieldBuilder();
           }
         }
         private static Builder create() {
@@ -2331,12 +1667,6 @@ public final class StratospherePlan {
             bitField0_ = (bitField0_ & ~0x00000008);
           } else {
             paramsBuilder_.clear();
-          }
-          if (paramTypesBuilder_ == null) {
-            paramTypes_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000010);
-          } else {
-            paramTypesBuilder_.clear();
           }
           return this;
         }
@@ -2388,15 +1718,6 @@ public final class StratospherePlan {
             result.params_ = params_;
           } else {
             result.params_ = paramsBuilder_.build();
-          }
-          if (paramTypesBuilder_ == null) {
-            if (((bitField0_ & 0x00000010) == 0x00000010)) {
-              paramTypes_ = java.util.Collections.unmodifiableList(paramTypes_);
-              bitField0_ = (bitField0_ & ~0x00000010);
-            }
-            result.paramTypes_ = paramTypes_;
-          } else {
-            result.paramTypes_ = paramTypesBuilder_.build();
           }
           result.bitField0_ = to_bitField0_;
           onBuilt();
@@ -2463,32 +1784,6 @@ public final class StratospherePlan {
               }
             }
           }
-          if (paramTypesBuilder_ == null) {
-            if (!other.paramTypes_.isEmpty()) {
-              if (paramTypes_.isEmpty()) {
-                paramTypes_ = other.paramTypes_;
-                bitField0_ = (bitField0_ & ~0x00000010);
-              } else {
-                ensureParamTypesIsMutable();
-                paramTypes_.addAll(other.paramTypes_);
-              }
-              onChanged();
-            }
-          } else {
-            if (!other.paramTypes_.isEmpty()) {
-              if (paramTypesBuilder_.isEmpty()) {
-                paramTypesBuilder_.dispose();
-                paramTypesBuilder_ = null;
-                paramTypes_ = other.paramTypes_;
-                bitField0_ = (bitField0_ & ~0x00000010);
-                paramTypesBuilder_ = 
-                  com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                     getParamTypesFieldBuilder() : null;
-              } else {
-                paramTypesBuilder_.addAllMessages(other.paramTypes_);
-              }
-            }
-          }
           this.mergeUnknownFields(other.getUnknownFields());
           return this;
         }
@@ -2500,12 +1795,6 @@ public final class StratospherePlan {
           }
           for (int i = 0; i < getParamsCount(); i++) {
             if (!getParams(i).isInitialized()) {
-              
-              return false;
-            }
-          }
-          for (int i = 0; i < getParamTypesCount(); i++) {
-            if (!getParamTypes(i).isInitialized()) {
               
               return false;
             }
@@ -2721,6 +2010,10 @@ public final class StratospherePlan {
 
         /**
          * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         *
+         * <pre>
+         *repeated TypeIndexPair paramTypes = 5;
+         * </pre>
          */
         public java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair> getParamsList() {
           if (paramsBuilder_ == null) {
@@ -2731,6 +2024,10 @@ public final class StratospherePlan {
         }
         /**
          * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         *
+         * <pre>
+         *repeated TypeIndexPair paramTypes = 5;
+         * </pre>
          */
         public int getParamsCount() {
           if (paramsBuilder_ == null) {
@@ -2741,6 +2038,10 @@ public final class StratospherePlan {
         }
         /**
          * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         *
+         * <pre>
+         *repeated TypeIndexPair paramTypes = 5;
+         * </pre>
          */
         public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair getParams(int index) {
           if (paramsBuilder_ == null) {
@@ -2751,6 +2052,10 @@ public final class StratospherePlan {
         }
         /**
          * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         *
+         * <pre>
+         *repeated TypeIndexPair paramTypes = 5;
+         * </pre>
          */
         public Builder setParams(
             int index, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair value) {
@@ -2768,6 +2073,10 @@ public final class StratospherePlan {
         }
         /**
          * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         *
+         * <pre>
+         *repeated TypeIndexPair paramTypes = 5;
+         * </pre>
          */
         public Builder setParams(
             int index, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair.Builder builderForValue) {
@@ -2782,6 +2091,10 @@ public final class StratospherePlan {
         }
         /**
          * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         *
+         * <pre>
+         *repeated TypeIndexPair paramTypes = 5;
+         * </pre>
          */
         public Builder addParams(eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair value) {
           if (paramsBuilder_ == null) {
@@ -2798,6 +2111,10 @@ public final class StratospherePlan {
         }
         /**
          * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         *
+         * <pre>
+         *repeated TypeIndexPair paramTypes = 5;
+         * </pre>
          */
         public Builder addParams(
             int index, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair value) {
@@ -2815,6 +2132,10 @@ public final class StratospherePlan {
         }
         /**
          * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         *
+         * <pre>
+         *repeated TypeIndexPair paramTypes = 5;
+         * </pre>
          */
         public Builder addParams(
             eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair.Builder builderForValue) {
@@ -2829,6 +2150,10 @@ public final class StratospherePlan {
         }
         /**
          * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         *
+         * <pre>
+         *repeated TypeIndexPair paramTypes = 5;
+         * </pre>
          */
         public Builder addParams(
             int index, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair.Builder builderForValue) {
@@ -2843,6 +2168,10 @@ public final class StratospherePlan {
         }
         /**
          * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         *
+         * <pre>
+         *repeated TypeIndexPair paramTypes = 5;
+         * </pre>
          */
         public Builder addAllParams(
             java.lang.Iterable<? extends eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair> values) {
@@ -2857,6 +2186,10 @@ public final class StratospherePlan {
         }
         /**
          * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         *
+         * <pre>
+         *repeated TypeIndexPair paramTypes = 5;
+         * </pre>
          */
         public Builder clearParams() {
           if (paramsBuilder_ == null) {
@@ -2870,6 +2203,10 @@ public final class StratospherePlan {
         }
         /**
          * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         *
+         * <pre>
+         *repeated TypeIndexPair paramTypes = 5;
+         * </pre>
          */
         public Builder removeParams(int index) {
           if (paramsBuilder_ == null) {
@@ -2883,6 +2220,10 @@ public final class StratospherePlan {
         }
         /**
          * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         *
+         * <pre>
+         *repeated TypeIndexPair paramTypes = 5;
+         * </pre>
          */
         public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair.Builder getParamsBuilder(
             int index) {
@@ -2890,6 +2231,10 @@ public final class StratospherePlan {
         }
         /**
          * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         *
+         * <pre>
+         *repeated TypeIndexPair paramTypes = 5;
+         * </pre>
          */
         public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePairOrBuilder getParamsOrBuilder(
             int index) {
@@ -2900,6 +2245,10 @@ public final class StratospherePlan {
         }
         /**
          * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         *
+         * <pre>
+         *repeated TypeIndexPair paramTypes = 5;
+         * </pre>
          */
         public java.util.List<? extends eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePairOrBuilder> 
              getParamsOrBuilderList() {
@@ -2911,6 +2260,10 @@ public final class StratospherePlan {
         }
         /**
          * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         *
+         * <pre>
+         *repeated TypeIndexPair paramTypes = 5;
+         * </pre>
          */
         public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair.Builder addParamsBuilder() {
           return getParamsFieldBuilder().addBuilder(
@@ -2918,6 +2271,10 @@ public final class StratospherePlan {
         }
         /**
          * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         *
+         * <pre>
+         *repeated TypeIndexPair paramTypes = 5;
+         * </pre>
          */
         public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair.Builder addParamsBuilder(
             int index) {
@@ -2926,6 +2283,10 @@ public final class StratospherePlan {
         }
         /**
          * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         *
+         * <pre>
+         *repeated TypeIndexPair paramTypes = 5;
+         * </pre>
          */
         public java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair.Builder> 
              getParamsBuilderList() {
@@ -2944,318 +2305,6 @@ public final class StratospherePlan {
             params_ = null;
           }
           return paramsBuilder_;
-        }
-
-        // repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;
-        private java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair> paramTypes_ =
-          java.util.Collections.emptyList();
-        private void ensureParamTypesIsMutable() {
-          if (!((bitField0_ & 0x00000010) == 0x00000010)) {
-            paramTypes_ = new java.util.ArrayList<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair>(paramTypes_);
-            bitField0_ |= 0x00000010;
-           }
-        }
-
-        private com.google.protobuf.RepeatedFieldBuilder<
-            eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair.Builder, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePairOrBuilder> paramTypesBuilder_;
-
-        /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-         *
-         * <pre>
-         * TODO remove and handle differently
-         * </pre>
-         */
-        public java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair> getParamTypesList() {
-          if (paramTypesBuilder_ == null) {
-            return java.util.Collections.unmodifiableList(paramTypes_);
-          } else {
-            return paramTypesBuilder_.getMessageList();
-          }
-        }
-        /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-         *
-         * <pre>
-         * TODO remove and handle differently
-         * </pre>
-         */
-        public int getParamTypesCount() {
-          if (paramTypesBuilder_ == null) {
-            return paramTypes_.size();
-          } else {
-            return paramTypesBuilder_.getCount();
-          }
-        }
-        /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-         *
-         * <pre>
-         * TODO remove and handle differently
-         * </pre>
-         */
-        public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair getParamTypes(int index) {
-          if (paramTypesBuilder_ == null) {
-            return paramTypes_.get(index);
-          } else {
-            return paramTypesBuilder_.getMessage(index);
-          }
-        }
-        /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-         *
-         * <pre>
-         * TODO remove and handle differently
-         * </pre>
-         */
-        public Builder setParamTypes(
-            int index, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair value) {
-          if (paramTypesBuilder_ == null) {
-            if (value == null) {
-              throw new NullPointerException();
-            }
-            ensureParamTypesIsMutable();
-            paramTypes_.set(index, value);
-            onChanged();
-          } else {
-            paramTypesBuilder_.setMessage(index, value);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-         *
-         * <pre>
-         * TODO remove and handle differently
-         * </pre>
-         */
-        public Builder setParamTypes(
-            int index, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair.Builder builderForValue) {
-          if (paramTypesBuilder_ == null) {
-            ensureParamTypesIsMutable();
-            paramTypes_.set(index, builderForValue.build());
-            onChanged();
-          } else {
-            paramTypesBuilder_.setMessage(index, builderForValue.build());
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-         *
-         * <pre>
-         * TODO remove and handle differently
-         * </pre>
-         */
-        public Builder addParamTypes(eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair value) {
-          if (paramTypesBuilder_ == null) {
-            if (value == null) {
-              throw new NullPointerException();
-            }
-            ensureParamTypesIsMutable();
-            paramTypes_.add(value);
-            onChanged();
-          } else {
-            paramTypesBuilder_.addMessage(value);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-         *
-         * <pre>
-         * TODO remove and handle differently
-         * </pre>
-         */
-        public Builder addParamTypes(
-            int index, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair value) {
-          if (paramTypesBuilder_ == null) {
-            if (value == null) {
-              throw new NullPointerException();
-            }
-            ensureParamTypesIsMutable();
-            paramTypes_.add(index, value);
-            onChanged();
-          } else {
-            paramTypesBuilder_.addMessage(index, value);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-         *
-         * <pre>
-         * TODO remove and handle differently
-         * </pre>
-         */
-        public Builder addParamTypes(
-            eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair.Builder builderForValue) {
-          if (paramTypesBuilder_ == null) {
-            ensureParamTypesIsMutable();
-            paramTypes_.add(builderForValue.build());
-            onChanged();
-          } else {
-            paramTypesBuilder_.addMessage(builderForValue.build());
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-         *
-         * <pre>
-         * TODO remove and handle differently
-         * </pre>
-         */
-        public Builder addParamTypes(
-            int index, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair.Builder builderForValue) {
-          if (paramTypesBuilder_ == null) {
-            ensureParamTypesIsMutable();
-            paramTypes_.add(index, builderForValue.build());
-            onChanged();
-          } else {
-            paramTypesBuilder_.addMessage(index, builderForValue.build());
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-         *
-         * <pre>
-         * TODO remove and handle differently
-         * </pre>
-         */
-        public Builder addAllParamTypes(
-            java.lang.Iterable<? extends eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair> values) {
-          if (paramTypesBuilder_ == null) {
-            ensureParamTypesIsMutable();
-            super.addAll(values, paramTypes_);
-            onChanged();
-          } else {
-            paramTypesBuilder_.addAllMessages(values);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-         *
-         * <pre>
-         * TODO remove and handle differently
-         * </pre>
-         */
-        public Builder clearParamTypes() {
-          if (paramTypesBuilder_ == null) {
-            paramTypes_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000010);
-            onChanged();
-          } else {
-            paramTypesBuilder_.clear();
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-         *
-         * <pre>
-         * TODO remove and handle differently
-         * </pre>
-         */
-        public Builder removeParamTypes(int index) {
-          if (paramTypesBuilder_ == null) {
-            ensureParamTypesIsMutable();
-            paramTypes_.remove(index);
-            onChanged();
-          } else {
-            paramTypesBuilder_.remove(index);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-         *
-         * <pre>
-         * TODO remove and handle differently
-         * </pre>
-         */
-        public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair.Builder getParamTypesBuilder(
-            int index) {
-          return getParamTypesFieldBuilder().getBuilder(index);
-        }
-        /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-         *
-         * <pre>
-         * TODO remove and handle differently
-         * </pre>
-         */
-        public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePairOrBuilder getParamTypesOrBuilder(
-            int index) {
-          if (paramTypesBuilder_ == null) {
-            return paramTypes_.get(index);  } else {
-            return paramTypesBuilder_.getMessageOrBuilder(index);
-          }
-        }
-        /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-         *
-         * <pre>
-         * TODO remove and handle differently
-         * </pre>
-         */
-        public java.util.List<? extends eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePairOrBuilder> 
-             getParamTypesOrBuilderList() {
-          if (paramTypesBuilder_ != null) {
-            return paramTypesBuilder_.getMessageOrBuilderList();
-          } else {
-            return java.util.Collections.unmodifiableList(paramTypes_);
-          }
-        }
-        /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-         *
-         * <pre>
-         * TODO remove and handle differently
-         * </pre>
-         */
-        public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair.Builder addParamTypesBuilder() {
-          return getParamTypesFieldBuilder().addBuilder(
-              eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair.getDefaultInstance());
-        }
-        /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-         *
-         * <pre>
-         * TODO remove and handle differently
-         * </pre>
-         */
-        public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair.Builder addParamTypesBuilder(
-            int index) {
-          return getParamTypesFieldBuilder().addBuilder(
-              index, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair.getDefaultInstance());
-        }
-        /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyTypePair paramTypes = 5;</code>
-         *
-         * <pre>
-         * TODO remove and handle differently
-         * </pre>
-         */
-        public java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair.Builder> 
-             getParamTypesBuilderList() {
-          return getParamTypesFieldBuilder().getBuilderList();
-        }
-        private com.google.protobuf.RepeatedFieldBuilder<
-            eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair.Builder, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePairOrBuilder> 
-            getParamTypesFieldBuilder() {
-          if (paramTypesBuilder_ == null) {
-            paramTypesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-                eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePair.Builder, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyTypePairOrBuilder>(
-                    paramTypes_,
-                    ((bitField0_ & 0x00000010) == 0x00000010),
-                    getParentForChildren(),
-                    isClean());
-            paramTypes_ = null;
-          }
-          return paramTypesBuilder_;
         }
 
         // @@protoc_insertion_point(builder_scope:eu.stratosphere.language.binding.protos.ProtoPlan.Vertex)
@@ -3837,11 +2886,6 @@ public final class StratospherePlan {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_eu_stratosphere_language_binding_protos_ProtoPlan_KeyValuePair_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_eu_stratosphere_language_binding_protos_ProtoPlan_KeyTypePair_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_eu_stratosphere_language_binding_protos_ProtoPlan_KeyTypePair_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_eu_stratosphere_language_binding_protos_ProtoPlan_Vertex_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -3856,31 +2900,26 @@ public final class StratospherePlan {
   static {
     java.lang.String[] descriptorData = {
       "\n\026stratospherePlan.proto\022\'eu.stratospher" +
-      "e.language.binding.protos\"\250\007\n\tProtoPlan\022" +
+      "e.language.binding.protos\"\353\005\n\tProtoPlan\022" +
       "K\n\010vertices\030\001 \003(\01329.eu.stratosphere.lang" +
       "uage.binding.protos.ProtoPlan.Vertex\032*\n\014" +
       "KeyValuePair\022\013\n\003key\030\001 \002(\t\022\r\n\005value\030\002 \002(\t" +
-      "\032g\n\013KeyTypePair\022\013\n\003key\030\001 \002(\t\022K\n\005value\030\002 " +
-      "\002(\0162<.eu.stratosphere.language.binding.p" +
-      "rotos.ProtoPlan.ValueType\032\341\002\n\006Vertex\022K\n\004" +
-      "type\030\001 \002(\0162=.eu.stratosphere.language.bi" +
-      "nding.protos.ProtoPlan.VertexType\022\022\n\006inp",
-      "uts\030\002 \003(\005B\002\020\001\022Q\n\013outputTypes\030\003 \003(\0162<.eu." +
-      "stratosphere.language.binding.protos.Pro" +
-      "toPlan.ValueType\022O\n\006params\030\004 \003(\0132?.eu.st" +
-      "ratosphere.language.binding.protos.Proto" +
-      "Plan.KeyValuePair\022R\n\nparamTypes\030\005 \003(\0132>." +
-      "eu.stratosphere.language.binding.protos." +
-      "ProtoPlan.KeyTypePair\"*\n\tValueType\022\017\n\013St" +
-      "ringValue\020\000\022\014\n\010IntValue\020\001\"\250\002\n\nVertexType" +
-      "\022\007\n\003Map\020\000\022\n\n\006Reduce\020\001\022\010\n\004Join\020\002\022\t\n\005Cross" +
-      "\020\003\022\013\n\007CoGroup\020\004\022\t\n\005Union\020\005\022\023\n\017TextInputF",
-      "ormat\020\006\022\022\n\016CsvInputFormat\020\007\022\030\n\024Delimited" +
-      "InputFormat\020\010\022\023\n\017FileInputFormat\020\t\022\023\n\017JD" +
-      "BCInputFormat\020\n\022\023\n\017CsvOutputFormat\020\013\022\031\n\025" +
-      "DelimitedOutputFormat\020\014\022\024\n\020FileOutputFor" +
-      "mat\020\r\022\021\n\rBulkIteration\020\016\022\022\n\016DeltaIterati" +
-      "on\020\017B\022B\020StratospherePlan"
+      "\032\215\002\n\006Vertex\022K\n\004type\030\001 \002(\0162=.eu.stratosph" +
+      "ere.language.binding.protos.ProtoPlan.Ve" +
+      "rtexType\022\022\n\006inputs\030\002 \003(\005B\002\020\001\022Q\n\013outputTy" +
+      "pes\030\003 \003(\0162<.eu.stratosphere.language.bin" +
+      "ding.protos.ProtoPlan.ValueType\022O\n\006param",
+      "s\030\004 \003(\0132?.eu.stratosphere.language.bindi" +
+      "ng.protos.ProtoPlan.KeyValuePair\"*\n\tValu" +
+      "eType\022\017\n\013StringValue\020\000\022\014\n\010IntValue\020\001\"\250\002\n" +
+      "\nVertexType\022\007\n\003Map\020\000\022\n\n\006Reduce\020\001\022\010\n\004Join" +
+      "\020\002\022\t\n\005Cross\020\003\022\013\n\007CoGroup\020\004\022\t\n\005Union\020\005\022\023\n" +
+      "\017TextInputFormat\020\006\022\022\n\016CsvInputFormat\020\007\022\030" +
+      "\n\024DelimitedInputFormat\020\010\022\023\n\017FileInputFor" +
+      "mat\020\t\022\023\n\017JDBCInputFormat\020\n\022\023\n\017CsvOutputF" +
+      "ormat\020\013\022\031\n\025DelimitedOutputFormat\020\014\022\024\n\020Fi" +
+      "leOutputFormat\020\r\022\021\n\rBulkIteration\020\016\022\022\n\016D",
+      "eltaIteration\020\017B\022B\020StratospherePlan"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3899,18 +2938,12 @@ public final class StratospherePlan {
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_eu_stratosphere_language_binding_protos_ProtoPlan_KeyValuePair_descriptor,
               new java.lang.String[] { "Key", "Value", });
-          internal_static_eu_stratosphere_language_binding_protos_ProtoPlan_KeyTypePair_descriptor =
-            internal_static_eu_stratosphere_language_binding_protos_ProtoPlan_descriptor.getNestedTypes().get(1);
-          internal_static_eu_stratosphere_language_binding_protos_ProtoPlan_KeyTypePair_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_eu_stratosphere_language_binding_protos_ProtoPlan_KeyTypePair_descriptor,
-              new java.lang.String[] { "Key", "Value", });
           internal_static_eu_stratosphere_language_binding_protos_ProtoPlan_Vertex_descriptor =
-            internal_static_eu_stratosphere_language_binding_protos_ProtoPlan_descriptor.getNestedTypes().get(2);
+            internal_static_eu_stratosphere_language_binding_protos_ProtoPlan_descriptor.getNestedTypes().get(1);
           internal_static_eu_stratosphere_language_binding_protos_ProtoPlan_Vertex_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_eu_stratosphere_language_binding_protos_ProtoPlan_Vertex_descriptor,
-              new java.lang.String[] { "Type", "Inputs", "OutputTypes", "Params", "ParamTypes", });
+              new java.lang.String[] { "Type", "Inputs", "OutputTypes", "Params", });
           return null;
         }
       };

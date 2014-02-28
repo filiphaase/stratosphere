@@ -21,18 +21,18 @@ import eu.stratosphere.types.Value;
 public class RecordSender {
 
 	private OutputStream outStream;
-	private List<Class<? extends Value>> inputClasses1;
-	private List<Class<? extends Value>> inputClasses2;
+	private Class<? extends Value>[] inputClasses1;
+	private Class<? extends Value>[] inputClasses2;
 	
 	public RecordSender(OutputStream outStream,
-			List<Class<? extends Value>> inputClasses) {
+			Class<? extends Value>[] inputClasses) {
 		this.inputClasses1 = inputClasses;
 		this.outStream = outStream;
 	}
 	
 	public RecordSender(OutputStream outputStream,
-			List<Class<? extends Value>> inputRecordClasses,
-			List<Class<? extends Value>> secondInputRecordClasses) {
+			Class<? extends Value>[] inputRecordClasses,
+			Class<? extends Value>[] secondInputRecordClasses) {
 		this.inputClasses1 = inputRecordClasses;
 		this.inputClasses2 = secondInputRecordClasses;
 		this.outStream = outputStream;
@@ -68,7 +68,7 @@ public class RecordSender {
 		}
 	}
 	
-	public void sendSingleRecord(Record record, List<Class<? extends Value>> classes) throws Exception{
+	public void sendSingleRecord(Record record, Class<? extends Value>[] classes) throws Exception{
 		//System.out.println("in Send single record classes: " + classes.get(0));
 		ProtoStratosphereRecord psr = getProtoStratosphereRecord(record, classes);
 		sendSize(psr.getSerializedSize());
@@ -89,11 +89,11 @@ public class RecordSender {
 	 * Builds a protobuf-record from the java-record to send it to the subprocess
 	 * Curently one int and strings are supported
 	 */
-	private ProtoStratosphereRecord getProtoStratosphereRecord(Record r, List<Class<? extends Value>> inputClasses) throws Exception {
+	private ProtoStratosphereRecord getProtoStratosphereRecord(Record r, Class<? extends Value>[] inputClasses) throws Exception {
 		ProtoStratosphereRecord.Builder psrb=  ProtoStratosphereRecord.newBuilder();
 		
-		for(int i = 0; i < inputClasses.size(); i++){
-			Class<? extends Value> inputClass = inputClasses.get(i);
+		for(int i = 0; i < inputClasses.length; i++){
+			Class<? extends Value> inputClass = inputClasses[i];
 			if(inputClass == StringValue.class){
 				psrb.addValues(ProtoValue.newBuilder()
 						.setValueType(ProtoValueType.StringValue)

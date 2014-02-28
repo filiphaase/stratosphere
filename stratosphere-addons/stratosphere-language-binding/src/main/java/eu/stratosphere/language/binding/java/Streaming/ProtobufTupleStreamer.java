@@ -16,15 +16,15 @@ public class ProtobufTupleStreamer extends ProtobufPythonStreamer {
 	
 	// Constructor for tuple streamer with one record-class(Map,Reduce)
 	public ProtobufTupleStreamer(Configuration conf,
-			ConnectionType connectionType, List<Class<?extends Value>> classes) throws IOException{
+			ConnectionType connectionType, Class<? extends Value>[] classes) throws IOException{
 		super(conf, connectionType, classes);
 	}
 	
 	// Constructor for tuple streamer with two different record-classes (Join,Cross,CoGroup) 
 	public ProtobufTupleStreamer(Configuration conf,
 			ConnectionType connectionType,
-			List<Class<? extends Value>> classes1,
-			List<Class<? extends Value>> classes2) throws IOException{
+			Class<? extends Value>[] classes1,
+			Class<? extends Value>[] classes2) throws IOException{
 		super(conf, connectionType, classes1, classes2);
 	}
 

@@ -1,7 +1,6 @@
 package eu.stratosphere.language.binding.java.operators;
 
 import java.io.Serializable;
-import java.util.List;
 
 import eu.stratosphere.api.java.record.functions.MapFunction;
 import eu.stratosphere.configuration.Configuration;
@@ -18,10 +17,10 @@ public class PyMapFunction extends MapFunction
 	
 	private transient ProtobufTupleStreamer streamer;
 	private ConnectionType connectionType;
-	private List<Class<? extends Value>> classes;
+	private Class<? extends Value>[] classes;
 	private int id;
 	
-	public PyMapFunction(String scriptPath, ConnectionType connectionType, List<Class<? extends Value>> classes, int id){
+	public PyMapFunction(String scriptPath, ConnectionType connectionType, Class<? extends Value>[] classes, int id){
 		this.connectionType = connectionType;
 		this.classes = classes;
 		this.id = id;
