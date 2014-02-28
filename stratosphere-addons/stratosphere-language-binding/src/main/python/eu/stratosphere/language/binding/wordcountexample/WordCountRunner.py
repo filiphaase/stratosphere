@@ -4,32 +4,38 @@ import sys
 import re
 
 # For debugging
-f = open("pythonPlanOut.txt", "w")
+f = open("pythonPlanOut.txt", "a")
 def log(s):
     f.write(str(s) + "\n")
-sys.stderr = open("pythonPlanError.txt", "w")
+sys.stderr = open("pythonPlanError.txt", "a")
 
 inputPath = r"file:///home/filip/Documents/stratosphere/hamlet10.txt"
 outputPath = r"file:///home/filip/Documents/stratosphere/resultPlan.txt"
 
 def split(record, collector):
     filteredLine = re.sub(r"\W+", " ", record[0].lower()) 
-    [collector.collect((s,1)) for s in filteredLine.split()]
+    [collector.collect((1, s, 0.1, True)) for s in filteredLine.split()]
         
 def count(iter, collector):
     sum = 0
+    floatSum = 0.0
     record = None
     
     for val in iter:
         record = val
         sum += 1
+        floatSum += val[2]
+    
+    bool = False
+    if(int(sum) > 1):
+        bool = True
         
     if(record != None):
-        collector.collect((record[0], int(sum)))
+        collector.collect((record[1], int(sum),floatSum, bool))
 
-TextInputFormat(inputPath).map(split, [ValueType.String, ValueType.Int]) \
-    .reduce(count, [ValueType.String, ValueType.Int]).key(0) \
-    .outputCSV(outputPath, [0,1]).fieldDelimiter(",") \
+TextInputFormat(inputPath).map(split, [ValueType.Int, ValueType.String, ValueType.Float, ValueType.Boolean]) \
+    .reduce(count, [ValueType.String, ValueType.Int, ValueType.Float, ValueType.Boolean]).key(1) \
+    .outputCSV(outputPath, [0,1,2,3]).fieldDelimiter(",") \
     .execute()
     
 """ Longer version

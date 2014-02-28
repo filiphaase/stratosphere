@@ -150,6 +150,14 @@ public final class StratospherePlan {
        * <code>IntValue = 1;</code>
        */
       IntValue(1, 1),
+      /**
+       * <code>BooleanValue = 2;</code>
+       */
+      BooleanValue(2, 2),
+      /**
+       * <code>FloatValue = 3;</code>
+       */
+      FloatValue(3, 3),
       ;
 
       /**
@@ -160,6 +168,14 @@ public final class StratospherePlan {
        * <code>IntValue = 1;</code>
        */
       public static final int IntValue_VALUE = 1;
+      /**
+       * <code>BooleanValue = 2;</code>
+       */
+      public static final int BooleanValue_VALUE = 2;
+      /**
+       * <code>FloatValue = 3;</code>
+       */
+      public static final int FloatValue_VALUE = 3;
 
 
       public final int getNumber() { return value; }
@@ -168,6 +184,8 @@ public final class StratospherePlan {
         switch (value) {
           case 0: return StringValue;
           case 1: return IntValue;
+          case 2: return BooleanValue;
+          case 3: return FloatValue;
           default: return null;
         }
       }
@@ -2900,7 +2918,7 @@ public final class StratospherePlan {
   static {
     java.lang.String[] descriptorData = {
       "\n\026stratospherePlan.proto\022\'eu.stratospher" +
-      "e.language.binding.protos\"\353\005\n\tProtoPlan\022" +
+      "e.language.binding.protos\"\215\006\n\tProtoPlan\022" +
       "K\n\010vertices\030\001 \003(\01329.eu.stratosphere.lang" +
       "uage.binding.protos.ProtoPlan.Vertex\032*\n\014" +
       "KeyValuePair\022\013\n\003key\030\001 \002(\t\022\r\n\005value\030\002 \002(\t" +
@@ -2910,16 +2928,17 @@ public final class StratospherePlan {
       "pes\030\003 \003(\0162<.eu.stratosphere.language.bin" +
       "ding.protos.ProtoPlan.ValueType\022O\n\006param",
       "s\030\004 \003(\0132?.eu.stratosphere.language.bindi" +
-      "ng.protos.ProtoPlan.KeyValuePair\"*\n\tValu" +
-      "eType\022\017\n\013StringValue\020\000\022\014\n\010IntValue\020\001\"\250\002\n" +
-      "\nVertexType\022\007\n\003Map\020\000\022\n\n\006Reduce\020\001\022\010\n\004Join" +
-      "\020\002\022\t\n\005Cross\020\003\022\013\n\007CoGroup\020\004\022\t\n\005Union\020\005\022\023\n" +
-      "\017TextInputFormat\020\006\022\022\n\016CsvInputFormat\020\007\022\030" +
-      "\n\024DelimitedInputFormat\020\010\022\023\n\017FileInputFor" +
-      "mat\020\t\022\023\n\017JDBCInputFormat\020\n\022\023\n\017CsvOutputF" +
-      "ormat\020\013\022\031\n\025DelimitedOutputFormat\020\014\022\024\n\020Fi" +
-      "leOutputFormat\020\r\022\021\n\rBulkIteration\020\016\022\022\n\016D",
-      "eltaIteration\020\017B\022B\020StratospherePlan"
+      "ng.protos.ProtoPlan.KeyValuePair\"L\n\tValu" +
+      "eType\022\017\n\013StringValue\020\000\022\014\n\010IntValue\020\001\022\020\n\014" +
+      "BooleanValue\020\002\022\016\n\nFloatValue\020\003\"\250\002\n\nVerte" +
+      "xType\022\007\n\003Map\020\000\022\n\n\006Reduce\020\001\022\010\n\004Join\020\002\022\t\n\005" +
+      "Cross\020\003\022\013\n\007CoGroup\020\004\022\t\n\005Union\020\005\022\023\n\017TextI" +
+      "nputFormat\020\006\022\022\n\016CsvInputFormat\020\007\022\030\n\024Deli" +
+      "mitedInputFormat\020\010\022\023\n\017FileInputFormat\020\t\022" +
+      "\023\n\017JDBCInputFormat\020\n\022\023\n\017CsvOutputFormat\020" +
+      "\013\022\031\n\025DelimitedOutputFormat\020\014\022\024\n\020FileOutp",
+      "utFormat\020\r\022\021\n\rBulkIteration\020\016\022\022\n\016DeltaIt" +
+      "eration\020\017B\022B\020StratospherePlan"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

@@ -5,6 +5,8 @@ import java.io.InputStream;
 import eu.stratosphere.language.binding.protos.StratosphereRecordProtoBuffers.ProtoRecordSize;
 import eu.stratosphere.language.binding.protos.StratosphereRecordProtoBuffers.ProtoStratosphereRecord;
 import eu.stratosphere.language.binding.protos.StratosphereRecordProtoBuffers.ProtoStratosphereRecord.ProtoValue;
+import eu.stratosphere.types.BooleanValue;
+import eu.stratosphere.types.FloatValue;
 import eu.stratosphere.types.IntValue;
 import eu.stratosphere.types.Record;
 import eu.stratosphere.types.StringValue;
@@ -45,6 +47,12 @@ public class RecordReceiver {
 					break;
 				case IntegerValue32: 
 					val = new IntValue(protoVal.getInt32Val());
+					break;
+				case BooleanValue:
+					val = new BooleanValue(protoVal.getBoolVal());
+					break;
+				case FloatValue:
+					val = new FloatValue(protoVal.getFloatVal());
 					break;
 				default:
 					throw new RuntimeException("Any not implemented ProtoValType received");

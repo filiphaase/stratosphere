@@ -7,6 +7,8 @@ message ProtoPlan{
 	enum ValueType{
 		StringValue = 0;
 		IntValue = 1;
+		BooleanValue = 2;
+		FloatValue = 3;
 	}
 
 	enum VertexType{

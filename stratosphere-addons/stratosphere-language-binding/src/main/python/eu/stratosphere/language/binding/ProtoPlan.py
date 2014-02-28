@@ -13,7 +13,7 @@ def log(s):
 # define our own enum type, because enums are only supported in python 3.4
 def enum(**enums):
     return type('Enum', (), enums)        
-ValueType = enum(String=1, Int=2)
+ValueType = enum(String=1, Int=2, Float=3, Boolean=4)
 
 class Plan(object):
     
@@ -54,7 +54,6 @@ class Plan(object):
             for vertex in self.__vertices:
                 #Adding it to the plan, therefore we give a new vertex refernce to the function
                 vertex.fillVertex(self.__protoPlan.vertices.add())
-            log("really sending plan back")
             self.sendPlan(self.__connection)
             log("sent plan")
         else:
@@ -87,7 +86,7 @@ class Vertex(object):
     
     curNumVertices = 0
     
-    def __init__(self, vertexType, parent1 = None, parent2 = None, params = {}, function = None, types = []):
+    def __init__(self, vertexType, parent1 = None, parent2 = None, params = None, function = None, types = []):
         self.CONST_PARAM_FILE_PATH = "filePath"
         self.CONST_PARAM_FIELD_DELIMITER = "fieldDelimiter"
         self.CONST_PARAM_RECORD_DELIMITER = "recordDelimiter"
@@ -108,9 +107,11 @@ class Vertex(object):
         log("initVertex-parent2: " + str(parent2))
         if parent2 != None:
             self.plan.mergePlan(parent2.plan)
-            
         self.__outputTypes = types
-        self.__params = params
+        if(params == None):
+            self.__params = {}
+        else:
+            self.__params = params
         self.function = function
         self.inputs = []
         if parent1 != None:
@@ -149,14 +150,12 @@ class Vertex(object):
     
     def outputCSV(self, filePath, indices, recordDelimiter = '\n', fieldDelimiter = " "):
         outputVertex = Vertex(ProtoPlan.CsvOutputFormat, parent1=self)
-        return outputVertex.file(filePath).indices(indices).fieldDelimiter(fieldDelimiter).recordDelimiter(recordDelimiter)
+        return outputVertex.file(filePath).indices(indices).fieldDelimiter(fieldDelimiter).recordDelimiter(recordDelimiter) 
     
     def fillVertex(self, newVertex):
          newVertex.type = self.vertexType
          newVertex.inputs.extend(self.inputs)
         
-         log("Inputs: " + str(self.inputs))
-         log("VertexSelf: " + str(self)) 
          for key,value in self.__params.iteritems():
              kvp = newVertex.params.add()
              kvp.key = key
@@ -168,9 +167,11 @@ class Vertex(object):
                  protoTypes.append(ProtoPlan.StringValue)
              elif type == ValueType.Int:
                  protoTypes.append(ProtoPlan.IntValue)
+             elif type == ValueType.Float:
+                 protoTypes.append(ProtoPlan.FloatValue)
+             elif type == ValueType.Boolean:
+                 protoTypes.append(ProtoPlan.BooleanValue)
          newVertex.outputTypes.extend(protoTypes)
-         
-         log("VertexSelfProtobuf: " + str(newVertex))
     
     def planString(self):
         return str(self.plan)
@@ -209,4 +210,5 @@ class Vertex(object):
             
 class TextInputFormat(Vertex):    
     def __init__(self, inputPath):
-        super(TextInputFormat, self).__init__(ProtoPlan.TextInputFormat, types = [ValueType.String], params = {"filePath": inputPath})
+        super(TextInputFormat, self).__init__(ProtoPlan.TextInputFormat, types = [ValueType.String])
+        self.file(inputPath)

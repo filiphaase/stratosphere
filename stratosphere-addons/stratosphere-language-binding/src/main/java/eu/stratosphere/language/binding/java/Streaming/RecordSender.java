@@ -2,12 +2,13 @@ package eu.stratosphere.language.binding.java.Streaming;
 
 import java.io.OutputStream;
 import java.util.Iterator;
-import java.util.List;
 
 import eu.stratosphere.language.binding.protos.StratosphereRecordProtoBuffers.ProtoRecordSize;
 import eu.stratosphere.language.binding.protos.StratosphereRecordProtoBuffers.ProtoStratosphereRecord;
 import eu.stratosphere.language.binding.protos.StratosphereRecordProtoBuffers.ProtoStratosphereRecord.ProtoValue;
 import eu.stratosphere.language.binding.protos.StratosphereRecordProtoBuffers.ProtoStratosphereRecord.ProtoValueType;
+import eu.stratosphere.types.BooleanValue;
+import eu.stratosphere.types.FloatValue;
 import eu.stratosphere.types.IntValue;
 import eu.stratosphere.types.Record;
 import eu.stratosphere.types.StringValue;
@@ -101,8 +102,15 @@ public class RecordSender {
 			}else if(inputClass == IntValue.class){
 				psrb.addValues(ProtoValue.newBuilder()
 						.setValueType(ProtoValueType.IntegerValue32)
-						.setInt32Val(r.getField(i, IntValue.class).getValue()));	
-							
+						.setInt32Val(r.getField(i, IntValue.class).getValue()));
+			}else if(inputClass == BooleanValue.class){
+				psrb.addValues(ProtoValue.newBuilder()
+						.setValueType(ProtoValueType.BooleanValue)
+						.setBoolVal(r.getField(i, BooleanValue.class).getValue()));	
+			}else if(inputClass == FloatValue.class){
+				psrb.addValues(ProtoValue.newBuilder()
+						.setValueType(ProtoValueType.FloatValue)
+						.setFloatVal(r.getField(i, FloatValue.class).getValue()));	
 			}else{
 				throw new Exception("Currently unimplemented value-type in the Record"); 
 			}

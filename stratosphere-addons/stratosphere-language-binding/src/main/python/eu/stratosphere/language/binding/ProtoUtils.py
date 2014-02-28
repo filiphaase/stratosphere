@@ -52,7 +52,6 @@ class STDPipeConnection(Connection):
         sys.stdout.write(buffer)
         sys.stdout.flush()    
             
-            
         
 """
     Class for receiving protobuf records and parsing them into python tuple.
@@ -123,6 +122,10 @@ class Iterator(object):
                 tuple += (value.int32Val,)
             elif(value.valueType == stratosphereRecord_pb2.ProtoStratosphereRecord.StringValue):
                 tuple += (value.stringVal,)
+            elif(value.valueType == stratosphereRecord_pb2.ProtoStratosphereRecord.BooleanValue):
+                tuple += (value.boolVal,)
+            elif(value.valueType == stratosphereRecord_pb2.ProtoStratosphereRecord.FloatValue):
+                tuple += (value.floatVal,)
             else:
                 raise BaseException("A currently not implemented valueType")
         return tuple
@@ -167,29 +170,15 @@ class Collector(object):
             if isinstance(value, str) or isinstance(value, unicode):
                 protoVal.valueType = stratosphereRecord_pb2.ProtoStratosphereRecord.StringValue
                 protoVal.stringVal = value
+            elif isinstance(value, bool):
+                protoVal.valueType = stratosphereRecord_pb2.ProtoStratosphereRecord.BooleanValue
+                protoVal.boolVal = value
             elif isinstance(value, int):
                 protoVal.valueType = stratosphereRecord_pb2.ProtoStratosphereRecord.IntegerValue32
                 protoVal.int32Val = value
+            elif isinstance(value, float):
+                protoVal.valueType = stratosphereRecord_pb2.ProtoStratosphereRecord.FloatValue
+                protoVal.floatVal = value
             else:
                 raise BaseException("A currently not implemented valueType")
         return result
-    
-"""class SocketConnection(object):
-    def __init__(self, host, port):
-        self.__sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.__sock.connect((host, port))
-    
-    def send(self, buffer):
-        self.__sock.send(buffer)
-        
-    def receive(self, size):
-        return self.__sock.recv(size)
-        
-class STDPipeConnection(object):
-    def __init__(self):
-        pass
-    
-h
-        
-    def receive(self, size):
-        return sys.stdin.read(size)"""

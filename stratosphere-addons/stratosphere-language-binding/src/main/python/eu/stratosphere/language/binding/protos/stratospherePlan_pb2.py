@@ -13,7 +13,7 @@ from google.protobuf import descriptor_pb2
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='stratospherePlan.proto',
   package='eu.stratosphere.language.binding.protos',
-  serialized_pb='\n\x16stratospherePlan.proto\x12\'eu.stratosphere.language.binding.protos\"\xeb\x05\n\tProtoPlan\x12K\n\x08vertices\x18\x01 \x03(\x0b\x32\x39.eu.stratosphere.language.binding.protos.ProtoPlan.Vertex\x1a*\n\x0cKeyValuePair\x12\x0b\n\x03key\x18\x01 \x02(\t\x12\r\n\x05value\x18\x02 \x02(\t\x1a\x8d\x02\n\x06Vertex\x12K\n\x04type\x18\x01 \x02(\x0e\x32=.eu.stratosphere.language.binding.protos.ProtoPlan.VertexType\x12\x12\n\x06inputs\x18\x02 \x03(\x05\x42\x02\x10\x01\x12Q\n\x0boutputTypes\x18\x03 \x03(\x0e\x32<.eu.stratosphere.language.binding.protos.ProtoPlan.ValueType\x12O\n\x06params\x18\x04 \x03(\x0b\x32?.eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair\"*\n\tValueType\x12\x0f\n\x0bStringValue\x10\x00\x12\x0c\n\x08IntValue\x10\x01\"\xa8\x02\n\nVertexType\x12\x07\n\x03Map\x10\x00\x12\n\n\x06Reduce\x10\x01\x12\x08\n\x04Join\x10\x02\x12\t\n\x05\x43ross\x10\x03\x12\x0b\n\x07\x43oGroup\x10\x04\x12\t\n\x05Union\x10\x05\x12\x13\n\x0fTextInputFormat\x10\x06\x12\x12\n\x0e\x43svInputFormat\x10\x07\x12\x18\n\x14\x44\x65limitedInputFormat\x10\x08\x12\x13\n\x0f\x46ileInputFormat\x10\t\x12\x13\n\x0fJDBCInputFormat\x10\n\x12\x13\n\x0f\x43svOutputFormat\x10\x0b\x12\x19\n\x15\x44\x65limitedOutputFormat\x10\x0c\x12\x14\n\x10\x46ileOutputFormat\x10\r\x12\x11\n\rBulkIteration\x10\x0e\x12\x12\n\x0e\x44\x65ltaIteration\x10\x0f\x42\x12\x42\x10StratospherePlan')
+  serialized_pb='\n\x16stratospherePlan.proto\x12\'eu.stratosphere.language.binding.protos\"\x8d\x06\n\tProtoPlan\x12K\n\x08vertices\x18\x01 \x03(\x0b\x32\x39.eu.stratosphere.language.binding.protos.ProtoPlan.Vertex\x1a*\n\x0cKeyValuePair\x12\x0b\n\x03key\x18\x01 \x02(\t\x12\r\n\x05value\x18\x02 \x02(\t\x1a\x8d\x02\n\x06Vertex\x12K\n\x04type\x18\x01 \x02(\x0e\x32=.eu.stratosphere.language.binding.protos.ProtoPlan.VertexType\x12\x12\n\x06inputs\x18\x02 \x03(\x05\x42\x02\x10\x01\x12Q\n\x0boutputTypes\x18\x03 \x03(\x0e\x32<.eu.stratosphere.language.binding.protos.ProtoPlan.ValueType\x12O\n\x06params\x18\x04 \x03(\x0b\x32?.eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair\"L\n\tValueType\x12\x0f\n\x0bStringValue\x10\x00\x12\x0c\n\x08IntValue\x10\x01\x12\x10\n\x0c\x42ooleanValue\x10\x02\x12\x0e\n\nFloatValue\x10\x03\"\xa8\x02\n\nVertexType\x12\x07\n\x03Map\x10\x00\x12\n\n\x06Reduce\x10\x01\x12\x08\n\x04Join\x10\x02\x12\t\n\x05\x43ross\x10\x03\x12\x0b\n\x07\x43oGroup\x10\x04\x12\t\n\x05Union\x10\x05\x12\x13\n\x0fTextInputFormat\x10\x06\x12\x12\n\x0e\x43svInputFormat\x10\x07\x12\x18\n\x14\x44\x65limitedInputFormat\x10\x08\x12\x13\n\x0f\x46ileInputFormat\x10\t\x12\x13\n\x0fJDBCInputFormat\x10\n\x12\x13\n\x0f\x43svOutputFormat\x10\x0b\x12\x19\n\x15\x44\x65limitedOutputFormat\x10\x0c\x12\x14\n\x10\x46ileOutputFormat\x10\r\x12\x11\n\rBulkIteration\x10\x0e\x12\x12\n\x0e\x44\x65ltaIteration\x10\x0f\x42\x12\x42\x10StratospherePlan')
 
 
 
@@ -31,11 +31,19 @@ _PROTOPLAN_VALUETYPE = _descriptor.EnumDescriptor(
       name='IntValue', index=1, number=1,
       options=None,
       type=None),
+    _descriptor.EnumValueDescriptor(
+      name='BooleanValue', index=2, number=2,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='FloatValue', index=3, number=3,
+      options=None,
+      type=None),
   ],
   containing_type=None,
   options=None,
   serialized_start=474,
-  serialized_end=516,
+  serialized_end=550,
 )
 
 _PROTOPLAN_VERTEXTYPE = _descriptor.EnumDescriptor(
@@ -111,8 +119,8 @@ _PROTOPLAN_VERTEXTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=519,
-  serialized_end=815,
+  serialized_start=553,
+  serialized_end=849,
 )
 
 
@@ -224,7 +232,7 @@ _PROTOPLAN = _descriptor.Descriptor(
   is_extendable=False,
   extension_ranges=[],
   serialized_start=68,
-  serialized_end=815,
+  serialized_end=849,
 )
 
 _PROTOPLAN_KEYVALUEPAIR.containing_type = _PROTOPLAN;

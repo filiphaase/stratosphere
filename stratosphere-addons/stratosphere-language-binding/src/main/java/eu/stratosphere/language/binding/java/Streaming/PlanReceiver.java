@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,8 @@ import eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueT
 import eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.Vertex;
 import eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.VertexType;
 import eu.stratosphere.language.binding.protos.StratosphereRecordProtoBuffers.ProtoRecordSize;
+import eu.stratosphere.types.BooleanValue;
+import eu.stratosphere.types.FloatValue;
 import eu.stratosphere.types.IntValue;
 import eu.stratosphere.types.Key;
 import eu.stratosphere.types.StringValue;
@@ -96,6 +99,10 @@ public class PlanReceiver {
 				return IntValue.class;
 			case StringValue:
 				return StringValue.class;
+			case BooleanValue:
+				return BooleanValue.class;
+			case FloatValue:
+				return FloatValue.class;
 			default:
 				throw new RuntimeException("Unimplemented Type in python-language-binding");
 		}
@@ -149,8 +156,6 @@ public class PlanReceiver {
 			Vertex vertex = protoPlan.getVertices(i);
 			Map<String, String> params = new HashMap<String, String>();
 			VertexType type = vertex.getType(); 
-			System.out.println("Vertex: " + vertex);
-			System.out.println("Vertex, inputscount: " + vertex.getInputsCount());
 			
 			Integer[] in = vertex.getInputsList().toArray(new Integer[vertex.getInputsCount()]);
 			classes[i] = getOutputClasses(vertex);
@@ -160,7 +165,6 @@ public class PlanReceiver {
 				KeyValuePair param = vertex.getParams(j);
 				params.put(param.getKey(), param.getValue());
 			}
-			System.out.println("Params: " + params);
 			// Parse class of key and indices if there are any
 			// I do this here because we need to do it for many operators
 			Class<? extends Value> c = null;
