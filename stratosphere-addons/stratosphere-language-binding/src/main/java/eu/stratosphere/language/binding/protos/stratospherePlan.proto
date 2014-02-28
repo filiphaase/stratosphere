@@ -41,8 +41,9 @@ message ProtoPlan{
 		repeated int32 inputs = 2[packed = true];
 		repeated ValueType outputTypes = 3;
 		repeated KeyValuePair params = 4;
-		//repeated TypeIndexPair paramTypes = 5;
+		required int32 ID = 5;
 	}
 
 	repeated Vertex vertices = 1;
+	repeated int32 DataSinkIDs = 2;
 }

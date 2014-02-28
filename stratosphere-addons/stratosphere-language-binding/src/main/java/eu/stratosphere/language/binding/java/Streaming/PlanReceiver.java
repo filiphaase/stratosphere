@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -117,11 +118,12 @@ public class PlanReceiver {
 	private Plan getPlan(ProtoPlan protoPlan, String scriptPath, ConnectionType connection, String pythonCode, String frameworkPath) throws IOException{
 		// Array used to save output classes of each operator, that way the output types
 		// of any operator are automatically used as input types for the next operator
-		Class<?extends Value>[][] classes = new Class[protoPlan.getVerticesCount()][];
+		Map<Integer, Class<?extends Value>[]> classes = new HashMap<Integer, Class<? extends Value>[]>();
 		// Array used for all operators of the plan, the operators are received sorted on the id
 		// therefore the ids correspond to the operator position in the array
-		Operator[] operators = new Operator[protoPlan.getVerticesCount()];
+		Map<Integer, Operator> operators = new HashMap<Integer, Operator>();
 		
+		System.out.println("Got Plan: " + protoPlan);
 		// First Build the strings we need to give to each process over the configuration
 		// This are: 
 		// 	- code of python-file(given as parameter pythonCode)
@@ -156,9 +158,11 @@ public class PlanReceiver {
 			Vertex vertex = protoPlan.getVertices(i);
 			Map<String, String> params = new HashMap<String, String>();
 			VertexType type = vertex.getType(); 
+			Operator tmpOperator;
+			int vID = vertex.getID();
 			
 			Integer[] in = vertex.getInputsList().toArray(new Integer[vertex.getInputsCount()]);
-			classes[i] = getOutputClasses(vertex);
+			classes.put(vID, getOutputClasses(vertex));
 			
 			// Get additional params for the vertex
 			for (int j = 0; j < vertex.getParamsCount(); j++){
@@ -171,7 +175,7 @@ public class PlanReceiver {
 			int ind = 0, ind2 = 0;		
 			if(params.get(PARAM_KEY_INDEX_1) != null){
 				ind = Integer.valueOf(params.get(PARAM_KEY_INDEX_1));
-				c = classes[in[0]][ind];
+				c = classes.get(in[0])[ind];
 			}
 			if(params.get(PARAM_KEY_INDEX_2) != null){
 				ind2 = Integer.valueOf(params.get(PARAM_KEY_INDEX_2));
@@ -180,69 +184,74 @@ public class PlanReceiver {
 			// For each operator construct a object of the correct class and save it into the array 
 			switch(type){
 				case TextInputFormat:
-					operators[i] = new FileDataSource(new TextInputFormat(), 
+					tmpOperator = new FileDataSource(new TextInputFormat(), 
 						params.get(PARAM_FILE_PATH));
 					break;
 				case Map:
-					PyMapFunction mapFunction = new PyMapFunction(scriptPath, connection, classes[in[0]], i);
-					operators[i] = MapOperator.builder(mapFunction)
-						.input(operators[in[0]])
+					PyMapFunction mapFunction = new PyMapFunction(scriptPath, connection, classes.get(in[0]), vID);
+					tmpOperator = MapOperator.builder(mapFunction)
+						.input(operators.get(in[0]))
 						.build();
 					break;
 				case Reduce:
-					PyReduceFunction reduceFunction = new PyReduceFunction(scriptPath, connection, classes[in[0]], i);
-					operators[i] = ReduceOperator.builder(reduceFunction, (Class<? extends Key>) c, ind)
-							.input(operators[in[0]])
+					PyReduceFunction reduceFunction = new PyReduceFunction(scriptPath, connection, classes.get(in[0]), vID);
+					tmpOperator = ReduceOperator.builder(reduceFunction, (Class<? extends Key>) c, ind)
+							.input(operators.get(in[0]))
 							.build();
 					break;
 					
 				case Join:
-					PyJoinFunction joinFunction = new PyJoinFunction(scriptPath, connection, classes[in[0]], classes[in[1]], i);			
-					operators[i] = JoinOperator.builder(joinFunction,  (Class<? extends Key>)c, ind, ind2)
-							.input1(operators[in[0]])
-							.input2(operators[in[1]])
+					PyJoinFunction joinFunction = new PyJoinFunction(scriptPath, connection, classes.get(in[0]), classes.get(in[1]), vID);			
+					tmpOperator = JoinOperator.builder(joinFunction,  (Class<? extends Key>)c, ind, ind2)
+							.input1(operators.get(in[0]))
+							.input2(operators.get(in[1]))
 							.build();
 					break;
 
 				case Cross:
-					PyCrossFunction crossFunction = new PyCrossFunction(scriptPath, connection, classes[in[0]], classes[in[1]], i);
-					operators[i] = CrossOperator.builder(crossFunction)
-							.input1(operators[in[0]])
-							.input2(operators[in[1]])
+					PyCrossFunction crossFunction = new PyCrossFunction(scriptPath, connection, classes.get(in[0]), classes.get(in[1]), vID);
+					tmpOperator = CrossOperator.builder(crossFunction)
+							.input1(operators.get(in[0]))
+							.input2(operators.get(in[1]))
 							.build();
 					break;
 					
 				case CoGroup:
-					PyCoGroupFunction coGroup = new PyCoGroupFunction(scriptPath, connection, classes[in[0]], classes[in[1]], i);
-					operators[i] = CoGroupOperator.builder(coGroup,  (Class<? extends Key>)c, ind, ind2)
-							.input1(operators[in[0]])
-							.input2(operators[in[1]])
+					PyCoGroupFunction coGroup = new PyCoGroupFunction(scriptPath, connection, classes.get(in[0]), classes.get(in[1]), vID);
+					tmpOperator = CoGroupOperator.builder(coGroup,  (Class<? extends Key>)c, ind, ind2)
+							.input1(operators.get(in[0]))
+							.input2(operators.get(in[1]))
 							.build();
 					break;
 				case CsvOutputFormat:
 					FileDataSink out = new FileDataSink(new CsvOutputFormat(), 
-							params.get(PARAM_FILE_PATH), operators[vertex.getInputs(0)]);
+							params.get(PARAM_FILE_PATH), operators.get(vertex.getInputs(0)));
 					CsvOutputFormat.configureRecordFormat(out)
 						.recordDelimiter(params.get(PARAM_RECORD_DELIMITER).charAt(0))
 						.fieldDelimiter(params.get(PARAM_FIELD_DELIMITER).charAt(0));
 					String[] listIndices = params.get(PARAM_INDEX_LIST).split(",");
 					for(String sInd : listIndices){
 						int iInd = Integer.valueOf(sInd);
-						CsvOutputFormat.configureRecordFormat(out).field(classes[in[0]][iInd], iInd);
+						CsvOutputFormat.configureRecordFormat(out).field(classes.get(in[0])[iInd], iInd);
 					}
-					operators[i] = out;
+					tmpOperator = out;
 					break;
 				default:
 					throw new RuntimeException("Not implemented Vertex/Operatortype");
 			}
-			operators[i].setParameter(ProtobufPythonStreamer.CONFIG_PYTHON_FILE, pythonCode);
-			operators[i].setParameter(ProtobufPythonStreamer.CONFIG_PYTHON_FRAMEWORK_CONTENTS, contentsConfString);
-			operators[i].setParameter(ProtobufPythonStreamer.CONFIG_PYTHON_FRAMEWORK_NAMES, namesConfString);
+			tmpOperator.setParameter(ProtobufPythonStreamer.CONFIG_PYTHON_FILE, pythonCode);
+			tmpOperator.setParameter(ProtobufPythonStreamer.CONFIG_PYTHON_FRAMEWORK_CONTENTS, contentsConfString);
+			tmpOperator.setParameter(ProtobufPythonStreamer.CONFIG_PYTHON_FRAMEWORK_NAMES, namesConfString);
+			operators.put(vID, tmpOperator);
 		}
 		
 		// Currently only one data sink is taken, should be handled differently in the future
 		// and multiple data sinks should be supported
-		Plan result = new Plan((GenericDataSink)operators[protoPlan.getVerticesCount()-1], "Python-language-binding");
+		List<GenericDataSink> dataSinks = new ArrayList<GenericDataSink>();
+		for(Integer dataSinkID : protoPlan.getDataSinkIDsList()){
+			dataSinks.add((GenericDataSink)operators.get(dataSinkID));
+		}
+		Plan result = new Plan(dataSinks, "Python-language-binding");
 		return result;
 	}
 

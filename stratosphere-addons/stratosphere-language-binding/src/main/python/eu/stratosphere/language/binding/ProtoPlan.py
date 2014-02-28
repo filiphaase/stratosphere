@@ -6,7 +6,7 @@ from ProtoJoinCross import JoinCross
 from ProtoCoGroup import CoGroup
 import sys
 
-f = open("pythonPlanModuleOut.txt", "w")
+f = open("pythonPlanModuleOut.txt", "a")
 def log(s):
     f.write(str(s) + "\n")
     
@@ -15,23 +15,34 @@ def enum(**enums):
     return type('Enum', (), enums)        
 ValueType = enum(String=1, Int=2, Float=3, Boolean=4)
 
+class StratosphereExecutor(object):
+    
+    @staticmethod
+    def execute(sinkVertices):
+        sinkIDs = []
+        lastVertex = None
+        for vertex in sinkVertices:
+            sinkIDs.append(vertex.ID)
+            # Not sure if I need to do this, only needed if unconnected graphs are supported
+            if(lastVertex != None):
+                lastVertex.plan.mergePlan(vertex.plan)
+            lastVertex = vertex
+        lastVertex.plan.execute(sinkIDs)
+        
 class Plan(object):
     
     def __init__(self):
         self.__protoPlan = None
-        self.__vertices = []
+        self.__vertices = {}
         
     def __str__(self):
         return "Plan: " + str(self.__protoPlan)
     
     def appendVertex(self, vertex):
-        self.__vertices.append(vertex)
+        self.__vertices[vertex.ID] = vertex
         log("self.__vertices after appending: "  + str(self.__vertices) + "len: " + str(len(self.__vertices)))
-        
-    def getNewEmptyProtoVertex(self):
-        return self.__protoPlan.vertices.add()
     
-    def execute(self):
+    def execute(self, sinkIDs):
         """
             Receive an integer from connection and if it is -1 we have to send back
             the plan next...
@@ -41,23 +52,22 @@ class Plan(object):
         log("in execute")
         self.__connection = STDPipeConnection()
         log("setup stdpipe connection")
-        vertexInd = self.__connection.readSize()
-        log("got size: "+ str(vertexInd))
-        self.__vertices.sort()
-        log("sorted")
-        
-        if vertexInd == -1:
+        vertexID = self.__connection.readSize()
+        log("got size: "+ str(vertexID))
+                
+        if vertexID == -1:
             log("in sending plan back")
             #Setup protoplan
             self.__protoPlan = ProtoPlan()
+            self.__protoPlan.DataSinkIDs.extend( sinkIDs )
             
-            for vertex in self.__vertices:
-                #Adding it to the plan, therefore we give a new vertex refernce to the function
+            for (ID, vertex) in self.__vertices.iteritems():
+                #Adding it to the plan, therefore we give a new vertex reference to the function
                 vertex.fillVertex(self.__protoPlan.vertices.add())
             self.sendPlan(self.__connection)
-            log("sent plan")
+            log("sent plan: " + str(self.__protoPlan))
         else:
-            vertex = self.__vertices[vertexInd]
+            vertex = self.__vertices[vertexID]
             
             if vertex.vertexType == ProtoPlan.Map:
                 Mapper(self.__connection).map(vertex.function)            
@@ -79,8 +89,7 @@ class Plan(object):
         
     def mergePlan(self, otherPlan):
         log("Merging plans now: " + str(self) + "///and///" + str(otherPlan))
-        self.__vertices += otherPlan.__vertices
-        #TODO sort list because of IDs
+        self.__vertices.update(otherPlan.__vertices)
         
 class Vertex(object):
     
@@ -93,11 +102,13 @@ class Vertex(object):
         self.CONST_PARAM_KEY_INDEX_1 = "keyIndex1"
         self.CONST_PARAM_KEY_INDEX_2 = "keyIndex2"
         self.CONST_PARAM_INDEX_LIST = "indexList"
-        
-        self.ind = Vertex.curNumVertices
+
+        self.vertexType = vertexType
+        self.function = function        
+        self.__outputTypes = types
+        self.ID = Vertex.curNumVertices
         Vertex.curNumVertices += 1
         
-        self.vertexType = vertexType
         if parent1 == None:
             self.plan = Plan()
         else:
@@ -107,26 +118,22 @@ class Vertex(object):
         log("initVertex-parent2: " + str(parent2))
         if parent2 != None:
             self.plan.mergePlan(parent2.plan)
-        self.__outputTypes = types
         if(params == None):
             self.__params = {}
         else:
             self.__params = params
-        self.function = function
         self.inputs = []
         if parent1 != None:
-           self.inputs.append(parent1.ind)
+           self.inputs.append(parent1.ID)
         if parent2 != None:
-           self.inputs.append(parent2.ind)
+           self.inputs.append(parent2.ID)
            
         self.plan.appendVertex(self)
-        #self.addVertexToPlan()
         
     def __cmp__(self, other):
         if other == None:
             return -1
-  
-        return self.ind - other.ind
+        return self.ID - other.ID
     
     def map(self, f, valueTypes):
         mapVertex = Vertex(ProtoPlan.Map, parent1=self, function = f, types = valueTypes)
@@ -152,12 +159,13 @@ class Vertex(object):
         outputVertex = Vertex(ProtoPlan.CsvOutputFormat, parent1=self)
         return outputVertex.file(filePath).indices(indices).fieldDelimiter(fieldDelimiter).recordDelimiter(recordDelimiter) 
     
-    def fillVertex(self, newVertex):
-         newVertex.type = self.vertexType
-         newVertex.inputs.extend(self.inputs)
-        
+    def fillVertex(self, protoVertex):
+         protoVertex.type = self.vertexType
+         protoVertex.inputs.extend(self.inputs)
+         protoVertex.ID = self.ID
+         
          for key,value in self.__params.iteritems():
-             kvp = newVertex.params.add()
+             kvp = protoVertex.params.add()
              kvp.key = key
              kvp.value = value
          
@@ -171,17 +179,17 @@ class Vertex(object):
                  protoTypes.append(ProtoPlan.FloatValue)
              elif type == ValueType.Boolean:
                  protoTypes.append(ProtoPlan.BooleanValue)
-         newVertex.outputTypes.extend(protoTypes)
+         protoVertex.outputTypes.extend(protoTypes)
     
     def planString(self):
         return str(self.plan)
 
     def __str__(self):
-        return str(self.ind) + " "+ str(self.vertexType) + ((" Params: " + str(self.__params)) if self.__params != None else "")
+        return str(self.ID) + " "+ str(self.vertexType) + ((" Params: " + str(self.__params)) if self.__params != None else "")
 
     def execute(self):
         log("executing now")
-        self.plan.execute()
+        self.plan.execute( [ self.ID ] )
         
     def key(self, ind):
         self.__params[self.CONST_PARAM_KEY_INDEX_1] = str(ind)
@@ -212,3 +220,7 @@ class TextInputFormat(Vertex):
     def __init__(self, inputPath):
         super(TextInputFormat, self).__init__(ProtoPlan.TextInputFormat, types = [ValueType.String])
         self.file(inputPath)
+
+#class Map(Vertex):
+#    def __init__(self, ):
+#        super(TextInputFormat, self).__init__(ProtoPlan.Map, parent1=self, function = f, types = valueTypes)

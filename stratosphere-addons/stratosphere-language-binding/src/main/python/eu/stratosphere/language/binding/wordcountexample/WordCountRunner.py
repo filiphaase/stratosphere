@@ -1,5 +1,6 @@
 from ProtoPlan import TextInputFormat
 from ProtoPlan import ValueType
+from ProtoPlan import StratosphereExecutor
 import sys
 import re
 
@@ -11,6 +12,7 @@ sys.stderr = open("pythonPlanError.txt", "a")
 
 inputPath = r"file:///home/filip/Documents/stratosphere/hamlet10.txt"
 outputPath = r"file:///home/filip/Documents/stratosphere/resultPlan.txt"
+outputPath2 = r"file:///home/filip/Documents/stratosphere/resultPlan2.txt"
 
 def split(record, collector):
     filteredLine = re.sub(r"\W+", " ", record[0].lower()) 
@@ -33,10 +35,15 @@ def count(iter, collector):
     if(record != None):
         collector.collect((record[1], int(sum),floatSum, bool))
 
-TextInputFormat(inputPath).map(split, [ValueType.Int, ValueType.String, ValueType.Float, ValueType.Boolean]) \
-    .reduce(count, [ValueType.String, ValueType.Int, ValueType.Float, ValueType.Boolean]).key(1) \
-    .outputCSV(outputPath, [0,1,2,3]).fieldDelimiter(",") \
-    .execute()
+mapped = TextInputFormat(inputPath).map(split, [ValueType.Int, ValueType.String, ValueType.Float, ValueType.Boolean])
+something = TextInputFormat(inputPath)
+out = mapped.reduce(count, [ValueType.String, ValueType.Int, ValueType.Float, ValueType.Boolean]).key(1) \
+    .outputCSV(outputPath, [0,1,2,3]).fieldDelimiter(",") 
+
+out2 = mapped.reduce(count, [ValueType.String, ValueType.Int, ValueType.Float, ValueType.Boolean]).key(1) \
+    .outputCSV(outputPath2, [0,1])
+
+StratosphereExecutor.execute( [ out, out2 ] )
     
 """ Longer version
 input = TextInputFormat(inputPath)
