@@ -6,7 +6,7 @@ import os
     The current python implementation for streaming data into a cross or a join iterator.
     (For both the streaming is exactly the same: 2 recrods as input, one collector for the output  
 """
-class JoinCross(object): 
+class ProtoJoinCross(object): 
     
     def __init__(self, connection):
         self.f = open('pythonJoinCrossOut.txt', 'w')

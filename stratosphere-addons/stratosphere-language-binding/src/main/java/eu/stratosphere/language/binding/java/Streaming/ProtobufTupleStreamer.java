@@ -2,7 +2,6 @@ package eu.stratosphere.language.binding.java.Streaming;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.List;
 
 import eu.stratosphere.configuration.Configuration;
 import eu.stratosphere.types.Record;

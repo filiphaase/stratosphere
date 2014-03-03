@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -116,11 +115,8 @@ public class PlanReceiver {
 	 */
 	@SuppressWarnings("unchecked")
 	private Plan getPlan(ProtoPlan protoPlan, String scriptPath, ConnectionType connection, String pythonCode, String frameworkPath) throws IOException{
-		// Array used to save output classes of each operator, that way the output types
-		// of any operator are automatically used as input types for the next operator
+		// Maps used to save the operators and their output classes according to their ID
 		Map<Integer, Class<?extends Value>[]> classes = new HashMap<Integer, Class<? extends Value>[]>();
-		// Array used for all operators of the plan, the operators are received sorted on the id
-		// therefore the ids correspond to the operator position in the array
 		Map<Integer, Operator> operators = new HashMap<Integer, Operator>();
 		
 		System.out.println("Got Plan: " + protoPlan);
@@ -161,7 +157,8 @@ public class PlanReceiver {
 			Operator tmpOperator;
 			int vID = vertex.getID();
 			
-			Integer[] in = vertex.getInputsList().toArray(new Integer[vertex.getInputsCount()]);
+			Operator[] input1 = getInputOperators(vertex.getInputs1List(), operators);
+			Operator[] input2 = getInputOperators(vertex.getInputs2List(), operators);
 			classes.put(vID, getOutputClasses(vertex));
 			
 			// Get additional params for the vertex
@@ -169,16 +166,17 @@ public class PlanReceiver {
 				KeyValuePair param = vertex.getParams(j);
 				params.put(param.getKey(), param.getValue());
 			}
+			
 			// Parse class of key and indices if there are any
 			// I do this here because we need to do it for many operators
-			Class<? extends Value> c = null;
-			int ind = 0, ind2 = 0;		
+			Class<? extends Value> keyClass = null;
+			int keyInd1 = 0, keyInd2 = 0;		
 			if(params.get(PARAM_KEY_INDEX_1) != null){
-				ind = Integer.valueOf(params.get(PARAM_KEY_INDEX_1));
-				c = classes.get(in[0])[ind];
+				keyInd1 = Integer.valueOf(params.get(PARAM_KEY_INDEX_1));
+				keyClass = classes.get(vertex.getInputs1(0))[keyInd1];
 			}
 			if(params.get(PARAM_KEY_INDEX_2) != null){
-				ind2 = Integer.valueOf(params.get(PARAM_KEY_INDEX_2));
+				keyInd2 = Integer.valueOf(params.get(PARAM_KEY_INDEX_2));
 			}
 	
 			// For each operator construct a object of the correct class and save it into the array 
@@ -188,51 +186,52 @@ public class PlanReceiver {
 						params.get(PARAM_FILE_PATH));
 					break;
 				case Map:
-					PyMapFunction mapFunction = new PyMapFunction(scriptPath, connection, classes.get(in[0]), vID);
+					PyMapFunction mapFunction = new PyMapFunction(scriptPath, connection, classes.get(vertex.getInputs1(0)), vID);
 					tmpOperator = MapOperator.builder(mapFunction)
-						.input(operators.get(in[0]))
+						.input(input1)
 						.build();
 					break;
 				case Reduce:
-					PyReduceFunction reduceFunction = new PyReduceFunction(scriptPath, connection, classes.get(in[0]), vID);
-					tmpOperator = ReduceOperator.builder(reduceFunction, (Class<? extends Key>) c, ind)
-							.input(operators.get(in[0]))
+					PyReduceFunction reduceFunction = new PyReduceFunction(scriptPath, connection, classes.get(vertex.getInputs1(0)), vID);
+					tmpOperator = ReduceOperator.builder(reduceFunction, (Class<? extends Key>) keyClass, keyInd1)
+							.input(input1)
 							.build();
 					break;
 					
 				case Join:
-					PyJoinFunction joinFunction = new PyJoinFunction(scriptPath, connection, classes.get(in[0]), classes.get(in[1]), vID);			
-					tmpOperator = JoinOperator.builder(joinFunction,  (Class<? extends Key>)c, ind, ind2)
-							.input1(operators.get(in[0]))
-							.input2(operators.get(in[1]))
+					PyJoinFunction joinFunction = new PyJoinFunction(scriptPath, connection, classes.get(vertex.getInputs1(0)), classes.get(vertex.getInputs2(1)), vID);			
+					tmpOperator = JoinOperator.builder(joinFunction,  (Class<? extends Key>)keyClass, keyInd1, keyInd2)
+							.input1(input1)
+							.input2(input2)
 							.build();
 					break;
 
 				case Cross:
-					PyCrossFunction crossFunction = new PyCrossFunction(scriptPath, connection, classes.get(in[0]), classes.get(in[1]), vID);
+					PyCrossFunction crossFunction = new PyCrossFunction(scriptPath, connection, classes.get(vertex.getInputs1(0)), classes.get(vertex.getInputs2(1)), vID);
 					tmpOperator = CrossOperator.builder(crossFunction)
-							.input1(operators.get(in[0]))
-							.input2(operators.get(in[1]))
+							.input1(input1)
+							.input2(input2)
 							.build();
 					break;
 					
 				case CoGroup:
-					PyCoGroupFunction coGroup = new PyCoGroupFunction(scriptPath, connection, classes.get(in[0]), classes.get(in[1]), vID);
-					tmpOperator = CoGroupOperator.builder(coGroup,  (Class<? extends Key>)c, ind, ind2)
-							.input1(operators.get(in[0]))
-							.input2(operators.get(in[1]))
+					PyCoGroupFunction coGroup = new PyCoGroupFunction(scriptPath, connection, classes.get(vertex.getInputs1(0)), classes.get(vertex.getInputs2(1)), vID);
+					tmpOperator = CoGroupOperator.builder(coGroup,  (Class<? extends Key>)keyClass, keyInd1, keyInd2)
+							.input1(input1)
+							.input2(input2)
 							.build();
 					break;
 				case CsvOutputFormat:
 					FileDataSink out = new FileDataSink(new CsvOutputFormat(), 
-							params.get(PARAM_FILE_PATH), operators.get(vertex.getInputs(0)));
+							params.get(PARAM_FILE_PATH), Arrays.asList(input1));
 					CsvOutputFormat.configureRecordFormat(out)
 						.recordDelimiter(params.get(PARAM_RECORD_DELIMITER).charAt(0))
 						.fieldDelimiter(params.get(PARAM_FIELD_DELIMITER).charAt(0));
 					String[] listIndices = params.get(PARAM_INDEX_LIST).split(",");
 					for(String sInd : listIndices){
 						int iInd = Integer.valueOf(sInd);
-						CsvOutputFormat.configureRecordFormat(out).field(classes.get(in[0])[iInd], iInd);
+						CsvOutputFormat.configureRecordFormat(out)
+							.field(classes.get(vertex.getInputs1(0))[iInd], iInd);
 					}
 					tmpOperator = out;
 					break;
@@ -244,14 +243,21 @@ public class PlanReceiver {
 			tmpOperator.setParameter(ProtobufPythonStreamer.CONFIG_PYTHON_FRAMEWORK_NAMES, namesConfString);
 			operators.put(vID, tmpOperator);
 		}
-		
-		// Currently only one data sink is taken, should be handled differently in the future
-		// and multiple data sinks should be supported
+
+		// Setup a List of DataSinks for the plan
 		List<GenericDataSink> dataSinks = new ArrayList<GenericDataSink>();
 		for(Integer dataSinkID : protoPlan.getDataSinkIDsList()){
 			dataSinks.add((GenericDataSink)operators.get(dataSinkID));
 		}
 		Plan result = new Plan(dataSinks, "Python-language-binding");
+		return result;
+	}
+
+	private Operator[] getInputOperators(List<Integer> inputs, Map<Integer, Operator> operators) {
+		Operator[] result = new Operator[inputs.size()];
+		for(int i = 0; i < inputs.size(); i++){
+			result[i] = operators.get(inputs.get(i));
+		}
 		return result;
 	}
 

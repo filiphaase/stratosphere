@@ -1147,66 +1147,107 @@ public final class StratospherePlan {
        */
       eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.VertexType getType();
 
-      // repeated int32 inputs = 2 [packed = true];
+      // repeated int32 inputs1 = 2 [packed = true];
       /**
-       * <code>repeated int32 inputs = 2 [packed = true];</code>
+       * <code>repeated int32 inputs1 = 2 [packed = true];</code>
+       *
+       * <pre>
+       * Save the ID's of input vertices in int-arrays.
+       * It's an array to save the IDs of multiple inputs for Unioning
+       * </pre>
        */
-      java.util.List<java.lang.Integer> getInputsList();
+      java.util.List<java.lang.Integer> getInputs1List();
       /**
-       * <code>repeated int32 inputs = 2 [packed = true];</code>
+       * <code>repeated int32 inputs1 = 2 [packed = true];</code>
+       *
+       * <pre>
+       * Save the ID's of input vertices in int-arrays.
+       * It's an array to save the IDs of multiple inputs for Unioning
+       * </pre>
        */
-      int getInputsCount();
+      int getInputs1Count();
       /**
-       * <code>repeated int32 inputs = 2 [packed = true];</code>
+       * <code>repeated int32 inputs1 = 2 [packed = true];</code>
+       *
+       * <pre>
+       * Save the ID's of input vertices in int-arrays.
+       * It's an array to save the IDs of multiple inputs for Unioning
+       * </pre>
        */
-      int getInputs(int index);
+      int getInputs1(int index);
 
-      // repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 3;
+      // repeated int32 inputs2 = 3 [packed = true];
       /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 3;</code>
+       * <code>repeated int32 inputs2 = 3 [packed = true];</code>
+       *
+       * <pre>
+       * The second array is used for operators with two inputs only (CoGroup, Cross, Join)
+       * </pre>
+       */
+      java.util.List<java.lang.Integer> getInputs2List();
+      /**
+       * <code>repeated int32 inputs2 = 3 [packed = true];</code>
+       *
+       * <pre>
+       * The second array is used for operators with two inputs only (CoGroup, Cross, Join)
+       * </pre>
+       */
+      int getInputs2Count();
+      /**
+       * <code>repeated int32 inputs2 = 3 [packed = true];</code>
+       *
+       * <pre>
+       * The second array is used for operators with two inputs only (CoGroup, Cross, Join)
+       * </pre>
+       */
+      int getInputs2(int index);
+
+      // repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 4;
+      /**
+       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 4;</code>
        */
       java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType> getOutputTypesList();
       /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 3;</code>
+       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 4;</code>
        */
       int getOutputTypesCount();
       /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 3;</code>
+       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 4;</code>
        */
       eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType getOutputTypes(int index);
 
-      // repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;
+      // repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;
       /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
        */
       java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair> 
           getParamsList();
       /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
        */
       eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair getParams(int index);
       /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
        */
       int getParamsCount();
       /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
        */
       java.util.List<? extends eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePairOrBuilder> 
           getParamsOrBuilderList();
       /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
        */
       eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePairOrBuilder getParamsOrBuilder(
           int index);
 
-      // required int32 ID = 5;
+      // required int32 ID = 6;
       /**
-       * <code>required int32 ID = 5;</code>
+       * <code>required int32 ID = 6;</code>
        */
       boolean hasID();
       /**
-       * <code>required int32 ID = 5;</code>
+       * <code>required int32 ID = 6;</code>
        */
       int getID();
     }
@@ -1274,51 +1315,72 @@ public final class StratospherePlan {
               }
               case 16: {
                 if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                  inputs_ = new java.util.ArrayList<java.lang.Integer>();
+                  inputs1_ = new java.util.ArrayList<java.lang.Integer>();
                   mutable_bitField0_ |= 0x00000002;
                 }
-                inputs_.add(input.readInt32());
+                inputs1_.add(input.readInt32());
                 break;
               }
               case 18: {
                 int length = input.readRawVarint32();
                 int limit = input.pushLimit(length);
                 if (!((mutable_bitField0_ & 0x00000002) == 0x00000002) && input.getBytesUntilLimit() > 0) {
-                  inputs_ = new java.util.ArrayList<java.lang.Integer>();
+                  inputs1_ = new java.util.ArrayList<java.lang.Integer>();
                   mutable_bitField0_ |= 0x00000002;
                 }
                 while (input.getBytesUntilLimit() > 0) {
-                  inputs_.add(input.readInt32());
+                  inputs1_.add(input.readInt32());
                 }
                 input.popLimit(limit);
                 break;
               }
               case 24: {
+                if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+                  inputs2_ = new java.util.ArrayList<java.lang.Integer>();
+                  mutable_bitField0_ |= 0x00000004;
+                }
+                inputs2_.add(input.readInt32());
+                break;
+              }
+              case 26: {
+                int length = input.readRawVarint32();
+                int limit = input.pushLimit(length);
+                if (!((mutable_bitField0_ & 0x00000004) == 0x00000004) && input.getBytesUntilLimit() > 0) {
+                  inputs2_ = new java.util.ArrayList<java.lang.Integer>();
+                  mutable_bitField0_ |= 0x00000004;
+                }
+                while (input.getBytesUntilLimit() > 0) {
+                  inputs2_.add(input.readInt32());
+                }
+                input.popLimit(limit);
+                break;
+              }
+              case 32: {
                 int rawValue = input.readEnum();
                 eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType value = eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType.valueOf(rawValue);
                 if (value == null) {
-                  unknownFields.mergeVarintField(3, rawValue);
+                  unknownFields.mergeVarintField(4, rawValue);
                 } else {
-                  if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+                  if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
                     outputTypes_ = new java.util.ArrayList<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType>();
-                    mutable_bitField0_ |= 0x00000004;
+                    mutable_bitField0_ |= 0x00000008;
                   }
                   outputTypes_.add(value);
                 }
                 break;
               }
-              case 26: {
+              case 34: {
                 int length = input.readRawVarint32();
                 int oldLimit = input.pushLimit(length);
                 while(input.getBytesUntilLimit() > 0) {
                   int rawValue = input.readEnum();
                   eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType value = eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType.valueOf(rawValue);
                   if (value == null) {
-                    unknownFields.mergeVarintField(3, rawValue);
+                    unknownFields.mergeVarintField(4, rawValue);
                   } else {
-                    if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+                    if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
                       outputTypes_ = new java.util.ArrayList<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType>();
-                      mutable_bitField0_ |= 0x00000004;
+                      mutable_bitField0_ |= 0x00000008;
                     }
                     outputTypes_.add(value);
                   }
@@ -1326,15 +1388,15 @@ public final class StratospherePlan {
                 input.popLimit(oldLimit);
                 break;
               }
-              case 34: {
-                if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+              case 42: {
+                if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
                   params_ = new java.util.ArrayList<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair>();
-                  mutable_bitField0_ |= 0x00000008;
+                  mutable_bitField0_ |= 0x00000010;
                 }
                 params_.add(input.readMessage(eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair.PARSER, extensionRegistry));
                 break;
               }
-              case 40: {
+              case 48: {
                 bitField0_ |= 0x00000002;
                 iD_ = input.readInt32();
                 break;
@@ -1348,12 +1410,15 @@ public final class StratospherePlan {
               e.getMessage()).setUnfinishedMessage(this);
         } finally {
           if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-            inputs_ = java.util.Collections.unmodifiableList(inputs_);
+            inputs1_ = java.util.Collections.unmodifiableList(inputs1_);
           }
           if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
-            outputTypes_ = java.util.Collections.unmodifiableList(outputTypes_);
+            inputs2_ = java.util.Collections.unmodifiableList(inputs2_);
           }
           if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+            outputTypes_ = java.util.Collections.unmodifiableList(outputTypes_);
+          }
+          if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
             params_ = java.util.Collections.unmodifiableList(params_);
           }
           this.unknownFields = unknownFields.build();
@@ -1404,99 +1469,150 @@ public final class StratospherePlan {
         return type_;
       }
 
-      // repeated int32 inputs = 2 [packed = true];
-      public static final int INPUTS_FIELD_NUMBER = 2;
-      private java.util.List<java.lang.Integer> inputs_;
+      // repeated int32 inputs1 = 2 [packed = true];
+      public static final int INPUTS1_FIELD_NUMBER = 2;
+      private java.util.List<java.lang.Integer> inputs1_;
       /**
-       * <code>repeated int32 inputs = 2 [packed = true];</code>
+       * <code>repeated int32 inputs1 = 2 [packed = true];</code>
+       *
+       * <pre>
+       * Save the ID's of input vertices in int-arrays.
+       * It's an array to save the IDs of multiple inputs for Unioning
+       * </pre>
        */
       public java.util.List<java.lang.Integer>
-          getInputsList() {
-        return inputs_;
+          getInputs1List() {
+        return inputs1_;
       }
       /**
-       * <code>repeated int32 inputs = 2 [packed = true];</code>
+       * <code>repeated int32 inputs1 = 2 [packed = true];</code>
+       *
+       * <pre>
+       * Save the ID's of input vertices in int-arrays.
+       * It's an array to save the IDs of multiple inputs for Unioning
+       * </pre>
        */
-      public int getInputsCount() {
-        return inputs_.size();
+      public int getInputs1Count() {
+        return inputs1_.size();
       }
       /**
-       * <code>repeated int32 inputs = 2 [packed = true];</code>
+       * <code>repeated int32 inputs1 = 2 [packed = true];</code>
+       *
+       * <pre>
+       * Save the ID's of input vertices in int-arrays.
+       * It's an array to save the IDs of multiple inputs for Unioning
+       * </pre>
        */
-      public int getInputs(int index) {
-        return inputs_.get(index);
+      public int getInputs1(int index) {
+        return inputs1_.get(index);
       }
-      private int inputsMemoizedSerializedSize = -1;
+      private int inputs1MemoizedSerializedSize = -1;
 
-      // repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 3;
-      public static final int OUTPUTTYPES_FIELD_NUMBER = 3;
+      // repeated int32 inputs2 = 3 [packed = true];
+      public static final int INPUTS2_FIELD_NUMBER = 3;
+      private java.util.List<java.lang.Integer> inputs2_;
+      /**
+       * <code>repeated int32 inputs2 = 3 [packed = true];</code>
+       *
+       * <pre>
+       * The second array is used for operators with two inputs only (CoGroup, Cross, Join)
+       * </pre>
+       */
+      public java.util.List<java.lang.Integer>
+          getInputs2List() {
+        return inputs2_;
+      }
+      /**
+       * <code>repeated int32 inputs2 = 3 [packed = true];</code>
+       *
+       * <pre>
+       * The second array is used for operators with two inputs only (CoGroup, Cross, Join)
+       * </pre>
+       */
+      public int getInputs2Count() {
+        return inputs2_.size();
+      }
+      /**
+       * <code>repeated int32 inputs2 = 3 [packed = true];</code>
+       *
+       * <pre>
+       * The second array is used for operators with two inputs only (CoGroup, Cross, Join)
+       * </pre>
+       */
+      public int getInputs2(int index) {
+        return inputs2_.get(index);
+      }
+      private int inputs2MemoizedSerializedSize = -1;
+
+      // repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 4;
+      public static final int OUTPUTTYPES_FIELD_NUMBER = 4;
       private java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType> outputTypes_;
       /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 3;</code>
+       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 4;</code>
        */
       public java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType> getOutputTypesList() {
         return outputTypes_;
       }
       /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 3;</code>
+       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 4;</code>
        */
       public int getOutputTypesCount() {
         return outputTypes_.size();
       }
       /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 3;</code>
+       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 4;</code>
        */
       public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType getOutputTypes(int index) {
         return outputTypes_.get(index);
       }
 
-      // repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;
-      public static final int PARAMS_FIELD_NUMBER = 4;
+      // repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;
+      public static final int PARAMS_FIELD_NUMBER = 5;
       private java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair> params_;
       /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
        */
       public java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair> getParamsList() {
         return params_;
       }
       /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
        */
       public java.util.List<? extends eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePairOrBuilder> 
           getParamsOrBuilderList() {
         return params_;
       }
       /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
        */
       public int getParamsCount() {
         return params_.size();
       }
       /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
        */
       public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair getParams(int index) {
         return params_.get(index);
       }
       /**
-       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+       * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
        */
       public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePairOrBuilder getParamsOrBuilder(
           int index) {
         return params_.get(index);
       }
 
-      // required int32 ID = 5;
-      public static final int ID_FIELD_NUMBER = 5;
+      // required int32 ID = 6;
+      public static final int ID_FIELD_NUMBER = 6;
       private int iD_;
       /**
-       * <code>required int32 ID = 5;</code>
+       * <code>required int32 ID = 6;</code>
        */
       public boolean hasID() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required int32 ID = 5;</code>
+       * <code>required int32 ID = 6;</code>
        */
       public int getID() {
         return iD_;
@@ -1504,7 +1620,8 @@ public final class StratospherePlan {
 
       private void initFields() {
         type_ = eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.VertexType.Map;
-        inputs_ = java.util.Collections.emptyList();
+        inputs1_ = java.util.Collections.emptyList();
+        inputs2_ = java.util.Collections.emptyList();
         outputTypes_ = java.util.Collections.emptyList();
         params_ = java.util.Collections.emptyList();
         iD_ = 0;
@@ -1538,21 +1655,28 @@ public final class StratospherePlan {
         if (((bitField0_ & 0x00000001) == 0x00000001)) {
           output.writeEnum(1, type_.getNumber());
         }
-        if (getInputsList().size() > 0) {
+        if (getInputs1List().size() > 0) {
           output.writeRawVarint32(18);
-          output.writeRawVarint32(inputsMemoizedSerializedSize);
+          output.writeRawVarint32(inputs1MemoizedSerializedSize);
         }
-        for (int i = 0; i < inputs_.size(); i++) {
-          output.writeInt32NoTag(inputs_.get(i));
+        for (int i = 0; i < inputs1_.size(); i++) {
+          output.writeInt32NoTag(inputs1_.get(i));
+        }
+        if (getInputs2List().size() > 0) {
+          output.writeRawVarint32(26);
+          output.writeRawVarint32(inputs2MemoizedSerializedSize);
+        }
+        for (int i = 0; i < inputs2_.size(); i++) {
+          output.writeInt32NoTag(inputs2_.get(i));
         }
         for (int i = 0; i < outputTypes_.size(); i++) {
-          output.writeEnum(3, outputTypes_.get(i).getNumber());
+          output.writeEnum(4, outputTypes_.get(i).getNumber());
         }
         for (int i = 0; i < params_.size(); i++) {
-          output.writeMessage(4, params_.get(i));
+          output.writeMessage(5, params_.get(i));
         }
         if (((bitField0_ & 0x00000002) == 0x00000002)) {
-          output.writeInt32(5, iD_);
+          output.writeInt32(6, iD_);
         }
         getUnknownFields().writeTo(output);
       }
@@ -1569,17 +1693,31 @@ public final class StratospherePlan {
         }
         {
           int dataSize = 0;
-          for (int i = 0; i < inputs_.size(); i++) {
+          for (int i = 0; i < inputs1_.size(); i++) {
             dataSize += com.google.protobuf.CodedOutputStream
-              .computeInt32SizeNoTag(inputs_.get(i));
+              .computeInt32SizeNoTag(inputs1_.get(i));
           }
           size += dataSize;
-          if (!getInputsList().isEmpty()) {
+          if (!getInputs1List().isEmpty()) {
             size += 1;
             size += com.google.protobuf.CodedOutputStream
                 .computeInt32SizeNoTag(dataSize);
           }
-          inputsMemoizedSerializedSize = dataSize;
+          inputs1MemoizedSerializedSize = dataSize;
+        }
+        {
+          int dataSize = 0;
+          for (int i = 0; i < inputs2_.size(); i++) {
+            dataSize += com.google.protobuf.CodedOutputStream
+              .computeInt32SizeNoTag(inputs2_.get(i));
+          }
+          size += dataSize;
+          if (!getInputs2List().isEmpty()) {
+            size += 1;
+            size += com.google.protobuf.CodedOutputStream
+                .computeInt32SizeNoTag(dataSize);
+          }
+          inputs2MemoizedSerializedSize = dataSize;
         }
         {
           int dataSize = 0;
@@ -1592,11 +1730,11 @@ public final class StratospherePlan {
         }
         for (int i = 0; i < params_.size(); i++) {
           size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(4, params_.get(i));
+            .computeMessageSize(5, params_.get(i));
         }
         if (((bitField0_ & 0x00000002) == 0x00000002)) {
           size += com.google.protobuf.CodedOutputStream
-            .computeInt32Size(5, iD_);
+            .computeInt32Size(6, iD_);
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
@@ -1717,18 +1855,20 @@ public final class StratospherePlan {
           super.clear();
           type_ = eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.VertexType.Map;
           bitField0_ = (bitField0_ & ~0x00000001);
-          inputs_ = java.util.Collections.emptyList();
+          inputs1_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00000002);
-          outputTypes_ = java.util.Collections.emptyList();
+          inputs2_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00000004);
+          outputTypes_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
           if (paramsBuilder_ == null) {
             params_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000008);
+            bitField0_ = (bitField0_ & ~0x00000010);
           } else {
             paramsBuilder_.clear();
           }
           iD_ = 0;
-          bitField0_ = (bitField0_ & ~0x00000010);
+          bitField0_ = (bitField0_ & ~0x00000020);
           return this;
         }
 
@@ -1762,25 +1902,30 @@ public final class StratospherePlan {
           }
           result.type_ = type_;
           if (((bitField0_ & 0x00000002) == 0x00000002)) {
-            inputs_ = java.util.Collections.unmodifiableList(inputs_);
+            inputs1_ = java.util.Collections.unmodifiableList(inputs1_);
             bitField0_ = (bitField0_ & ~0x00000002);
           }
-          result.inputs_ = inputs_;
+          result.inputs1_ = inputs1_;
           if (((bitField0_ & 0x00000004) == 0x00000004)) {
-            outputTypes_ = java.util.Collections.unmodifiableList(outputTypes_);
+            inputs2_ = java.util.Collections.unmodifiableList(inputs2_);
             bitField0_ = (bitField0_ & ~0x00000004);
+          }
+          result.inputs2_ = inputs2_;
+          if (((bitField0_ & 0x00000008) == 0x00000008)) {
+            outputTypes_ = java.util.Collections.unmodifiableList(outputTypes_);
+            bitField0_ = (bitField0_ & ~0x00000008);
           }
           result.outputTypes_ = outputTypes_;
           if (paramsBuilder_ == null) {
-            if (((bitField0_ & 0x00000008) == 0x00000008)) {
+            if (((bitField0_ & 0x00000010) == 0x00000010)) {
               params_ = java.util.Collections.unmodifiableList(params_);
-              bitField0_ = (bitField0_ & ~0x00000008);
+              bitField0_ = (bitField0_ & ~0x00000010);
             }
             result.params_ = params_;
           } else {
             result.params_ = paramsBuilder_.build();
           }
-          if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
             to_bitField0_ |= 0x00000002;
           }
           result.iD_ = iD_;
@@ -1803,20 +1948,30 @@ public final class StratospherePlan {
           if (other.hasType()) {
             setType(other.getType());
           }
-          if (!other.inputs_.isEmpty()) {
-            if (inputs_.isEmpty()) {
-              inputs_ = other.inputs_;
+          if (!other.inputs1_.isEmpty()) {
+            if (inputs1_.isEmpty()) {
+              inputs1_ = other.inputs1_;
               bitField0_ = (bitField0_ & ~0x00000002);
             } else {
-              ensureInputsIsMutable();
-              inputs_.addAll(other.inputs_);
+              ensureInputs1IsMutable();
+              inputs1_.addAll(other.inputs1_);
+            }
+            onChanged();
+          }
+          if (!other.inputs2_.isEmpty()) {
+            if (inputs2_.isEmpty()) {
+              inputs2_ = other.inputs2_;
+              bitField0_ = (bitField0_ & ~0x00000004);
+            } else {
+              ensureInputs2IsMutable();
+              inputs2_.addAll(other.inputs2_);
             }
             onChanged();
           }
           if (!other.outputTypes_.isEmpty()) {
             if (outputTypes_.isEmpty()) {
               outputTypes_ = other.outputTypes_;
-              bitField0_ = (bitField0_ & ~0x00000004);
+              bitField0_ = (bitField0_ & ~0x00000008);
             } else {
               ensureOutputTypesIsMutable();
               outputTypes_.addAll(other.outputTypes_);
@@ -1827,7 +1982,7 @@ public final class StratospherePlan {
             if (!other.params_.isEmpty()) {
               if (params_.isEmpty()) {
                 params_ = other.params_;
-                bitField0_ = (bitField0_ & ~0x00000008);
+                bitField0_ = (bitField0_ & ~0x00000010);
               } else {
                 ensureParamsIsMutable();
                 params_.addAll(other.params_);
@@ -1840,7 +1995,7 @@ public final class StratospherePlan {
                 paramsBuilder_.dispose();
                 paramsBuilder_ = null;
                 params_ = other.params_;
-                bitField0_ = (bitField0_ & ~0x00000008);
+                bitField0_ = (bitField0_ & ~0x00000010);
                 paramsBuilder_ = 
                   com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                      getParamsFieldBuilder() : null;
@@ -1929,101 +2084,230 @@ public final class StratospherePlan {
           return this;
         }
 
-        // repeated int32 inputs = 2 [packed = true];
-        private java.util.List<java.lang.Integer> inputs_ = java.util.Collections.emptyList();
-        private void ensureInputsIsMutable() {
+        // repeated int32 inputs1 = 2 [packed = true];
+        private java.util.List<java.lang.Integer> inputs1_ = java.util.Collections.emptyList();
+        private void ensureInputs1IsMutable() {
           if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-            inputs_ = new java.util.ArrayList<java.lang.Integer>(inputs_);
+            inputs1_ = new java.util.ArrayList<java.lang.Integer>(inputs1_);
             bitField0_ |= 0x00000002;
            }
         }
         /**
-         * <code>repeated int32 inputs = 2 [packed = true];</code>
+         * <code>repeated int32 inputs1 = 2 [packed = true];</code>
+         *
+         * <pre>
+         * Save the ID's of input vertices in int-arrays.
+         * It's an array to save the IDs of multiple inputs for Unioning
+         * </pre>
          */
         public java.util.List<java.lang.Integer>
-            getInputsList() {
-          return java.util.Collections.unmodifiableList(inputs_);
+            getInputs1List() {
+          return java.util.Collections.unmodifiableList(inputs1_);
         }
         /**
-         * <code>repeated int32 inputs = 2 [packed = true];</code>
+         * <code>repeated int32 inputs1 = 2 [packed = true];</code>
+         *
+         * <pre>
+         * Save the ID's of input vertices in int-arrays.
+         * It's an array to save the IDs of multiple inputs for Unioning
+         * </pre>
          */
-        public int getInputsCount() {
-          return inputs_.size();
+        public int getInputs1Count() {
+          return inputs1_.size();
         }
         /**
-         * <code>repeated int32 inputs = 2 [packed = true];</code>
+         * <code>repeated int32 inputs1 = 2 [packed = true];</code>
+         *
+         * <pre>
+         * Save the ID's of input vertices in int-arrays.
+         * It's an array to save the IDs of multiple inputs for Unioning
+         * </pre>
          */
-        public int getInputs(int index) {
-          return inputs_.get(index);
+        public int getInputs1(int index) {
+          return inputs1_.get(index);
         }
         /**
-         * <code>repeated int32 inputs = 2 [packed = true];</code>
+         * <code>repeated int32 inputs1 = 2 [packed = true];</code>
+         *
+         * <pre>
+         * Save the ID's of input vertices in int-arrays.
+         * It's an array to save the IDs of multiple inputs for Unioning
+         * </pre>
          */
-        public Builder setInputs(
+        public Builder setInputs1(
             int index, int value) {
-          ensureInputsIsMutable();
-          inputs_.set(index, value);
+          ensureInputs1IsMutable();
+          inputs1_.set(index, value);
           onChanged();
           return this;
         }
         /**
-         * <code>repeated int32 inputs = 2 [packed = true];</code>
+         * <code>repeated int32 inputs1 = 2 [packed = true];</code>
+         *
+         * <pre>
+         * Save the ID's of input vertices in int-arrays.
+         * It's an array to save the IDs of multiple inputs for Unioning
+         * </pre>
          */
-        public Builder addInputs(int value) {
-          ensureInputsIsMutable();
-          inputs_.add(value);
+        public Builder addInputs1(int value) {
+          ensureInputs1IsMutable();
+          inputs1_.add(value);
           onChanged();
           return this;
         }
         /**
-         * <code>repeated int32 inputs = 2 [packed = true];</code>
+         * <code>repeated int32 inputs1 = 2 [packed = true];</code>
+         *
+         * <pre>
+         * Save the ID's of input vertices in int-arrays.
+         * It's an array to save the IDs of multiple inputs for Unioning
+         * </pre>
          */
-        public Builder addAllInputs(
+        public Builder addAllInputs1(
             java.lang.Iterable<? extends java.lang.Integer> values) {
-          ensureInputsIsMutable();
-          super.addAll(values, inputs_);
+          ensureInputs1IsMutable();
+          super.addAll(values, inputs1_);
           onChanged();
           return this;
         }
         /**
-         * <code>repeated int32 inputs = 2 [packed = true];</code>
+         * <code>repeated int32 inputs1 = 2 [packed = true];</code>
+         *
+         * <pre>
+         * Save the ID's of input vertices in int-arrays.
+         * It's an array to save the IDs of multiple inputs for Unioning
+         * </pre>
          */
-        public Builder clearInputs() {
-          inputs_ = java.util.Collections.emptyList();
+        public Builder clearInputs1() {
+          inputs1_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00000002);
           onChanged();
           return this;
         }
 
-        // repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 3;
+        // repeated int32 inputs2 = 3 [packed = true];
+        private java.util.List<java.lang.Integer> inputs2_ = java.util.Collections.emptyList();
+        private void ensureInputs2IsMutable() {
+          if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+            inputs2_ = new java.util.ArrayList<java.lang.Integer>(inputs2_);
+            bitField0_ |= 0x00000004;
+           }
+        }
+        /**
+         * <code>repeated int32 inputs2 = 3 [packed = true];</code>
+         *
+         * <pre>
+         * The second array is used for operators with two inputs only (CoGroup, Cross, Join)
+         * </pre>
+         */
+        public java.util.List<java.lang.Integer>
+            getInputs2List() {
+          return java.util.Collections.unmodifiableList(inputs2_);
+        }
+        /**
+         * <code>repeated int32 inputs2 = 3 [packed = true];</code>
+         *
+         * <pre>
+         * The second array is used for operators with two inputs only (CoGroup, Cross, Join)
+         * </pre>
+         */
+        public int getInputs2Count() {
+          return inputs2_.size();
+        }
+        /**
+         * <code>repeated int32 inputs2 = 3 [packed = true];</code>
+         *
+         * <pre>
+         * The second array is used for operators with two inputs only (CoGroup, Cross, Join)
+         * </pre>
+         */
+        public int getInputs2(int index) {
+          return inputs2_.get(index);
+        }
+        /**
+         * <code>repeated int32 inputs2 = 3 [packed = true];</code>
+         *
+         * <pre>
+         * The second array is used for operators with two inputs only (CoGroup, Cross, Join)
+         * </pre>
+         */
+        public Builder setInputs2(
+            int index, int value) {
+          ensureInputs2IsMutable();
+          inputs2_.set(index, value);
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>repeated int32 inputs2 = 3 [packed = true];</code>
+         *
+         * <pre>
+         * The second array is used for operators with two inputs only (CoGroup, Cross, Join)
+         * </pre>
+         */
+        public Builder addInputs2(int value) {
+          ensureInputs2IsMutable();
+          inputs2_.add(value);
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>repeated int32 inputs2 = 3 [packed = true];</code>
+         *
+         * <pre>
+         * The second array is used for operators with two inputs only (CoGroup, Cross, Join)
+         * </pre>
+         */
+        public Builder addAllInputs2(
+            java.lang.Iterable<? extends java.lang.Integer> values) {
+          ensureInputs2IsMutable();
+          super.addAll(values, inputs2_);
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>repeated int32 inputs2 = 3 [packed = true];</code>
+         *
+         * <pre>
+         * The second array is used for operators with two inputs only (CoGroup, Cross, Join)
+         * </pre>
+         */
+        public Builder clearInputs2() {
+          inputs2_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000004);
+          onChanged();
+          return this;
+        }
+
+        // repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 4;
         private java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType> outputTypes_ =
           java.util.Collections.emptyList();
         private void ensureOutputTypesIsMutable() {
-          if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+          if (!((bitField0_ & 0x00000008) == 0x00000008)) {
             outputTypes_ = new java.util.ArrayList<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType>(outputTypes_);
-            bitField0_ |= 0x00000004;
+            bitField0_ |= 0x00000008;
           }
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 3;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 4;</code>
          */
         public java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType> getOutputTypesList() {
           return java.util.Collections.unmodifiableList(outputTypes_);
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 3;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 4;</code>
          */
         public int getOutputTypesCount() {
           return outputTypes_.size();
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 3;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 4;</code>
          */
         public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType getOutputTypes(int index) {
           return outputTypes_.get(index);
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 3;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 4;</code>
          */
         public Builder setOutputTypes(
             int index, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType value) {
@@ -2036,7 +2320,7 @@ public final class StratospherePlan {
           return this;
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 3;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 4;</code>
          */
         public Builder addOutputTypes(eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType value) {
           if (value == null) {
@@ -2048,7 +2332,7 @@ public final class StratospherePlan {
           return this;
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 3;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 4;</code>
          */
         public Builder addAllOutputTypes(
             java.lang.Iterable<? extends eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.ValueType> values) {
@@ -2058,22 +2342,22 @@ public final class StratospherePlan {
           return this;
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 3;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.ValueType outputTypes = 4;</code>
          */
         public Builder clearOutputTypes() {
           outputTypes_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000008);
           onChanged();
           return this;
         }
 
-        // repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;
+        // repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;
         private java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair> params_ =
           java.util.Collections.emptyList();
         private void ensureParamsIsMutable() {
-          if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+          if (!((bitField0_ & 0x00000010) == 0x00000010)) {
             params_ = new java.util.ArrayList<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair>(params_);
-            bitField0_ |= 0x00000008;
+            bitField0_ |= 0x00000010;
            }
         }
 
@@ -2081,7 +2365,7 @@ public final class StratospherePlan {
             eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair.Builder, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePairOrBuilder> paramsBuilder_;
 
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
          */
         public java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair> getParamsList() {
           if (paramsBuilder_ == null) {
@@ -2091,7 +2375,7 @@ public final class StratospherePlan {
           }
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
          */
         public int getParamsCount() {
           if (paramsBuilder_ == null) {
@@ -2101,7 +2385,7 @@ public final class StratospherePlan {
           }
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
          */
         public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair getParams(int index) {
           if (paramsBuilder_ == null) {
@@ -2111,7 +2395,7 @@ public final class StratospherePlan {
           }
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
          */
         public Builder setParams(
             int index, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair value) {
@@ -2128,7 +2412,7 @@ public final class StratospherePlan {
           return this;
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
          */
         public Builder setParams(
             int index, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair.Builder builderForValue) {
@@ -2142,7 +2426,7 @@ public final class StratospherePlan {
           return this;
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
          */
         public Builder addParams(eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair value) {
           if (paramsBuilder_ == null) {
@@ -2158,7 +2442,7 @@ public final class StratospherePlan {
           return this;
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
          */
         public Builder addParams(
             int index, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair value) {
@@ -2175,7 +2459,7 @@ public final class StratospherePlan {
           return this;
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
          */
         public Builder addParams(
             eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair.Builder builderForValue) {
@@ -2189,7 +2473,7 @@ public final class StratospherePlan {
           return this;
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
          */
         public Builder addParams(
             int index, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair.Builder builderForValue) {
@@ -2203,7 +2487,7 @@ public final class StratospherePlan {
           return this;
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
          */
         public Builder addAllParams(
             java.lang.Iterable<? extends eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair> values) {
@@ -2217,12 +2501,12 @@ public final class StratospherePlan {
           return this;
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
          */
         public Builder clearParams() {
           if (paramsBuilder_ == null) {
             params_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000008);
+            bitField0_ = (bitField0_ & ~0x00000010);
             onChanged();
           } else {
             paramsBuilder_.clear();
@@ -2230,7 +2514,7 @@ public final class StratospherePlan {
           return this;
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
          */
         public Builder removeParams(int index) {
           if (paramsBuilder_ == null) {
@@ -2243,14 +2527,14 @@ public final class StratospherePlan {
           return this;
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
          */
         public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair.Builder getParamsBuilder(
             int index) {
           return getParamsFieldBuilder().getBuilder(index);
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
          */
         public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePairOrBuilder getParamsOrBuilder(
             int index) {
@@ -2260,7 +2544,7 @@ public final class StratospherePlan {
           }
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
          */
         public java.util.List<? extends eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePairOrBuilder> 
              getParamsOrBuilderList() {
@@ -2271,14 +2555,14 @@ public final class StratospherePlan {
           }
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
          */
         public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair.Builder addParamsBuilder() {
           return getParamsFieldBuilder().addBuilder(
               eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair.getDefaultInstance());
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
          */
         public eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair.Builder addParamsBuilder(
             int index) {
@@ -2286,7 +2570,7 @@ public final class StratospherePlan {
               index, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair.getDefaultInstance());
         }
         /**
-         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 4;</code>
+         * <code>repeated .eu.stratosphere.language.binding.protos.ProtoPlan.KeyValuePair params = 5;</code>
          */
         public java.util.List<eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair.Builder> 
              getParamsBuilderList() {
@@ -2299,7 +2583,7 @@ public final class StratospherePlan {
             paramsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
                 eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePair.Builder, eu.stratosphere.language.binding.protos.StratospherePlan.ProtoPlan.KeyValuePairOrBuilder>(
                     params_,
-                    ((bitField0_ & 0x00000008) == 0x00000008),
+                    ((bitField0_ & 0x00000010) == 0x00000010),
                     getParentForChildren(),
                     isClean());
             params_ = null;
@@ -2307,34 +2591,34 @@ public final class StratospherePlan {
           return paramsBuilder_;
         }
 
-        // required int32 ID = 5;
+        // required int32 ID = 6;
         private int iD_ ;
         /**
-         * <code>required int32 ID = 5;</code>
+         * <code>required int32 ID = 6;</code>
          */
         public boolean hasID() {
-          return ((bitField0_ & 0x00000010) == 0x00000010);
+          return ((bitField0_ & 0x00000020) == 0x00000020);
         }
         /**
-         * <code>required int32 ID = 5;</code>
+         * <code>required int32 ID = 6;</code>
          */
         public int getID() {
           return iD_;
         }
         /**
-         * <code>required int32 ID = 5;</code>
+         * <code>required int32 ID = 6;</code>
          */
         public Builder setID(int value) {
-          bitField0_ |= 0x00000010;
+          bitField0_ |= 0x00000020;
           iD_ = value;
           onChanged();
           return this;
         }
         /**
-         * <code>required int32 ID = 5;</code>
+         * <code>required int32 ID = 6;</code>
          */
         public Builder clearID() {
-          bitField0_ = (bitField0_ & ~0x00000010);
+          bitField0_ = (bitField0_ & ~0x00000020);
           iD_ = 0;
           onChanged();
           return this;
@@ -3052,28 +3336,29 @@ public final class StratospherePlan {
   static {
     java.lang.String[] descriptorData = {
       "\n\026stratospherePlan.proto\022\'eu.stratospher" +
-      "e.language.binding.protos\"\256\006\n\tProtoPlan\022" +
+      "e.language.binding.protos\"\304\006\n\tProtoPlan\022" +
       "K\n\010vertices\030\001 \003(\01329.eu.stratosphere.lang" +
       "uage.binding.protos.ProtoPlan.Vertex\022\023\n\013" +
       "DataSinkIDs\030\002 \003(\005\032*\n\014KeyValuePair\022\013\n\003key" +
-      "\030\001 \002(\t\022\r\n\005value\030\002 \002(\t\032\231\002\n\006Vertex\022K\n\004type" +
+      "\030\001 \002(\t\022\r\n\005value\030\002 \002(\t\032\257\002\n\006Vertex\022K\n\004type" +
       "\030\001 \002(\0162=.eu.stratosphere.language.bindin" +
-      "g.protos.ProtoPlan.VertexType\022\022\n\006inputs\030" +
-      "\002 \003(\005B\002\020\001\022Q\n\013outputTypes\030\003 \003(\0162<.eu.stra" +
-      "tosphere.language.binding.protos.ProtoPl",
-      "an.ValueType\022O\n\006params\030\004 \003(\0132?.eu.strato" +
-      "sphere.language.binding.protos.ProtoPlan" +
-      ".KeyValuePair\022\n\n\002ID\030\005 \002(\005\"L\n\tValueType\022\017" +
-      "\n\013StringValue\020\000\022\014\n\010IntValue\020\001\022\020\n\014Boolean" +
-      "Value\020\002\022\016\n\nFloatValue\020\003\"\250\002\n\nVertexType\022\007" +
-      "\n\003Map\020\000\022\n\n\006Reduce\020\001\022\010\n\004Join\020\002\022\t\n\005Cross\020\003" +
-      "\022\013\n\007CoGroup\020\004\022\t\n\005Union\020\005\022\023\n\017TextInputFor" +
-      "mat\020\006\022\022\n\016CsvInputFormat\020\007\022\030\n\024DelimitedIn" +
-      "putFormat\020\010\022\023\n\017FileInputFormat\020\t\022\023\n\017JDBC" +
-      "InputFormat\020\n\022\023\n\017CsvOutputFormat\020\013\022\031\n\025De",
-      "limitedOutputFormat\020\014\022\024\n\020FileOutputForma" +
-      "t\020\r\022\021\n\rBulkIteration\020\016\022\022\n\016DeltaIteration" +
-      "\020\017B\022B\020StratospherePlan"
+      "g.protos.ProtoPlan.VertexType\022\023\n\007inputs1" +
+      "\030\002 \003(\005B\002\020\001\022\023\n\007inputs2\030\003 \003(\005B\002\020\001\022Q\n\013outpu" +
+      "tTypes\030\004 \003(\0162<.eu.stratosphere.language.",
+      "binding.protos.ProtoPlan.ValueType\022O\n\006pa" +
+      "rams\030\005 \003(\0132?.eu.stratosphere.language.bi" +
+      "nding.protos.ProtoPlan.KeyValuePair\022\n\n\002I" +
+      "D\030\006 \002(\005\"L\n\tValueType\022\017\n\013StringValue\020\000\022\014\n" +
+      "\010IntValue\020\001\022\020\n\014BooleanValue\020\002\022\016\n\nFloatVa" +
+      "lue\020\003\"\250\002\n\nVertexType\022\007\n\003Map\020\000\022\n\n\006Reduce\020" +
+      "\001\022\010\n\004Join\020\002\022\t\n\005Cross\020\003\022\013\n\007CoGroup\020\004\022\t\n\005U" +
+      "nion\020\005\022\023\n\017TextInputFormat\020\006\022\022\n\016CsvInputF" +
+      "ormat\020\007\022\030\n\024DelimitedInputFormat\020\010\022\023\n\017Fil" +
+      "eInputFormat\020\t\022\023\n\017JDBCInputFormat\020\n\022\023\n\017C",
+      "svOutputFormat\020\013\022\031\n\025DelimitedOutputForma" +
+      "t\020\014\022\024\n\020FileOutputFormat\020\r\022\021\n\rBulkIterati" +
+      "on\020\016\022\022\n\016DeltaIteration\020\017B\022B\020Stratosphere" +
+      "Plan"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3097,7 +3382,7 @@ public final class StratospherePlan {
           internal_static_eu_stratosphere_language_binding_protos_ProtoPlan_Vertex_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_eu_stratosphere_language_binding_protos_ProtoPlan_Vertex_descriptor,
-              new java.lang.String[] { "Type", "Inputs", "OutputTypes", "Params", "ID", });
+              new java.lang.String[] { "Type", "Inputs1", "Inputs2", "OutputTypes", "Params", "ID", });
           return null;
         }
       };

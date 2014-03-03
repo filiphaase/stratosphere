@@ -38,10 +38,14 @@ message ProtoPlan{
 
 	message Vertex{
 		required VertexType type = 1;
-		repeated int32 inputs = 2[packed = true];
-		repeated ValueType outputTypes = 3;
-		repeated KeyValuePair params = 4;
-		required int32 ID = 5;
+		// Save the ID's of input vertices in int-arrays.
+		// It's an array to save the IDs of multiple inputs for Unioning
+		repeated int32 inputs1 = 2[packed = true];
+		// The second array is used for operators with two inputs only (CoGroup, Cross, Join)
+		repeated int32 inputs2 = 3[packed = true];
+		repeated ValueType outputTypes = 4;
+		repeated KeyValuePair params = 5;
+		required int32 ID = 6;
 	}
 
 	repeated Vertex vertices = 1;

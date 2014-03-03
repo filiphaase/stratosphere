@@ -6,7 +6,7 @@ import os
     The current python implementation for streaming data into a  
     coGroup Operator
 """
-class CoGroup(object): 
+class ProtoCoGroup(object): 
     
     def __init__(self, connection):
         self.f = open('pythonCoGroupOut.txt', 'a')

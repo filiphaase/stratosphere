@@ -5,7 +5,7 @@ import os
 """ 
 The current python implementation for streaming data into a map-operator. 
 """
-class Mapper(object):
+class ProtoMapper(object):
     
     def __init__(self, connection):
         self.f = open('pythonMapperOut.txt', 'w')
