@@ -32,6 +32,7 @@ def count(iter, collector):
 
 in1 = TextInputFormat(inputPath1)
 in2 = TextInputFormat(inputPath2)
+
 Mapper([in1, in2], split, [ValueType.String, ValueType.Int]) \
     .reduce(count, [ValueType.String, ValueType.Int]).key(0) \
     .outputCSV(outputPath, [0,1]).fieldDelimiter(",")  \

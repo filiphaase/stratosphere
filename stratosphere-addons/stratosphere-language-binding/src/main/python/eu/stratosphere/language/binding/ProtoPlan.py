@@ -162,7 +162,7 @@ class Vertex(object):
         reduceVertex = Vertex(ProtoPlan.Reduce, parent1= [ self ],  function = f, types = valueTypes)
         return reduceVertex.key(keyInd)
     
-    def join(self, otherParent, f, valueTypes, keyInd1 = 0, keyInd2 = 1):
+    def join(self, otherParent, f, valueTypes, keyInd1 = 0, keyInd2 = 0):
         if not isinstance(otherParent, list):
             otherParent = [ otherParent]
         joinVertex = Vertex(ProtoPlan.Join, parent1= [ self ], parent2=otherParent, function = f, types = valueTypes )
@@ -174,7 +174,7 @@ class Vertex(object):
         crossVertex = Vertex(ProtoPlan.Cross, parent1= [ self ], parent2=otherParent, function = f, types = valueTypes )
         return crossVertex
 
-    def coGroup(self, otherParent, f, valueTypes, keyInd1 = 0, keyInd2 = 1):
+    def coGroup(self, otherParent, f, valueTypes, keyInd1 = 0, keyInd2 = 0):
         if not isinstance(otherParent, list):
             otherParent = [ otherParent]
         coGroupVertex = Vertex(ProtoPlan.CoGroup, parent1=self, parent2=otherParent, function = f, types = valueTypes )
@@ -263,7 +263,7 @@ class Reducer(Vertex):
         self.key(keyInd)
         
 class Join(Vertex):
-    def __init__(self, inputVertices1, inputVertices2 , f, valueTypes, keyInd1 = 0, keyInd2 = 1):
+    def __init__(self, inputVertices1, inputVertices2 , f, valueTypes, keyInd1 = 0, keyInd2 = 0):
         if not isinstance(inputVertices1, list):
             inputVertices1 = [ inputVertices1]
         if not isinstance(inputVertices2, list):
@@ -280,7 +280,7 @@ class Cross(Vertex):
         super(Cross, self).__init__(ProtoPlan.Cross, parent1=inputVertices1, parent2=inputVertices2, function = f, types = valueTypes)
 
 class CoGroup(Vertex):
-    def __init__(self, inputVertices1, inputVertices2 , f, valueTypes, keyInd1 = 0, keyInd2 = 1):
+    def __init__(self, inputVertices1, inputVertices2 , f, valueTypes, keyInd1 = 0, keyInd2 = 0):
         if not isinstance(inputVertices1, list):
             inputVertices1 = [ inputVertices1]
         if not isinstance(inputVertices2, list):
@@ -288,3 +288,12 @@ class CoGroup(Vertex):
         super(CoGroup, self).__init__(ProtoPlan.CoGroup, parent1=inputVertices1, parent2=inputVertices2, function = f, types = valueTypes)
         self.keys(keyInd1, keyInd2)
         
+class OutputCSV(Vertex):
+    def __init__(self, inputVertices , filePath, indices, recordDelimiter = '\n', fieldDelimiter = " "):
+        if not isinstance(inputVertices, list):
+            inputVertices = [ inputVertices]        
+        super(CoGroup, self).__init__Vertex(ProtoPlan.CsvOutputFormat, parent1= inputVertices)
+        self.file(filePath)
+        self.indices(indices)
+        self.fieldDelimiter(fieldDelimiter)
+        self.recordDelimiter(recordDelimiter)        

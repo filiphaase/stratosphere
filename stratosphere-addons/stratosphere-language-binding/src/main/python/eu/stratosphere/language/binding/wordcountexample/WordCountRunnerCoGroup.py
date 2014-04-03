@@ -24,7 +24,7 @@ def splitTable(record, collector):
     filteredLine = re.sub(r"\W+", " ", record[0].lower()).split() 
     collector.collect((filteredLine[0], int(filteredLine[1])))
             
-def coGroup(iter1, iter2, collector):
+def coGroupUDF(iter1, iter2, collector):
     s = ""
     sum = 0
     for i in iter1:
@@ -39,9 +39,9 @@ def coGroup(iter1, iter2, collector):
         collector.collect((s, sum))       
             
 
-alph = TextInputFormat(inputAlphabet).map(splitAlphabet, [ValueType.String, ValueType.Int])
-table = TextInputFormat(inputTable).map(splitTable, [ValueType.String, ValueType.Int])     
+inAlph = TextInputFormat(inputAlphabet).map(splitAlphabet, [ValueType.String, ValueType.Int])
+inTable = TextInputFormat(inputTable).map(splitTable, [ValueType.String, ValueType.Int])     
 
-table.coGroup(alph, coGroup, [ValueType.String, ValueType.Int]) \
+inTable.coGroup(inAlph, coGroupUDF, [ValueType.String, ValueType.Int]) \
     .outputCSV(outputPath) \
     .execute()
