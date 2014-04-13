@@ -13,6 +13,7 @@
 
 package eu.stratosphere.api.common.operators;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import eu.stratosphere.api.common.aggregators.AggregatorRegistry;
@@ -154,8 +155,22 @@ public class DeltaIteration extends DualInputOperator<AbstractFunction> implemen
 	 * 
 	 * @return The iteration's initial solution set input.
 	 */
-	public List<Operator> getInitialSolutionSet() {
-		return getFirstInputs();
+	public Operator getInitialSolutionSet() {
+		return getFirstInput();
+	}
+	
+	/**
+	 * Returns the initial solution set input as list, or null, if none is set.
+	 * 
+	 * @return The iteration's initial solution set input as list.
+	 */
+	public List<Operator> getInitialSolutionSets() {
+		if(this.input1 == null){
+			return null;
+		}
+		ArrayList<Operator> inputs = new ArrayList<Operator>();
+		inputs.add(this.input1);
+		return inputs;
 	}
 	
 	/**
@@ -163,9 +178,25 @@ public class DeltaIteration extends DualInputOperator<AbstractFunction> implemen
 	 * 
 	 * @return The iteration's workset input.
 	 */
-	public List<Operator> getInitialWorkset() {
-		return getSecondInputs();
+	public Operator getInitialWorkset() {
+		return getSecondInput();
 	}
+
+	/**
+	 * Returns the initial workset input as list, or null, if none is set.
+	 * This function is here for compatibility-reasons of the old-java-API with the scala API
+	 * 
+	 * @return The iteration's initial workset input as list.
+	 */
+	public List<Operator> getInitialWorksets() {
+		if(this.input1 == null){
+			return null;
+		}
+		ArrayList<Operator> inputs = new ArrayList<Operator>();
+		inputs.add(this.input1);
+		return inputs;
+	}
+
 	
 	/**
 	 * Sets the given input as the initial solution set.
