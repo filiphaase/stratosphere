@@ -178,25 +178,9 @@ public class DeltaIteration extends DualInputOperator<AbstractFunction> implemen
 	 * 
 	 * @return The iteration's workset input.
 	 */
-	public Operator getInitialWorkset() {
-		return getSecondInput();
+	public List<Operator> getInitialWorkset() {
+		return getSecondInputs();
 	}
-
-	/**
-	 * Returns the initial workset input as list, or null, if none is set.
-	 * This function is here for compatibility-reasons of the old-java-API with the scala API
-	 * 
-	 * @return The iteration's initial workset input as list.
-	 */
-	public List<Operator> getInitialWorksets() {
-		if(this.input1 == null){
-			return null;
-		}
-		ArrayList<Operator> inputs = new ArrayList<Operator>();
-		inputs.add(this.input1);
-		return inputs;
-	}
-
 	
 	/**
 	 * Sets the given input as the initial solution set.
