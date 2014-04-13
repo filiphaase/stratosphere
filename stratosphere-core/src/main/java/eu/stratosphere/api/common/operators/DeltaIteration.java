@@ -154,8 +154,8 @@ public class DeltaIteration extends DualInputOperator<AbstractFunction> implemen
 	 * 
 	 * @return The iteration's initial solution set input.
 	 */
-	public List<Operator> getInitialSolutionSet() {
-		return getFirstInputs();
+	public Operator getInitialSolutionSet() {
+		return getFirstInput();
 	}
 	
 	/**
@@ -163,8 +163,8 @@ public class DeltaIteration extends DualInputOperator<AbstractFunction> implemen
 	 * 
 	 * @return The iteration's workset input.
 	 */
-	public List<Operator> getInitialWorkset() {
-		return getSecondInputs();
+	public Operator getInitialWorkset() {
+		return getSecondInput();
 	}
 	
 	/**

@@ -13,6 +13,7 @@
 
 package eu.stratosphere.example.java.record.wordcount;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
@@ -22,6 +23,7 @@ import eu.stratosphere.api.common.Program;
 import eu.stratosphere.api.common.ProgramDescription;
 import eu.stratosphere.api.common.operators.FileDataSink;
 import eu.stratosphere.api.common.operators.FileDataSource;
+import eu.stratosphere.api.common.operators.Operator;
 import eu.stratosphere.api.java.record.functions.FunctionAnnotation.ConstantFields;
 import eu.stratosphere.api.java.record.functions.MapFunction;
 import eu.stratosphere.api.java.record.functions.ReduceFunction;
@@ -113,18 +115,22 @@ public class WordCount implements Program, ProgramDescription {
 
 		FileDataSource source = new FileDataSource(new TextInputFormat(), dataInput, "Input Lines");
 		MapOperator mapper = MapOperator.builder(new TokenizeLine())
-			.input(source)
+			.input(source, source)
 			.name("Tokenize Lines")
 			.build();
 		ReduceOperator reducer = ReduceOperator.builder(CountWords.class, StringValue.class, 0)
-			.input(mapper)
+			.input(mapper, mapper)
 			.name("Count Words")
 			.build();
+		ArrayList<Operator> reducerList = new ArrayList<Operator>();
+		reducerList.add(reducer);
+		reducerList.add(reducer);
+		
 		@SuppressWarnings("unchecked")
 		FileDataSink out = new FileDataSink(new CsvOutputFormat("\n", " ", StringValue.class, IntValue.class), output, reducer, "Word Counts");
 		
 		Plan plan = new Plan(out, "WordCount Example");
-		plan.setDefaultParallelism(numSubTasks);
+		plan.setDefaultParallelism(1);
 		return plan;
 	}
 
