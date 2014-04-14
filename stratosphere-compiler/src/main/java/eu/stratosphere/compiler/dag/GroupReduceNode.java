@@ -87,6 +87,7 @@ public class GroupReduceNode extends SingleInputNode {
 		final Configuration conf = getPactContract().getParameters();
 		final String localStrategy = conf.getString(PactCompiler.HINT_LOCAL_STRATEGY, null);
 
+		System.out.println("Getting possibleProperties for GroupReduceNode");
 		final boolean useCombiner;
 		if (localStrategy != null) {
 			if (PactCompiler.HINT_LOCAL_STRATEGY_SORT.equals(localStrategy)) {
@@ -113,6 +114,7 @@ public class GroupReduceNode extends SingleInputNode {
 			}
 		}
 		
+		System.out.println("GroupOrder: " + groupOrder);
 		OperatorDescriptorSingle props = useCombiner ?
 			(this.keys == null ? new AllGroupWithPartialPreGroupProperties() : new GroupWithPartialPreGroupProperties(this.keys, groupOrder)) :
 			(this.keys == null ? new AllGroupProperties() : new GroupProperties(this.keys, groupOrder));

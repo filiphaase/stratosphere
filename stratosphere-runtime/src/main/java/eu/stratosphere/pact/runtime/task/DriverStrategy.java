@@ -38,6 +38,8 @@ public enum DriverStrategy {
 	// the flat mapper
 	FLAT_MAP(FlatMapDriver.class, ChainedFlatMapDriver.class, PIPELINED, false),
 	// grouping the inputs
+	HASH_REDUCE(HashReduceDriver.class, null, PIPELINED, true),
+	// grouping the inputs
 	SORTED_GROUP(ReduceDriver.class, null, PIPELINED, true),
 	// partially grouping inputs (best effort resulting possibly in duplicates --> combiner)
 	PARTIAL_GROUP(CombineDriver.class, SynchronousChainedCombineDriver.class, MATERIALIZING, true),

@@ -58,6 +58,7 @@ public class ReduceNode extends SingleInputNode {
 	
 	@Override
 	protected List<OperatorDescriptorSingle> getPossibleProperties() {
+		System.out.println("Getting possible properties for reduce");
 		OperatorDescriptorSingle props = this.keys == null ?
 			new AllGroupWithPartialPreGroupProperties() :
 			new GroupWithPartialPreGroupProperties(this.keys);
