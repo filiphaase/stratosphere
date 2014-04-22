@@ -13,19 +13,24 @@
 
 package eu.stratosphere.compiler.dag;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import eu.stratosphere.api.common.operators.base.ReduceOperatorBase;
+import eu.stratosphere.api.java.operators.translation.PlanReduceOperator;
 import eu.stratosphere.compiler.DataStatistics;
+import eu.stratosphere.compiler.operators.AllGroupProperties;
 import eu.stratosphere.compiler.operators.AllGroupWithPartialPreGroupProperties;
+import eu.stratosphere.compiler.operators.GroupProperties;
 import eu.stratosphere.compiler.operators.GroupWithPartialPreGroupProperties;
+import eu.stratosphere.compiler.operators.HashReduceProperties;
 import eu.stratosphere.compiler.operators.OperatorDescriptorSingle;
 
 /**
  * The Optimizer representation of a <i>Reduce</i> operator.
  */
-public class ReduceNode extends SingleInputNode {
+public class ReduceNode extends SingleInputNode{
 	
 	private ReduceNode preReduceUtilityNode;
 	
@@ -47,8 +52,8 @@ public class ReduceNode extends SingleInputNode {
 	// ------------------------------------------------------------------------
 
 	@Override
-	public ReduceOperatorBase<?> getPactContract() {
-		return (ReduceOperatorBase<?>) super.getPactContract();
+	public PlanReduceOperator<?> getPactContract() {
+		return (PlanReduceOperator<?>) super.getPactContract();
 	}
 
 	@Override
@@ -58,12 +63,14 @@ public class ReduceNode extends SingleInputNode {
 	
 	@Override
 	protected List<OperatorDescriptorSingle> getPossibleProperties() {
-		System.out.println("Getting possible properties for reduce");
-		OperatorDescriptorSingle props = this.keys == null ?
-			new AllGroupWithPartialPreGroupProperties() :
-			new GroupWithPartialPreGroupProperties(this.keys);
-		
-			return Collections.singletonList(props);
+		System.out.println("called get possible properties of reduceNode");
+		List<OperatorDescriptorSingle> props = new ArrayList<OperatorDescriptorSingle>();
+		if( this.keys == null ){
+			props.add(new AllGroupProperties());
+		}else{
+			props.add(new GroupProperties(this.keys, null));
+		}
+		return props;
 	}
 	
 	// --------------------------------------------------------------------------------------------

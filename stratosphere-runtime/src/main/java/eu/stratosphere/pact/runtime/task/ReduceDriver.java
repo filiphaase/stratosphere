@@ -98,6 +98,8 @@ public class ReduceDriver<IT, OT> implements PactDriver<GenericGroupReduce<IT, O
 		final GenericGroupReduce<IT, OT> stub = this.taskContext.getStub();
 		final Collector<OT> output = this.taskContext.getOutputCollector();
 
+		System.out.println("Running reduce Driver");
+		
 		// run stub implementation
 		while (this.running && iter.nextKey()) {
 			stub.reduce(iter.getValues(), output);

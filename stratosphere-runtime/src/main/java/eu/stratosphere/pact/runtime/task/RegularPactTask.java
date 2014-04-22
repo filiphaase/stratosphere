@@ -431,7 +431,9 @@ public class RegularPactTask<S extends Function, OT> extends AbstractTask implem
 		
 		// instantiate the UDF
 		try {
+			System.out.println("Driver: " + this.driver.getClass());
 			final Class<? super S> userCodeFunctionType = this.driver.getStubType();
+			System.out.println("UDFclass: " + userCodeFunctionType);
 			// if the class is null, the driver has no user code 
 			if (userCodeFunctionType != null) {
 				this.stub = initStub(userCodeFunctionType);
@@ -470,6 +472,7 @@ public class RegularPactTask<S extends Function, OT> extends AbstractTask implem
 
 		boolean stubOpen = false;
 
+		System.out.println("Before running!");
 		try {
 			// run the data preparation
 			try {
@@ -672,6 +675,8 @@ public class RegularPactTask<S extends Function, OT> extends AbstractTask implem
 	protected S initStub(Class<? super S> stubSuperClass) throws Exception {
 		try {
 			S stub = config.<S>getStubWrapper(this.userCodeClassLoader).getUserCodeObject(stubSuperClass, this.userCodeClassLoader);
+			System.out.println("StubSuperClass: " + stubSuperClass.getName());
+			System.out.println("stub.getClass: " + stub.getClass());
 			// check if the class is a subclass, if the check is required
 			if (stubSuperClass != null && !stubSuperClass.isAssignableFrom(stub.getClass())) {
 				throw new RuntimeException("The class '" + stub.getClass().getName() + "' is not a subclass of '" + 

@@ -20,6 +20,7 @@ import eu.stratosphere.api.common.operators.Ordering;
 import eu.stratosphere.api.common.operators.util.FieldSet;
 import eu.stratosphere.compiler.costs.Costs;
 import eu.stratosphere.compiler.dag.GroupReduceNode;
+import eu.stratosphere.compiler.dag.ReduceNode;
 import eu.stratosphere.compiler.dag.SingleInputNode;
 import eu.stratosphere.compiler.dataproperties.GlobalProperties;
 import eu.stratosphere.compiler.dataproperties.LocalProperties;
@@ -81,9 +82,10 @@ public final class GroupWithPartialPreGroupProperties extends OperatorDescriptor
 		} else {
 			// non forward case. all local properties are killed anyways, so we can safely plug in a combiner
 			Channel toCombiner = new Channel(in.getSource());
+			
 			toCombiner.setShipStrategy(ShipStrategyType.FORWARD);
 			// create an input node for combine with same DOP as input node
-			GroupReduceNode combinerNode = ((GroupReduceNode) node).getCombinerUtilityNode();
+			SingleInputNode combinerNode = (node instanceof GroupReduceNode)?((GroupReduceNode) node).getCombinerUtilityNode():((ReduceNode) node).getCombinerUtilityNode();
 			combinerNode.setDegreeOfParallelism(in.getSource().getDegreeOfParallelism());
 			combinerNode.setSubtasksPerInstance(in.getSource().getSubtasksPerInstance());
 			

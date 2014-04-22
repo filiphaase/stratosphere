@@ -13,6 +13,8 @@
 
 package eu.stratosphere.pact.runtime.task;
 
+import java.util.Hashtable;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -21,7 +23,6 @@ import eu.stratosphere.api.common.functions.GenericReduce;
 import eu.stratosphere.api.common.typeutils.TypeComparator;
 import eu.stratosphere.api.common.typeutils.TypeSerializer;
 import eu.stratosphere.pact.runtime.task.util.TaskConfig;
-import eu.stratosphere.pact.runtime.util.KeyGroupedIterator;
 import eu.stratosphere.util.Collector;
 import eu.stratosphere.util.MutableObjectIterator;
 
@@ -46,6 +47,8 @@ public class HashReduceDriver<T> implements PactDriver<GenericReduce<T>, T> {
 	private TypeSerializer<T> serializer;
 
 	private TypeComparator<T> comparator;
+	
+	private Hashtable<Integer, T> hashtable;
 	
 	private volatile boolean running;
 
@@ -78,13 +81,15 @@ public class HashReduceDriver<T> implements PactDriver<GenericReduce<T>, T> {
 
 	@Override
 	public void prepare() throws Exception {
+		System.out.println("Called prepare()");
 		TaskConfig config = this.taskContext.getTaskConfig();
-		if (config.getDriverStrategy() != DriverStrategy.SORTED_GROUP) {
+		if (config.getDriverStrategy() != DriverStrategy.HASH_REDUCE) {
 			throw new Exception("Unrecognized driver strategy for Reduce driver: " + config.getDriverStrategy().name());
 		}
 		this.serializer = this.taskContext.getInputSerializer(0);
 		this.comparator = this.taskContext.getInputComparator(0);
 		this.input = this.taskContext.getInput(0);
+		this.hashtable = new Hashtable<Integer, T>();
 	}
 
 	@Override
@@ -93,21 +98,28 @@ public class HashReduceDriver<T> implements PactDriver<GenericReduce<T>, T> {
 			LOG.debug(this.taskContext.formatLogString("Reducer preprocessing done. Running Reducer code."));
 		}
 
-		final GenericReduce<T> stub = this.taskContext.getStub();
-		final Collector<T> output = this.taskContext.getOutputCollector();
+		System.out.println("In HashReduceDriver run()");
+		System.out.println("");
 		
-		//stub.reduce(value1, value2)
-		/*TODO
-		 * final KeyGroupedIterator<IT> iter = new KeyGroupedIterator<IT>(this.input, this.serializer, this.comparator);
-
-		// cache references on the stack
-		final GenericGroupReduce<IT, OT> stub = this.taskContext.getStub();
-		final Collector<OT> output = this.taskContext.getOutputCollector();
-
-		// run stub implementation
-		while (this.running && iter.nextKey()) {
-			stub.reduce(iter.getValues(), output);
-		}*/
+		final GenericReduce<T> stub = this.taskContext.getStub();
+		T record = this.serializer.createInstance();
+		while (this.running && ((record = input.next(record)) != null)) {
+			Integer hashvalue = new Integer(this.comparator.hash(record));
+			// If the Value is already in the hashtable reduce it with the new value, and write them back
+			if(hashtable.containsKey(hashvalue)){
+				record = stub.reduce(this.hashtable.get(hashvalue), record);
+				this.hashtable.put(hashvalue, record);
+			// Otherwise just put the value in the hashtable
+			}else{
+				this.hashtable.put(hashvalue, record);
+			}
+			record = this.taskContext.<T>getInputSerializer(0).createInstance();
+		}
+		// Afterward all records are reduced, collect the output
+		final Collector<T> output = this.taskContext.getOutputCollector();
+		for ( Integer e : this.hashtable.keySet()){
+			output.collect(this.hashtable.get(e));
+		}
 	}
 
 	@Override

@@ -24,7 +24,7 @@ import eu.stratosphere.util.Collector;
 
 
 @SuppressWarnings("serial")
-public class WordCount {
+public class WordCountPojo {
 	
 	public static class WC{
 		public String s;
@@ -41,24 +41,24 @@ public class WordCount {
 		}
 	}
 	
-	public static final class Tokenizer extends FlatMapFunction<String, Tuple2<String, Integer>> {
+	public static final class Tokenizer extends FlatMapFunction<String, WC> {
 
 		@Override
-		public void flatMap(String value, Collector<Tuple2<String, Integer>> out) {
+		public void flatMap(String value, Collector<WC> out) {
 			String[] tokens = value.toLowerCase().split("\\W");
 			for (String token : tokens) {
 				if (token.length() > 0) {
-					out.collect(new Tuple2<String, Integer>(token, 1));
+					out.collect(new WC(token, 1));
 				}
 			}
 		}
 	}
 	
-	public static final class ReduceCountFuntion extends ReduceFunction<Tuple2<String, Integer>> {
+	public static final class ReduceCountFuntion extends ReduceFunction<WC> {
 
 		@Override
-		public Tuple2<String, Integer> reduce(Tuple2<String, Integer> v1, Tuple2<String, Integer> v2) throws Exception {
-			return new Tuple2<String, Integer>(v1.f0, v1.f1 + v2.f1);
+		public WC reduce(WC v1, WC v2) throws Exception {
+			return new WC(v1.s, v1.i + v2.i);
 		}
 	}
 	
@@ -76,9 +76,9 @@ public class WordCount {
 		
 		DataSet<String> text = env.readTextFile(input);
 		
-		DataSet<Tuple2<String, Integer>> words = text.flatMap(new Tokenizer());
+		DataSet<WC> words = text.flatMap(new Tokenizer());
 		
-		DataSet<Tuple2<String, Integer>> result = words.groupBy(0).reduce(new ReduceCountFuntion());
+		DataSet<WC> result = words.reduce(new ReduceCountFuntion());
 		
 		result.writeAsText(output);
 		env.execute("Word Count");

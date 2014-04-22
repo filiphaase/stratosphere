@@ -35,7 +35,7 @@ public class PlanGroupReduceOperator<IN, OUT> extends GroupReduceOperatorBase<Ge
 				TypeInformation<IN> inputType, TypeInformation<OUT> outputType)
 	{
 		super(udf, logicalGroupingFields, name);
-		
+		System.out.println("Constrcutor of operator.translation.PlanGroupReduceOperator called");
 		this.inType = inputType;
 		this.outType = outputType;
 	}

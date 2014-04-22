@@ -85,6 +85,8 @@ public class AllReduceDriver<IT, OT> implements PactDriver<GenericGroupReduce<IT
 			LOG.debug(this.taskContext.formatLogString("AllReduce preprocessing done. Running Reducer code."));
 		}
 
+		System.out.println("Running AllReduce Driver");
+		
 		final GenericGroupReduce<IT, OT> stub = this.taskContext.getStub();
 		final Collector<OT> output = this.taskContext.getOutputCollector();
 		final MutableToRegularIteratorWrapper<IT> inIter = new MutableToRegularIteratorWrapper<IT>(this.input, this.serializer);

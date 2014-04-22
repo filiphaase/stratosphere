@@ -170,6 +170,9 @@ public abstract class CostEstimator {
 		case UNION:
 			// pipelined local union is for free
 			
+		case HASH_REDUCE:
+			// TODO
+			
 			break;
 		case MERGE:
 			addLocalMergeCost(firstInput, secondInput, availableMemory, driverCosts);

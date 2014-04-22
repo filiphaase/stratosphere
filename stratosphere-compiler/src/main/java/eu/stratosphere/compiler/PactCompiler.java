@@ -45,6 +45,7 @@ import eu.stratosphere.api.common.operators.base.MapOperatorBase;
 import eu.stratosphere.api.common.operators.base.GroupReduceOperatorBase;
 import eu.stratosphere.api.common.operators.base.PlainMapOperatorBase;
 import eu.stratosphere.api.common.operators.base.ReduceOperatorBase;
+import eu.stratosphere.api.java.operators.translation.PlanReduceOperator;
 import eu.stratosphere.compiler.costs.CostEstimator;
 import eu.stratosphere.compiler.costs.DefaultCostEstimator;
 import eu.stratosphere.compiler.dag.BulkIterationNode;

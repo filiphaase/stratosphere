@@ -77,8 +77,9 @@ public class ReduceOperator<IN> extends SingleInputUdfOperator<IN, IN, ReduceOpe
 			return new UnaryNodeTranslation(new PlanReduceOperator<IN>(function, new int[0], name, getInputType()));
 		}
 		
-		
+		System.out.println("In ReduceOperator.translate to dataFlow()");
 		if (grouper.getKeys() instanceof Keys.SelectorFunctionKeys) {
+			System.out.println("KeySelectorFunctionKeys");
 			
 			@SuppressWarnings("unchecked")
 			Keys.SelectorFunctionKeys<IN, ?> selectorKeys = (Keys.SelectorFunctionKeys<IN, ?>) grouper.getKeys();
@@ -86,6 +87,7 @@ public class ReduceOperator<IN> extends SingleInputUdfOperator<IN, IN, ReduceOpe
 			return translateSelectorFunctionReducer(selectorKeys, function, getInputType(), name);
 		}
 		else if (grouper.getKeys() instanceof Keys.FieldPositionKeys) {
+			System.out.println("Keys.FieldPositionKeys");
 			int[] logicalKeyPositions = grouper.getKeys().computeLogicalKeyPositions();
 			PlanReduceOperator<IN> reduceOp = new PlanReduceOperator<IN>(function, logicalKeyPositions, name, getInputType());
 			

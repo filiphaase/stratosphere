@@ -43,6 +43,8 @@ public class GroupReduceNode extends SingleInputNode {
 	public GroupReduceNode(GroupReduceOperatorBase<?> pactContract) {
 		super(pactContract);
 		
+		System.out.println("Constructor of Optimizer.GroupReduceNode");
+		
 		if (this.keys == null) {
 			// case of a key-less reducer. force a parallelism of 1
 			setDegreeOfParallelism(1);

@@ -14,15 +14,17 @@
  **********************************************************************************************************************/
 package eu.stratosphere.api.java.operators.translation;
 
-import eu.stratosphere.api.common.functions.GenericGroupReduce;
-import eu.stratosphere.api.common.operators.base.GroupReduceOperatorBase;
+import java.util.Arrays;
+
+import eu.stratosphere.api.common.functions.GenericReduce;
+import eu.stratosphere.api.common.operators.base.ReduceOperatorBase;
 import eu.stratosphere.api.java.functions.ReduceFunction;
 import eu.stratosphere.api.java.typeutils.TypeInformation;
 
 /**
  *
  */
-public class PlanReduceOperator<T> extends GroupReduceOperatorBase<GenericGroupReduce<T,T>>
+public class PlanReduceOperator<T> extends ReduceOperatorBase<GenericReduce<T>>
 	implements UnaryJavaPlanNode<T, T>
 {
 
@@ -30,10 +32,10 @@ public class PlanReduceOperator<T> extends GroupReduceOperatorBase<GenericGroupR
 	
 	
 	public PlanReduceOperator(ReduceFunction<T> udf, int[] logicalGroupingFields, String name, TypeInformation<T> type) {
-		super(udf, logicalGroupingFields, name);
+		super(udf, logicalGroupingFields, name); 
+		System.out.println("Constrcutor of operator.translation.PlanReduceOperator called - logicalGroupingFields: " + Arrays.toString(logicalGroupingFields));
 		this.type = type;
 	}
-	
 	
 	@Override
 	public TypeInformation<T> getReturnType() {
