@@ -37,7 +37,7 @@ public abstract class ComparatorTestBase<T> {
 	
 	protected abstract TypeSerializer<T> createSerializer();
 	
-	protected abstract int getNormalizeKeyLength();
+	protected abstract int getNormalizedKeyLength();
 	
 	protected abstract Class<T> getTypeClass();
 	
@@ -50,7 +50,7 @@ public abstract class ComparatorTestBase<T> {
 	public void testGetLength() {
 		try {
 			TypeComparator<T> comparator = getComparator(true);
-			assertEquals(getNormalizeKeyLength(), comparator.getNormalizeKeyLen());
+			assertEquals(getNormalizedKeyLength(), comparator.getNormalizeKeyLen());
 		}
 		catch (Exception e) {
 			System.err.println(e.getMessage());
@@ -60,7 +60,16 @@ public abstract class ComparatorTestBase<T> {
 	}
 	
 	@Test
-	public void testEqualsSimple() {
+	public void testEqualsAscending() {
+		testEquals(true);
+	}
+	
+	@Test
+	public void testEqualsDescending() {
+		testEquals(false);
+	}
+	
+	private void testEquals(boolean ascending) {
 		try {
 			// Just setup two identical output/inputViews and go over their data to see if compare works
 			TestOutputView out1 = new TestOutputView();
@@ -73,7 +82,7 @@ public abstract class ComparatorTestBase<T> {
 			TestInputView in2 = out2.getInputView();
 
 			// Now use comparator and compar
-			TypeComparator<T> comparator = getComparator(true);
+			TypeComparator<T> comparator = getComparator(ascending);
 			T[] data = getSortedData();
 			for(T e : data){
 				assertTrue(comparator.compare(in1, in2) == 0);
@@ -88,7 +97,7 @@ public abstract class ComparatorTestBase<T> {
 	
 	// --------------------------------------------------------------------------------------------
 	
-	private void deepEquals(String message, T should, T is) {
+	protected void deepEquals(String message, T should, T is) {
 		if (should.getClass().isArray()) {
 			if (should instanceof long[]) {
 				assertArrayEquals(message, (long[]) should, (long[]) is);
