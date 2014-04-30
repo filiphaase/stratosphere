@@ -167,7 +167,7 @@ public abstract class ComparatorTestBase<T> {
 	private TypeComparator<T> getComparator(boolean ascending) {
 		TypeComparator<T> comparator = createComparator(ascending);
 		if (comparator == null) {
-			throw new RuntimeException("Test case corrupt. Returns null as serializer.");
+			throw new RuntimeException("Test case corrupt. Returns null as comparator.");
 		}
 		return comparator;
 	}
