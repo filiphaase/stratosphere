@@ -27,6 +27,7 @@ import org.junit.Test;
 
 /**
  * Abstract test base for serializers.
+ * @param <T>
  */
 public abstract class ComparatorTestBase<T> {
 
@@ -124,7 +125,7 @@ public abstract class ComparatorTestBase<T> {
 			//compares every element in high with every element in low
 			for (T h : high) {
 				//workaround for generic array creation
-				T[] selectedH = Arrays.copyOf(low, 0);
+				T[] selectedH = Arrays.copyOf(low, low.length);
 				for (int x = 0; x < selectedH.length; x++) {
 					selectedH[x] = h;
 				}
@@ -136,9 +137,16 @@ public abstract class ComparatorTestBase<T> {
 				writeSortedData(low, out1);
 				in1 = out1.getInputView();
 				for (T l : low) {
-					if (greater) {
+					if(greater && ascending){
 						assertTrue(comparator.compare(in1, in2) < 0);
-					} else {
+					}
+					if(greater && !ascending){
+						assertTrue(comparator.compare(in1, in2) > 0);
+					}
+					if(!greater && ascending){
+						assertTrue(comparator.compare(in1, in2) < 0);
+					}
+					if(!greater && !ascending){
 						assertTrue(comparator.compare(in1, in2) > 0);
 					}
 				}
