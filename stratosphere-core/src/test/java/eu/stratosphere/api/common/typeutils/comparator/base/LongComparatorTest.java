@@ -55,11 +55,11 @@ public class LongComparatorTest extends ComparatorTestBase<Long> {
 		if(rndLong==Long.MAX_VALUE){
 			rndLong-=3;
 		}
-		if(rndLong<=1){
+		if(rndLong<=2){
 			rndLong+=3;
 		}		
 		return new Long[] {new Long(Long.MIN_VALUE), new Long(-rndLong), new Long(-1L), 
-				new Long(0L), new Long(1L), new Long(rndLong), new Long(Long.MAX_VALUE)};
+				new Long(0L), new Long(1L), new Long(2L), new Long(rndLong), new Long(Long.MAX_VALUE)};
 	}
 
 }
