@@ -14,59 +14,58 @@
  **********************************************************************************************************************/
 package eu.stratosphere.api.common.typeutils.comparator.base;
 
-import java.util.Random;
-
 import eu.stratosphere.api.common.typeutils.ComparatorTestBase;
 import eu.stratosphere.api.common.typeutils.TypeComparator;
 import eu.stratosphere.api.common.typeutils.TypeSerializer;
-import eu.stratosphere.api.common.typeutils.base.LongComparator;
-import eu.stratosphere.api.common.typeutils.base.LongSerializer;
+import eu.stratosphere.api.common.typeutils.base.ByteComparator;
+import eu.stratosphere.api.common.typeutils.base.ByteSerializer;
+import java.util.Random;
 
-public class LongComparatorTest extends ComparatorTestBase<Long> {
+public class ByteComparatorTest extends ComparatorTestBase<Byte> {
 
 	@Override
-	protected TypeComparator<Long> createComparator(boolean ascending) {
-		return new LongComparator(ascending);
+	protected TypeComparator<Byte> createComparator(boolean ascending) {
+		return new ByteComparator(ascending);
 	}
 
 	@Override
-	protected TypeSerializer<Long> createSerializer() {
-		return new LongSerializer();
+	protected TypeSerializer<Byte> createSerializer() {
+		return new ByteSerializer();
 	}
 
 	@Override
 	protected int getNormalizedKeyLength() {
-		return 8;
+		return 1;
 	}
 
 	// Don't know if we will need this function
 	@Override
-	protected Class<Long> getTypeClass() {
-		return Long.class;
+	protected Class<Byte> getTypeClass() {
+		return Byte.class;
 	}
 
 	@Override
-	protected Long[] getSortedTestData() {
-		Random rnd = new Random(874597969123412338L);
-		long rndLong = rnd.nextLong();
-		if (rndLong < 0) {
-			rndLong = -rndLong;
-		}
-		if (rndLong == Long.MAX_VALUE) {
-			rndLong -= 3;
-		}
-		if (rndLong <= 2) {
-			rndLong += 3;
-		}
-		return new Long[]{
-			new Long(Long.MIN_VALUE),
-			new Long(-rndLong),
-			new Long(-1L),
-			new Long(0L),
-			new Long(1L),
-			new Long(2L),
-			new Long(rndLong),
-			new Long(Long.MAX_VALUE)};
-	}
+	protected Byte[] getSortedTestData() {
 
+		Random rnd = new Random(874597969123412338L);
+		int rndByte = rnd.nextInt(127);
+		if (rndByte < 0) {
+			rndByte = -rndByte;
+		}
+		if (rndByte == Byte.MAX_VALUE) {
+			rndByte -= 3;
+		}
+		if (rndByte <= 2) {
+			rndByte += 3;
+		}
+		return new Byte[]{
+			new Byte(Byte.MIN_VALUE),
+			new Byte(new Integer(-rndByte).byteValue()),
+			new Byte(new Integer(-1).byteValue()),
+			new Byte(new Integer(0).byteValue()),
+			new Byte(new Integer(1).byteValue()),
+			new Byte(new Integer(2).byteValue()),
+			new Byte(new Integer(rndByte).byteValue()),
+			new Byte(Byte.MAX_VALUE)};
+	}
 }

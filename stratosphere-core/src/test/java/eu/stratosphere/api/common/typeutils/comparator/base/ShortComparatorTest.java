@@ -19,54 +19,54 @@ import java.util.Random;
 import eu.stratosphere.api.common.typeutils.ComparatorTestBase;
 import eu.stratosphere.api.common.typeutils.TypeComparator;
 import eu.stratosphere.api.common.typeutils.TypeSerializer;
-import eu.stratosphere.api.common.typeutils.base.LongComparator;
-import eu.stratosphere.api.common.typeutils.base.LongSerializer;
+import eu.stratosphere.api.common.typeutils.base.ShortComparator;
+import eu.stratosphere.api.common.typeutils.base.ShortSerializer;
 
-public class LongComparatorTest extends ComparatorTestBase<Long> {
+public class ShortComparatorTest extends ComparatorTestBase<Short> {
 
 	@Override
-	protected TypeComparator<Long> createComparator(boolean ascending) {
-		return new LongComparator(ascending);
+	protected TypeComparator<Short> createComparator(boolean ascending) {
+		return new ShortComparator(ascending);
 	}
 
 	@Override
-	protected TypeSerializer<Long> createSerializer() {
-		return new LongSerializer();
+	protected TypeSerializer<Short> createSerializer() {
+		return new ShortSerializer();
 	}
 
 	@Override
 	protected int getNormalizedKeyLength() {
-		return 8;
+		return 2;
 	}
 
 	// Don't know if we will need this function
 	@Override
-	protected Class<Long> getTypeClass() {
-		return Long.class;
+	protected Class<Short> getTypeClass() {
+		return Short.class;
 	}
 
 	@Override
-	protected Long[] getSortedTestData() {
+	protected Short[] getSortedTestData() {
 		Random rnd = new Random(874597969123412338L);
-		long rndLong = rnd.nextLong();
-		if (rndLong < 0) {
-			rndLong = -rndLong;
+		short rndShort = new Integer(rnd.nextInt()).shortValue();
+		if (rndShort < 0) {
+			rndShort = new Integer(-rndShort).shortValue();
 		}
-		if (rndLong == Long.MAX_VALUE) {
-			rndLong -= 3;
+		if (rndShort == Short.MAX_VALUE) {
+			rndShort -= 3;
 		}
-		if (rndLong <= 2) {
-			rndLong += 3;
+		if (rndShort <= 2) {
+			rndShort += 3;
 		}
-		return new Long[]{
-			new Long(Long.MIN_VALUE),
-			new Long(-rndLong),
-			new Long(-1L),
-			new Long(0L),
-			new Long(1L),
-			new Long(2L),
-			new Long(rndLong),
-			new Long(Long.MAX_VALUE)};
+		return new Short[]{
+			new Short(Short.MIN_VALUE),
+			new Short(new Integer(-rndShort).shortValue()),
+			new Short(new Integer(-1).shortValue()),
+			new Short(new Integer(0).shortValue()),
+			new Short(new Integer(1).shortValue()),
+			new Short(new Integer(2).shortValue()),
+			new Short(new Integer(rndShort).shortValue()),
+			new Short(Short.MAX_VALUE)};
 	}
 
 }

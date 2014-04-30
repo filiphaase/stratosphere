@@ -15,58 +15,56 @@
 package eu.stratosphere.api.common.typeutils.comparator.base;
 
 import java.util.Random;
-
 import eu.stratosphere.api.common.typeutils.ComparatorTestBase;
 import eu.stratosphere.api.common.typeutils.TypeComparator;
 import eu.stratosphere.api.common.typeutils.TypeSerializer;
-import eu.stratosphere.api.common.typeutils.base.LongComparator;
-import eu.stratosphere.api.common.typeutils.base.LongSerializer;
+import eu.stratosphere.api.common.typeutils.base.FloatComparator;
+import eu.stratosphere.api.common.typeutils.base.FloatSerializer;
 
-public class LongComparatorTest extends ComparatorTestBase<Long> {
+public class FloatComparatorTest extends ComparatorTestBase<Float> {
 
 	@Override
-	protected TypeComparator<Long> createComparator(boolean ascending) {
-		return new LongComparator(ascending);
+	protected TypeComparator<Float> createComparator(boolean ascending) {
+		return new FloatComparator(ascending);
 	}
 
 	@Override
-	protected TypeSerializer<Long> createSerializer() {
-		return new LongSerializer();
+	protected TypeSerializer<Float> createSerializer() {
+		return new FloatSerializer();
 	}
 
 	@Override
 	protected int getNormalizedKeyLength() {
-		return 8;
+		return 0;
 	}
 
 	// Don't know if we will need this function
 	@Override
-	protected Class<Long> getTypeClass() {
-		return Long.class;
+	protected Class<Float> getTypeClass() {
+		return Float.class;
 	}
 
 	@Override
-	protected Long[] getSortedTestData() {
+	protected Float[] getSortedTestData() {
 		Random rnd = new Random(874597969123412338L);
-		long rndLong = rnd.nextLong();
-		if (rndLong < 0) {
-			rndLong = -rndLong;
+		float rndFloat = rnd.nextFloat();
+		if (rndFloat < 0) {
+			rndFloat = -rndFloat;
 		}
-		if (rndLong == Long.MAX_VALUE) {
-			rndLong -= 3;
+		if (rndFloat == Float.MAX_VALUE) {
+			rndFloat -= 3;
 		}
-		if (rndLong <= 2) {
-			rndLong += 3;
+		if (rndFloat <= 2) {
+			rndFloat += 3;
 		}
-		return new Long[]{
-			new Long(Long.MIN_VALUE),
-			new Long(-rndLong),
-			new Long(-1L),
-			new Long(0L),
-			new Long(1L),
-			new Long(2L),
-			new Long(rndLong),
-			new Long(Long.MAX_VALUE)};
+		return new Float[]{
+			new Float(Float.MIN_VALUE),
+			new Float(-rndFloat),
+			new Float(-1.0F),
+			new Float(0.0F),
+			new Float(1.0F),
+			new Float(2.0F),
+			new Float(rndFloat),
+			new Float(Float.MAX_VALUE)};
 	}
-
 }
