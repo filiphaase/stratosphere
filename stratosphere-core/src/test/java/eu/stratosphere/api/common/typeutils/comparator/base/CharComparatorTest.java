@@ -47,7 +47,7 @@ public class CharComparatorTest extends ComparatorTestBase<Character> {
 	@Override
 	protected Character[] getSortedTestData() {
 		Random rnd = new Random(874597969123412338L);
-		int rndChar = rnd.nextInt(127);
+		int rndChar = rnd.nextInt(Character.MIN_VALUE);
 		if(rndChar<0){
 			rndChar=-rndChar;
 		}

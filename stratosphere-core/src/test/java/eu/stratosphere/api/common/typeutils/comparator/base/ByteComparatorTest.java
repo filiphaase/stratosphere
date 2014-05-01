@@ -48,7 +48,7 @@ public class ByteComparatorTest extends ComparatorTestBase<Byte> {
 	protected Byte[] getSortedTestData() {
 
 		Random rnd = new Random(874597969123412338L);
-		int rndByte = rnd.nextInt(127);
+		int rndByte = rnd.nextInt(Byte.MAX_VALUE);
 		if (rndByte < 0) {
 			rndByte = -rndByte;
 		}
