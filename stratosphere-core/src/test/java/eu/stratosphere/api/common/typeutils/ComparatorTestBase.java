@@ -91,27 +91,27 @@ public abstract class ComparatorTestBase<T> {
 
 	@Test
 	public void testGreaterAscending() {
-		test(true, true);
+		testGreatSmallAscDesc(true, true);
 	}
 
 	@Test
 	public void testGreaterDescending() {
-		test(false, true);
+		testGreatSmallAscDesc(false, true);
 	}
 
 	@Test
 	public void testSmallerAscending() {
-		test(true, false);
+		testGreatSmallAscDesc(true, false);
 	}
 
 	@Test
 	public void testSmallerDescending() {
-		test(false, false);
+		testGreatSmallAscDesc(false, false);
 	}
 
-	public void test(boolean ascending, boolean greater) {
+	private void testGreatSmallAscDesc(boolean ascending, boolean greater) {
 		try {
-			// Now use comparator and compar
+			//split data into low and high part
 			T[] data = getSortedData();
 			T[] low = Arrays.copyOfRange(data, 0, data.length / 2);
 			T[] high = Arrays.copyOfRange(data, data.length / 2, data.length);
@@ -129,25 +129,28 @@ public abstract class ComparatorTestBase<T> {
 				for (int x = 0; x < selectedH.length; x++) {
 					selectedH[x] = h;
 				}
+
+				//create high inputView
 				out2 = new TestOutputView();
 				writeSortedData(selectedH, out2);
 				in2 = out2.getInputView();
 
+				//reset low InputView
 				out1 = new TestOutputView();
 				writeSortedData(low, out1);
 				in1 = out1.getInputView();
 				for (T l : low) {
-					if(greater && ascending){
+					if (greater && ascending) {
 						assertTrue(comparator.compare(in1, in2) < 0);
 					}
-					if(greater && !ascending){
+					if (greater && !ascending) {
 						assertTrue(comparator.compare(in1, in2) > 0);
 					}
-					if(!greater && ascending){
-						assertTrue(comparator.compare(in1, in2) < 0);
+					if (!greater && ascending) {
+						assertTrue(comparator.compare(in2, in1) > 0);
 					}
-					if(!greater && !ascending){
-						assertTrue(comparator.compare(in1, in2) > 0);
+					if (!greater && !ascending) {
+						assertTrue(comparator.compare(in2, in1) < 0);
 					}
 				}
 			}
@@ -159,15 +162,47 @@ public abstract class ComparatorTestBase<T> {
 	}
 
 	// --------------------------------------------------------------------------------------------
-	protected void deepEquals(String message, T should, T is) {
+	//returntype used for quick escapes
+	protected String deepEquals(String message, T should, T is) {
 		if (should.getClass().isArray()) {
+			//is the type check really necessary? Object one worked fine for int/bool/etc.
 			if (should instanceof long[]) {
 				assertArrayEquals(message, (long[]) should, (long[]) is);
-			} else {
-				assertArrayEquals(message, (Object[]) should, (Object[]) is);
+				return null;
 			}
+			if (should instanceof short[]) {
+				assertArrayEquals(message, (short[]) should, (short[]) is);
+				return null;
+			}
+			if (should instanceof int[]) {
+				assertArrayEquals(message, (int[]) should, (int[]) is);
+				return null;
+			}
+			if (should instanceof boolean[]) {
+				for (int x = 0; x < ((boolean[]) should).length; x++) {
+					assertTrue(((boolean[]) should)[x] == ((boolean[]) is)[x]);
+				}
+				return null;
+			}
+			if (should instanceof float[]) {
+				assertArrayEquals(message, (float[]) should, (float[]) is, (float) 0.0001);
+				return null;
+			}
+			if (should instanceof double[]) {
+				assertArrayEquals(message, (double[]) should, (double[]) is, 0.0001);
+				return null;
+			}
+			if (should instanceof byte[]) {
+				assertArrayEquals(message, (byte[]) should, (byte[]) is);
+				return null;
+			}
+
+			assertArrayEquals(message, (Object[]) should, (Object[]) is);
+			return null;
+
 		} else {
 			assertEquals(message, should, is);
+			return null;
 		}
 	}
 
@@ -182,6 +217,9 @@ public abstract class ComparatorTestBase<T> {
 
 	private T[] getSortedData() {
 		T[] data = getSortedTestData();
+		if (data.length % 2 != 0) {
+			throw new RuntimeException("Test case corrupt. Data must ocntain an even number of elements.");
+		}
 		if (data == null) {
 			throw new RuntimeException("Test case corrupt. Returns null as test data.");
 		}
