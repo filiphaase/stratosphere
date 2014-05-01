@@ -18,22 +18,24 @@ import eu.stratosphere.api.common.typeutils.ComparatorTestBase;
 import eu.stratosphere.api.java.tuple.Tuple;
 import eu.stratosphere.api.java.typeutils.runtime.TupleComparator;
 import eu.stratosphere.api.java.typeutils.runtime.TupleSerializer;
+import static org.junit.Assert.assertEquals;
 
-public abstract class TupleComparatorTestBase<T extends Tuple> extends ComparatorTestBase<T>{
-	
-	
-	
+public abstract class TupleComparatorTestBase<T extends Tuple> extends ComparatorTestBase<T> {
+
 	@Override
-	protected void deepEquals(String message, T should, T is){
-		throw new UnsupportedOperationException();
+	protected String deepEquals(String message, T should, T is) {
+		for (int x = 0; x < should.getArity(); x++) {
+			assertEquals(should.getField(x), is.getField(x));
+		}
+		return null;
 	}
 
 	protected abstract int[] getNormalizedKeyLengths();
-	
+
 	@Override
 	protected abstract TupleComparator<T> createComparator(boolean ascending);
 
 	@Override
 	protected abstract TupleSerializer<T> createSerializer();
-	
+
 }

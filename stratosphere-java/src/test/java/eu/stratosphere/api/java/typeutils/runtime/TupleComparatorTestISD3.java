@@ -25,7 +25,7 @@ import eu.stratosphere.api.common.typeutils.base.StringSerializer;
 import eu.stratosphere.api.java.tuple.Tuple3;
 import eu.stratosphere.api.java.typeutils.runtime.tuple.base.TupleComparatorTestBase;
 
-public class TupleComparatorTest extends TupleComparatorTestBase<Tuple3> {
+public class TupleComparatorTestISD3 extends TupleComparatorTestBase<Tuple3> {
 
 	Tuple3[] dataISD = new Tuple3[]{
 		new Tuple3<Integer, String, Double>(4, "hello", 20.0),
@@ -34,7 +34,8 @@ public class TupleComparatorTest extends TupleComparatorTestBase<Tuple3> {
 		new Tuple3<Integer, String, Double>(5, "hello", 20.0),
 		new Tuple3<Integer, String, Double>(5, "hello", 23.2),
 		new Tuple3<Integer, String, Double>(5, "world", 20.0),
-		new Tuple3<Integer, String, Double>(6, "hello", 20.0)
+		new Tuple3<Integer, String, Double>(6, "hello", 20.0),
+		new Tuple3<Integer, String, Double>(6, "hello", 23.2)
 	};
 
 	@Override
@@ -60,7 +61,16 @@ public class TupleComparatorTest extends TupleComparatorTestBase<Tuple3> {
 
 	@Override
 	protected int getNormalizedKeyLength() {
-		return 8;
+		return Integer.MAX_VALUE;
+	}
+
+	@Override
+	protected int[] getNormalizedKeyLengths() {
+		return new int[]{
+			4,
+			Integer.MAX_VALUE,
+			0
+		};
 	}
 
 	@Override
