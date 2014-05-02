@@ -109,7 +109,7 @@ public abstract class ComparatorTestBase<T> {
 		testGreatSmallAscDesc(false, false);
 	}
 
-	private void testGreatSmallAscDesc(boolean ascending, boolean greater) {
+	protected void testGreatSmallAscDesc(boolean ascending, boolean greater) {
 		try {
 			//split data into low and high part
 			T[] data = getSortedData();
@@ -207,7 +207,7 @@ public abstract class ComparatorTestBase<T> {
 	}
 
 	// --------------------------------------------------------------------------------------------
-	private TypeComparator<T> getComparator(boolean ascending) {
+	protected TypeComparator<T> getComparator(boolean ascending) {
 		TypeComparator<T> comparator = createComparator(ascending);
 		if (comparator == null) {
 			throw new RuntimeException("Test case corrupt. Returns null as comparator.");
@@ -215,7 +215,7 @@ public abstract class ComparatorTestBase<T> {
 		return comparator;
 	}
 
-	private T[] getSortedData() {
+	protected T[] getSortedData() {
 		T[] data = getSortedTestData();
 		if (data.length % 2 != 0) {
 			throw new RuntimeException("Test case corrupt. Data must ocntain an even number of elements.");
@@ -226,7 +226,7 @@ public abstract class ComparatorTestBase<T> {
 		return data;
 	}
 
-	private TypeSerializer<T> getSerializer() {
+	protected TypeSerializer<T> getSerializer() {
 		TypeSerializer<T> serializer = createSerializer();
 		if (serializer == null) {
 			throw new RuntimeException("Test case corrupt. Returns null as serializer.");
@@ -234,7 +234,7 @@ public abstract class ComparatorTestBase<T> {
 		return serializer;
 	}
 
-	private void writeSortedData(T[] data, TestOutputView out) throws IOException {
+	protected void writeSortedData(T[] data, TestOutputView out) throws IOException {
 		TypeSerializer<T> serializer = getSerializer();
 
 		// Write data into a outputView
@@ -254,7 +254,7 @@ public abstract class ComparatorTestBase<T> {
 	}
 
 	// --------------------------------------------------------------------------------------------
-	private static final class TestOutputView extends DataOutputStream implements DataOutputView {
+	protected static final class TestOutputView extends DataOutputStream implements DataOutputView {
 
 		public TestOutputView() {
 			super(new ByteArrayOutputStream(4096));
@@ -280,7 +280,7 @@ public abstract class ComparatorTestBase<T> {
 		}
 	}
 
-	private static final class TestInputView extends DataInputStream implements DataInputView {
+	protected static final class TestInputView extends DataInputStream implements DataInputView {
 
 		public TestInputView(byte[] data) {
 			super(new ByteArrayInputStream(data));
