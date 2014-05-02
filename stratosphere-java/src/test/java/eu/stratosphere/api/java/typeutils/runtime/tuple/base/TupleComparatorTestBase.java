@@ -35,6 +35,38 @@ public abstract class TupleComparatorTestBase<T extends Tuple> extends Comparato
 	}
 
 	@Override
+	protected void testEquals(boolean ascending) {
+		try {
+			// Just setup two identical output/inputViews and go over their data to see if compare works
+			TestOutputView out1;
+			TestOutputView out2;
+			TestInputView in1;
+			TestInputView in2;
+			
+			// Now use comparator and compar
+			TypeComparator<T> comparator = getComparator(ascending);
+			T[] data1 = getSortedData();
+			T[] data2 = getSortedData();
+			for (int x = 0; x < data1.length; x++) {
+
+				out2 = new TestOutputView();
+				writeSortedData(Arrays.copyOfRange(data1, x, x + 1), out2);
+				in2 = out2.getInputView();
+
+				out1 = new TestOutputView();
+				writeSortedData(Arrays.copyOfRange(data1, x, x + 1), out1);
+				in1 = out1.getInputView();
+
+				assertTrue(comparator.compare(in1, in2) == 0);
+			}
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+			fail("Exception in test: " + e.getMessage());
+		}
+	}
+
+	@Override
 	protected void testGreatSmallAscDesc(boolean ascending, boolean greater) {
 		try {
 			//split data into low and high part

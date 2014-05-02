@@ -64,7 +64,7 @@ public abstract class ComparatorTestBase<T> {
 		testEquals(false);
 	}
 
-	private void testEquals(boolean ascending) {
+	protected void testEquals(boolean ascending) {
 		try {
 			// Just setup two identical output/inputViews and go over their data to see if compare works
 			TestOutputView out1 = new TestOutputView();
