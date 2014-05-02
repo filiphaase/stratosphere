@@ -27,14 +27,14 @@ import eu.stratosphere.api.java.typeutils.runtime.tuple.base.TupleComparatorTest
 public class TupleComparatorTestILD2 extends TupleComparatorTestBase<Tuple3> {
 
 	Tuple3[] dataISD = new Tuple3[]{
-		new Tuple3<Integer, Long, Double>(4, new Long(4), 20.0),
-		new Tuple3<Integer, Long, Double>(4, new Long(4), 23.2),
-		new Tuple3<Integer, Long, Double>(4, new Long(9), 20.0),
-		new Tuple3<Integer, Long, Double>(5, new Long(4), 20.0),
-		new Tuple3<Integer, Long, Double>(5, new Long(4), 23.2),
-		new Tuple3<Integer, Long, Double>(5, new Long(9), 20.0),
-		new Tuple3<Integer, Long, Double>(6, new Long(4), 20.0),
-		new Tuple3<Integer, Long, Double>(6, new Long(4), 23.2)
+		new Tuple3<Integer, Long, Double>(4, new Long(14), 20.0),
+		new Tuple3<Integer, Long, Double>(4, new Long(15), 23.2),
+		new Tuple3<Integer, Long, Double>(5, new Long(15), 20.0),
+		new Tuple3<Integer, Long, Double>(5, new Long(20), 20.0),
+		new Tuple3<Integer, Long, Double>(6, new Long(20), 23.2),
+		new Tuple3<Integer, Long, Double>(6, new Long(29), 20.0),
+		new Tuple3<Integer, Long, Double>(7, new Long(29), 20.0),
+		new Tuple3<Integer, Long, Double>(7, new Long(34), 23.2)
 	};
 
 	@Override
