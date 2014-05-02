@@ -89,8 +89,9 @@ public final class TupleComparator<T extends Tuple> extends TypeComparator<T> im
 					nKeyLen = Integer.MAX_VALUE;
 					break;
 				}
+			} else {
+				break;
 			}
-			else break;
 		}
 		this.numLeadingNormalizableKeys = nKeys;
 		this.normalizableKeyPrefixLen = nKeyLen;
