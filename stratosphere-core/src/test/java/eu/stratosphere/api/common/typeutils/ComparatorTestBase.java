@@ -123,23 +123,16 @@ public abstract class ComparatorTestBase<T> {
 			TestInputView in2;
 
 			//compares every element in high with every element in low
-			for (T h : high) {
-				//workaround for generic array creation
-				T[] selectedH = Arrays.copyOf(low, low.length);
-				for (int x = 0; x < selectedH.length; x++) {
-					selectedH[x] = h;
-				}
+			for (int h = 0; h < high.length; h++) {
+				for (int l = 0; l < low.length - 1; l++) {
+					out2 = new TestOutputView();
+					writeSortedData(Arrays.copyOfRange(high, h, h + 1), out2);
+					in2 = out2.getInputView();
 
-				//create high inputView
-				out2 = new TestOutputView();
-				writeSortedData(selectedH, out2);
-				in2 = out2.getInputView();
+					out1 = new TestOutputView();
+					writeSortedData(Arrays.copyOfRange(low, l, l + 1), out1);
+					in1 = out1.getInputView();
 
-				//reset low InputView
-				out1 = new TestOutputView();
-				writeSortedData(low, out1);
-				in1 = out1.getInputView();
-				for (T l : low) {
 					if (greater && ascending) {
 						assertTrue(comparator.compare(in1, in2) < 0);
 					}

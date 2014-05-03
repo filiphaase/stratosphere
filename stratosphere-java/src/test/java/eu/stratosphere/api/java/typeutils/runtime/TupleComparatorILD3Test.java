@@ -20,22 +20,22 @@ import eu.stratosphere.api.common.typeutils.base.DoubleComparator;
 import eu.stratosphere.api.common.typeutils.base.DoubleSerializer;
 import eu.stratosphere.api.common.typeutils.base.IntComparator;
 import eu.stratosphere.api.common.typeutils.base.IntSerializer;
-import eu.stratosphere.api.common.typeutils.base.StringComparator;
-import eu.stratosphere.api.common.typeutils.base.StringSerializer;
+import eu.stratosphere.api.common.typeutils.base.LongComparator;
+import eu.stratosphere.api.common.typeutils.base.LongSerializer;
 import eu.stratosphere.api.java.tuple.Tuple3;
 import eu.stratosphere.api.java.typeutils.runtime.tuple.base.TupleComparatorTestBase;
 
-public class TupleComparatorTestISD3 extends TupleComparatorTestBase<Tuple3> {
+public class TupleComparatorILD3Test extends TupleComparatorTestBase<Tuple3> {
 
 	Tuple3[] dataISD = new Tuple3[]{
-		new Tuple3<Integer, String, Double>(4, "hello", 20.0),
-		new Tuple3<Integer, String, Double>(4, "hello", 23.2),
-		new Tuple3<Integer, String, Double>(4, "world", 20.0),
-		new Tuple3<Integer, String, Double>(5, "hello", 20.0),
-		new Tuple3<Integer, String, Double>(5, "hello", 23.2),
-		new Tuple3<Integer, String, Double>(5, "world", 20.0),
-		new Tuple3<Integer, String, Double>(6, "hello", 20.0),
-		new Tuple3<Integer, String, Double>(6, "hello", 23.2)
+		new Tuple3<Integer, Long, Double>(4, new Long(4), 20.0),
+		new Tuple3<Integer, Long, Double>(4, new Long(4), 23.2),
+		new Tuple3<Integer, Long, Double>(4, new Long(9), 20.0),
+		new Tuple3<Integer, Long, Double>(5, new Long(4), 20.0),
+		new Tuple3<Integer, Long, Double>(5, new Long(4), 23.2),
+		new Tuple3<Integer, Long, Double>(5, new Long(9), 20.0),
+		new Tuple3<Integer, Long, Double>(6, new Long(4), 20.0),
+		new Tuple3<Integer, Long, Double>(6, new Long(4), 23.2)
 	};
 
 	@Override
@@ -44,7 +44,7 @@ public class TupleComparatorTestISD3 extends TupleComparatorTestBase<Tuple3> {
 				new int[]{0, 1, 2},
 				new TypeComparator[]{
 					new IntComparator(ascending),
-					new StringComparator(ascending),
+					new LongComparator(ascending),
 					new DoubleComparator(ascending)
 				});
 	}
@@ -55,22 +55,13 @@ public class TupleComparatorTestISD3 extends TupleComparatorTestBase<Tuple3> {
 				Tuple3.class,
 				new TypeSerializer[]{
 					new IntSerializer(),
-					new StringSerializer(),
+					new LongSerializer(),
 					new DoubleSerializer()});
 	}
 
 	@Override
 	protected int getNormalizedKeyLength() {
-		return Integer.MAX_VALUE;
-	}
-
-	@Override
-	protected int[] getNormalizedKeyLengths() {
-		return new int[]{
-			4,
-			Integer.MAX_VALUE,
-			0
-		};
+		return 12;
 	}
 
 	@Override

@@ -67,54 +67,6 @@ public abstract class TupleComparatorTestBase<T extends Tuple> extends Comparato
 	}
 
 	@Override
-	protected void testGreatSmallAscDesc(boolean ascending, boolean greater) {
-		try {
-			//split data into low and high part
-			T[] data = getSortedData();
-			T[] low = Arrays.copyOfRange(data, 0, data.length / 2);
-			T[] high = Arrays.copyOfRange(data, data.length / 2, data.length);
-
-			TypeComparator<T> comparator = getComparator(ascending);
-			TestOutputView out1;
-			TestOutputView out2;
-			TestInputView in1;
-			TestInputView in2;
-
-			//compares every element in high with every element in low
-			for (int h = 0; h < high.length; h++) {
-				for (int l = 0; l < low.length - 1; l++) {
-					out2 = new TestOutputView();
-					writeSortedData(Arrays.copyOfRange(high, h, h + 1), out2);
-					in2 = out2.getInputView();
-
-					out1 = new TestOutputView();
-					writeSortedData(Arrays.copyOfRange(low, l, l + 1), out1);
-					in1 = out1.getInputView();
-
-					if (greater && ascending) {
-						assertTrue(comparator.compare(in1, in2) < 0);
-					}
-					if (greater && !ascending) {
-						assertTrue(comparator.compare(in1, in2) > 0);
-					}
-					if (!greater && ascending) {
-						assertTrue(comparator.compare(in2, in1) > 0);
-					}
-					if (!greater && !ascending) {
-						assertTrue(comparator.compare(in2, in1) < 0);
-					}
-				}
-			}
-		} catch (Exception e) {
-			System.err.println(e.getMessage());
-			e.printStackTrace();
-			fail("Exception in test: " + e.getMessage());
-		}
-	}
-
-	protected abstract int[] getNormalizedKeyLengths();
-
-	@Override
 	protected abstract TupleComparator<T> createComparator(boolean ascending);
 
 	@Override
