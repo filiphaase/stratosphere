@@ -35,17 +35,6 @@ public class ShortComparatorTest extends ComparatorTestBase<Short> {
 	}
 
 	@Override
-	protected int getNormalizedKeyLength() {
-		return 2;
-	}
-
-	// Don't know if we will need this function
-	@Override
-	protected Class<Short> getTypeClass() {
-		return Short.class;
-	}
-
-	@Override
 	protected Short[] getSortedTestData() {
 		Random rnd = new Random(874597969123412338L);
 		short rndShort = new Integer(rnd.nextInt()).shortValue();

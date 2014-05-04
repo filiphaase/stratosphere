@@ -58,16 +58,6 @@ public class TupleComparatorILD2Test extends TupleComparatorTestBase<Tuple3> {
 	}
 
 	@Override
-	protected int getNormalizedKeyLength() {
-		return 12;
-	}
-
-	@Override
-	protected Class<Tuple3> getTypeClass() {
-		return Tuple3.class;
-	}
-
-	@Override
 	protected Tuple3[] getSortedTestData() {
 		return dataISD;
 	}

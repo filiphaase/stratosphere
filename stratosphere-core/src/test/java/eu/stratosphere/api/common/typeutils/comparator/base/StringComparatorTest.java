@@ -33,17 +33,6 @@ public class StringComparatorTest extends ComparatorTestBase<String> {
 	}
 
 	@Override
-	protected int getNormalizedKeyLength() {
-		return Integer.MAX_VALUE;
-	}
-
-	// Don't know if we will need this function
-	@Override
-	protected Class<String> getTypeClass() {
-		return String.class;
-	}
-
-	@Override
 	protected String[] getSortedTestData() {
 		return new String[]{
 			"aaaa",

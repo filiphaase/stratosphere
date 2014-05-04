@@ -32,18 +32,7 @@ public class DoubleComparatorTest extends ComparatorTestBase<Double> {
 	protected TypeSerializer<Double> createSerializer() {
 		return new DoubleSerializer();
 	}
-
-	@Override
-	protected int getNormalizedKeyLength() {
-		return 0;
-	}
-
-	// Don't know if we will need this function
-	@Override
-	protected Class<Double> getTypeClass() {
-		return Double.class;
-	}
-
+	
 	@Override
 	protected Double[] getSortedTestData() {
 		Random rnd = new Random(874597969123412338L);

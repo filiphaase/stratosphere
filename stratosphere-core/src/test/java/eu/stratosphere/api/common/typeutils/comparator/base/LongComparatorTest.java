@@ -35,17 +35,6 @@ public class LongComparatorTest extends ComparatorTestBase<Long> {
 	}
 
 	@Override
-	protected int getNormalizedKeyLength() {
-		return 8;
-	}
-
-	// Don't know if we will need this function
-	@Override
-	protected Class<Long> getTypeClass() {
-		return Long.class;
-	}
-
-	@Override
 	protected Long[] getSortedTestData() {
 		Random rnd = new Random(874597969123412338L);
 		long rndLong = rnd.nextLong();

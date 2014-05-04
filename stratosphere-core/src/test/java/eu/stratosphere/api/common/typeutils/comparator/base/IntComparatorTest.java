@@ -34,17 +34,6 @@ public class IntComparatorTest extends ComparatorTestBase<Integer> {
 	}
 
 	@Override
-	protected int getNormalizedKeyLength() {
-		return 4;
-	}
-
-	// Don't know if we will need this function
-	@Override
-	protected Class<Integer> getTypeClass() {
-		return Integer.class;
-	}
-
-	@Override
 	protected Integer[] getSortedTestData() {
 
 		Random rnd = new Random(874597969123412338L);

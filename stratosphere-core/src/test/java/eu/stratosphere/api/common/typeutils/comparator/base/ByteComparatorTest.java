@@ -34,17 +34,6 @@ public class ByteComparatorTest extends ComparatorTestBase<Byte> {
 	}
 
 	@Override
-	protected int getNormalizedKeyLength() {
-		return 1;
-	}
-
-	// Don't know if we will need this function
-	@Override
-	protected Class<Byte> getTypeClass() {
-		return Byte.class;
-	}
-
-	@Override
 	protected Byte[] getSortedTestData() {
 
 		Random rnd = new Random(874597969123412338L);

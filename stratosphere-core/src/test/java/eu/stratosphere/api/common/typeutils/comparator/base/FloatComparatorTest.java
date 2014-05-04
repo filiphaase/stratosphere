@@ -34,17 +34,6 @@ public class FloatComparatorTest extends ComparatorTestBase<Float> {
 	}
 
 	@Override
-	protected int getNormalizedKeyLength() {
-		return 0;
-	}
-
-	// Don't know if we will need this function
-	@Override
-	protected Class<Float> getTypeClass() {
-		return Float.class;
-	}
-
-	@Override
 	protected Float[] getSortedTestData() {
 		Random rnd = new Random(874597969123412338L);
 		float rndFloat = rnd.nextFloat();

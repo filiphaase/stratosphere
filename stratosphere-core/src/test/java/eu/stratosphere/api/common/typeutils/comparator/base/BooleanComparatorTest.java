@@ -19,9 +19,6 @@ import eu.stratosphere.api.common.typeutils.TypeComparator;
 import eu.stratosphere.api.common.typeutils.TypeSerializer;
 import eu.stratosphere.api.common.typeutils.base.BooleanComparator;
 import eu.stratosphere.api.common.typeutils.base.BooleanSerializer;
-import eu.stratosphere.api.common.typeutils.base.IntComparator;
-import eu.stratosphere.api.common.typeutils.base.IntSerializer;
-import java.util.Random;
 
 public class BooleanComparatorTest extends ComparatorTestBase<Boolean> {
 
@@ -33,17 +30,6 @@ public class BooleanComparatorTest extends ComparatorTestBase<Boolean> {
 	@Override
 	protected TypeSerializer<Boolean> createSerializer() {
 		return new BooleanSerializer();
-	}
-
-	@Override
-	protected int getNormalizedKeyLength() {
-		return 1;
-	}
-
-	// Don't know if we will need this function
-	@Override
-	protected Class<Boolean> getTypeClass() {
-		return Boolean.class;
 	}
 
 	@Override

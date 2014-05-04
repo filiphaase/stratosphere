@@ -35,24 +35,9 @@ public abstract class ComparatorTestBase<T> {
 
 	protected abstract TypeSerializer<T> createSerializer();
 
-	protected abstract int getNormalizedKeyLength();
-
-	protected abstract Class<T> getTypeClass();
-
 	protected abstract T[] getSortedTestData();
 
 	// --------------------------------------------------------------------------------------------
-	@Test
-	public void testGetLength() {
-		try {
-			TypeComparator<T> comparator = getComparator(true);
-			assertEquals(getNormalizedKeyLength(), comparator.getNormalizeKeyLen());
-		} catch (Exception e) {
-			System.err.println(e.getMessage());
-			e.printStackTrace();
-			fail("Exception in test: " + e.getMessage());
-		}
-	}
 
 	@Test
 	public void testEqualsAscending() {
@@ -67,19 +52,24 @@ public abstract class ComparatorTestBase<T> {
 	protected void testEquals(boolean ascending) {
 		try {
 			// Just setup two identical output/inputViews and go over their data to see if compare works
-			TestOutputView out1 = new TestOutputView();
-			writeSortedData(getSortedData(), out1);
-
-			TestOutputView out2 = new TestOutputView();
-			writeSortedData(getSortedData(), out2);
-
-			TestInputView in1 = out1.getInputView();
-			TestInputView in2 = out2.getInputView();
+			TestOutputView out1;
+			TestOutputView out2;
+			TestInputView in1;
+			TestInputView in2;
 
 			// Now use comparator and compar
 			TypeComparator<T> comparator = getComparator(ascending);
 			T[] data = getSortedData();
-			for (T e : data) {
+			for (T d : data) {
+
+				out2 = new TestOutputView();
+				writeSortedData(d, out2);
+				in2 = out2.getInputView();
+
+				out1 = new TestOutputView();
+				writeSortedData(d, out1);
+				in1 = out1.getInputView();
+
 				assertTrue(comparator.compare(in1, in2) == 0);
 			}
 		} catch (Exception e) {
@@ -123,14 +113,14 @@ public abstract class ComparatorTestBase<T> {
 			TestInputView in2;
 
 			//compares every element in high with every element in low
-			for (int h = 0; h < high.length; h++) {
-				for (int l = 0; l < low.length - 1; l++) {
+			for (T h : high) {
+				for (T l : low) {
 					out2 = new TestOutputView();
-					writeSortedData(Arrays.copyOfRange(high, h, h + 1), out2);
+					writeSortedData(l, out2);
 					in2 = out2.getInputView();
 
 					out1 = new TestOutputView();
-					writeSortedData(Arrays.copyOfRange(low, l, l + 1), out1);
+					writeSortedData(h, out1);
 					in1 = out1.getInputView();
 
 					if (greater && ascending) {
@@ -155,48 +145,8 @@ public abstract class ComparatorTestBase<T> {
 	}
 
 	// --------------------------------------------------------------------------------------------
-	//returntype used for quick escapes
-	protected String deepEquals(String message, T should, T is) {
-		if (should.getClass().isArray()) {
-			//is the type check really necessary? Object one worked fine for int/bool/etc.
-			if (should instanceof long[]) {
-				assertArrayEquals(message, (long[]) should, (long[]) is);
-				return null;
-			}
-			if (should instanceof short[]) {
-				assertArrayEquals(message, (short[]) should, (short[]) is);
-				return null;
-			}
-			if (should instanceof int[]) {
-				assertArrayEquals(message, (int[]) should, (int[]) is);
-				return null;
-			}
-			if (should instanceof boolean[]) {
-				for (int x = 0; x < ((boolean[]) should).length; x++) {
-					assertTrue(((boolean[]) should)[x] == ((boolean[]) is)[x]);
-				}
-				return null;
-			}
-			if (should instanceof float[]) {
-				assertArrayEquals(message, (float[]) should, (float[]) is, (float) 0.0001);
-				return null;
-			}
-			if (should instanceof double[]) {
-				assertArrayEquals(message, (double[]) should, (double[]) is, 0.0001);
-				return null;
-			}
-			if (should instanceof byte[]) {
-				assertArrayEquals(message, (byte[]) should, (byte[]) is);
-				return null;
-			}
-
-			assertArrayEquals(message, (Object[]) should, (Object[]) is);
-			return null;
-
-		} else {
-			assertEquals(message, should, is);
-			return null;
-		}
+	protected void deepEquals(String message, T should, T is) {
+		assertEquals(should, is);
 	}
 
 	// --------------------------------------------------------------------------------------------
@@ -227,23 +177,20 @@ public abstract class ComparatorTestBase<T> {
 		return serializer;
 	}
 
-	protected void writeSortedData(T[] data, TestOutputView out) throws IOException {
+	protected void writeSortedData(T value, TestOutputView out) throws IOException {
 		TypeSerializer<T> serializer = getSerializer();
 
 		// Write data into a outputView
-		for (T value : data) {
-			serializer.serialize(value, out);
-		}
+		serializer.serialize(value, out);
 
-		// This are the same tests like in the serializer
+        // This are the same tests like in the serializer
 		// Just look if the data is really there after serialization, before testing comparator on it
 		TestInputView in = out.getInputView();
-		for (T value : data) {
-			assertTrue("No data available during deserialization.", in.available() > 0);
+		assertTrue("No data available during deserialization.", in.available() > 0);
 
-			T deserialized = serializer.deserialize(serializer.createInstance(), in);
-			deepEquals("Deserialized value if wrong.", value, deserialized);
-		}
+		T deserialized = serializer.deserialize(serializer.createInstance(), in);
+		deepEquals("Deserialized value if wrong.", value, deserialized);
+
 	}
 
 	// --------------------------------------------------------------------------------------------
