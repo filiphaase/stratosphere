@@ -19,6 +19,7 @@ import eu.stratosphere.api.common.typeutils.TypeComparator;
 import eu.stratosphere.api.common.typeutils.TypeSerializer;
 import eu.stratosphere.api.common.typeutils.base.CharComparator;
 import eu.stratosphere.api.common.typeutils.base.CharSerializer;
+
 import java.util.Random;
 
 public class CharComparatorTest extends ComparatorTestBase<Character> {

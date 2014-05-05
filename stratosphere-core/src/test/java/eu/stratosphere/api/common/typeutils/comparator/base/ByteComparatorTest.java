@@ -19,6 +19,7 @@ import eu.stratosphere.api.common.typeutils.TypeComparator;
 import eu.stratosphere.api.common.typeutils.TypeSerializer;
 import eu.stratosphere.api.common.typeutils.base.ByteComparator;
 import eu.stratosphere.api.common.typeutils.base.ByteSerializer;
+
 import java.util.Random;
 
 public class ByteComparatorTest extends ComparatorTestBase<Byte> {

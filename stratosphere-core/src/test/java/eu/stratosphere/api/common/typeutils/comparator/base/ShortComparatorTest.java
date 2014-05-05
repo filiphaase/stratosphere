@@ -57,5 +57,4 @@ public class ShortComparatorTest extends ComparatorTestBase<Short> {
 			new Short(new Integer(rndShort).shortValue()),
 			new Short(Short.MAX_VALUE)};
 	}
-
 }

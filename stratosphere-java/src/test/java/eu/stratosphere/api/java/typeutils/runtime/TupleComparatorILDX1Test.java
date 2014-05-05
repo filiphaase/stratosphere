@@ -43,9 +43,9 @@ public class TupleComparatorILDX1Test extends TupleComparatorTestBase<Tuple3> {
 		return new TupleComparator<Tuple3>(
 				new int[]{1},
 				new TypeComparator[]{
-					new IntComparator(ascending),
+					//new IntComparator(ascending),
 					new LongComparator(ascending),
-					new DoubleComparator(ascending)
+					//new DoubleComparator(ascending)
 				});
 	}
 

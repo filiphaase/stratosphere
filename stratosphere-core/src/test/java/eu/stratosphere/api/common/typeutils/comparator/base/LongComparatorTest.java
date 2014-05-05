@@ -57,5 +57,4 @@ public class LongComparatorTest extends ComparatorTestBase<Long> {
 			new Long(rndLong),
 			new Long(Long.MAX_VALUE)};
 	}
-
 }

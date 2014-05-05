@@ -15,6 +15,7 @@
 package eu.stratosphere.api.common.typeutils.comparator.base;
 
 import java.util.Random;
+
 import eu.stratosphere.api.common.typeutils.ComparatorTestBase;
 import eu.stratosphere.api.common.typeutils.TypeComparator;
 import eu.stratosphere.api.common.typeutils.TypeSerializer;

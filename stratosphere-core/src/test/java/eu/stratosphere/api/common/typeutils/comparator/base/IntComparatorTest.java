@@ -19,6 +19,7 @@ import eu.stratosphere.api.common.typeutils.TypeComparator;
 import eu.stratosphere.api.common.typeutils.TypeSerializer;
 import eu.stratosphere.api.common.typeutils.base.IntComparator;
 import eu.stratosphere.api.common.typeutils.base.IntSerializer;
+
 import java.util.Random;
 
 public class IntComparatorTest extends ComparatorTestBase<Integer> {
