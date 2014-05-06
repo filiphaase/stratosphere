@@ -29,13 +29,13 @@ public class TupleComparatorILDX1Test extends TupleComparatorTestBase<Tuple3> {
 
 	Tuple3[] dataISD = new Tuple3[]{
 		new Tuple3<Integer, Long, Double>(4, new Long(4), 20.0),
-		new Tuple3<Integer, Long, Double>(4, new Long(4), 23.2),
+		new Tuple3<Integer, Long, Double>(4, new Long(5), 23.2),
 		new Tuple3<Integer, Long, Double>(4, new Long(9), 20.0),
-		new Tuple3<Integer, Long, Double>(4, new Long(9), 24.0),
+		new Tuple3<Integer, Long, Double>(4, new Long(10), 24.0),
 		new Tuple3<Integer, Long, Double>(4, new Long(19), 23.2),
-		new Tuple3<Integer, Long, Double>(4, new Long(19), 24.0),
+		new Tuple3<Integer, Long, Double>(4, new Long(20), 24.0),
 		new Tuple3<Integer, Long, Double>(4, new Long(24), 20.0),
-		new Tuple3<Integer, Long, Double>(4, new Long(24), 23.2)
+		new Tuple3<Integer, Long, Double>(4, new Long(25), 23.2)
 	};
 
 	@Override
@@ -43,10 +43,9 @@ public class TupleComparatorILDX1Test extends TupleComparatorTestBase<Tuple3> {
 		return new TupleComparator<Tuple3>(
 				new int[]{1},
 				new TypeComparator[]{
-					//new IntComparator(ascending),
-					new LongComparator(ascending),
-					//new DoubleComparator(ascending)
-				});
+					new LongComparator(ascending)
+				},
+		new TypeSerializer[]{new IntSerializer()});
 	}
 
 	@Override

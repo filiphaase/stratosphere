@@ -15,14 +15,10 @@
 package eu.stratosphere.api.java.typeutils.runtime.tuple.base;
 
 import eu.stratosphere.api.common.typeutils.ComparatorTestBase;
-import eu.stratosphere.api.common.typeutils.TypeComparator;
 import eu.stratosphere.api.java.tuple.Tuple;
 import eu.stratosphere.api.java.typeutils.runtime.TupleComparator;
 import eu.stratosphere.api.java.typeutils.runtime.TupleSerializer;
-import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 public abstract class TupleComparatorTestBase<T extends Tuple> extends ComparatorTestBase<T> {
 

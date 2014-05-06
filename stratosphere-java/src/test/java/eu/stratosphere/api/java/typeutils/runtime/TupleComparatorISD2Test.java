@@ -44,7 +44,8 @@ public class TupleComparatorISD2Test extends TupleComparatorTestBase<Tuple3> {
 				new TypeComparator[]{
 					new IntComparator(ascending),
 					new StringComparator(ascending)
-				});
+				},
+		new TypeSerializer[]{});
 	}
 
 	@Override

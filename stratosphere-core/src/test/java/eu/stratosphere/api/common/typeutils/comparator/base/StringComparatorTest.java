@@ -36,12 +36,13 @@ public class StringComparatorTest extends ComparatorTestBase<String> {
 	protected String[] getSortedTestData() {
 		return new String[]{
 			"",
+			"Lorem Ipsum Dolor Omit Longer",
 			"aaaa",
 			"abcd",
 			"abce",
 			"abdd",
 			"accd",
-			"bbcd", 
-			"Lorem Ipsum Dolor Omit Longer"};
+			"bbcd"
+		};
 	}
 }

@@ -48,11 +48,9 @@ public class DoubleComparatorTest extends ComparatorTestBase<Double> {
 			rndDouble += 3;
 		}
 		return new Double[]{
-			new Double(Double.MIN_VALUE),
 			new Double(-rndDouble),
 			new Double(-1.0D),
 			new Double(0.0D),
-			new Double(1.0D),
 			new Double(2.0D),
 			new Double(rndDouble),
 			new Double(Double.MAX_VALUE)};

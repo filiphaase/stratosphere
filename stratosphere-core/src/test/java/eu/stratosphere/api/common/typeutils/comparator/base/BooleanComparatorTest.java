@@ -34,6 +34,6 @@ public class BooleanComparatorTest extends ComparatorTestBase<Boolean> {
 
 	@Override
 	protected Boolean[] getSortedTestData() {
-		return new Boolean[]{true, false};
+		return new Boolean[]{false, true};
 	}
 }

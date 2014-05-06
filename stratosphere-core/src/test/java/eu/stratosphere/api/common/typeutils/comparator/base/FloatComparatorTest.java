@@ -48,11 +48,9 @@ public class FloatComparatorTest extends ComparatorTestBase<Float> {
 			rndFloat += 3;
 		}
 		return new Float[]{
-			new Float(Float.MIN_VALUE),
 			new Float(-rndFloat),
 			new Float(-1.0F),
 			new Float(0.0F),
-			new Float(1.0F),
 			new Float(2.0F),
 			new Float(rndFloat),
 			new Float(Float.MAX_VALUE)};
