@@ -34,7 +34,9 @@ import org.junit.Test;
  * @param <T>
  */
 public abstract class ComparatorTestBase<T> {
+
 	// Same as in the NormalizedKeySorter
+
 	private static final int DEFAULT_MAX_NORMALIZED_KEY_LEN = 8;
 
 	protected abstract TypeComparator<T> createComparator(boolean ascending);
@@ -44,7 +46,6 @@ public abstract class ComparatorTestBase<T> {
 	protected abstract T[] getSortedTestData();
 
 	// --------------------------------- equality tests ------------------------------------------
-	
 	@Test
 	public void testEquality() {
 		testEquals(true);
@@ -80,7 +81,7 @@ public abstract class ComparatorTestBase<T> {
 			fail("Exception in test: " + e.getMessage());
 		}
 	}
-	
+
 	@Test
 	public void testEqualityWithReference() {
 		try {
@@ -104,11 +105,10 @@ public abstract class ComparatorTestBase<T> {
 			fail("Exception in test: " + e.getMessage());
 		}
 	}
-	
+
 	// --------------------------------- inequality tests ----------------------------------------
-	
 	@Test
-	public void testInequality(){
+	public void testInequality() {
 		testGreatSmallAscDesc(true, true);
 		testGreatSmallAscDesc(false, true);
 		testGreatSmallAscDesc(true, false);
@@ -136,7 +136,7 @@ public abstract class ComparatorTestBase<T> {
 					out2 = new TestOutputView();
 					writeSortedData(data[y], out2);
 					in2 = out2.getInputView();
-					
+
 					if (greater && ascending) {
 						assertTrue(comparator.compare(in1, in2) < 0);
 					}
@@ -158,7 +158,6 @@ public abstract class ComparatorTestBase<T> {
 		}
 	}
 
-	// TODO Currently not used: Strangely breaks with Boolean Comparator
 	@Test
 	public void testInequalityWithReference() {
 		testGreatSmallAscDescWithReference(true, true);
@@ -201,7 +200,6 @@ public abstract class ComparatorTestBase<T> {
 			fail("Exception in test: " + e.getMessage());
 		}
 	}
-
 
 	// --------------------------------- Normalized key tests -------------------------------------
 	public MemorySegment setupNormalizedKeysMemSegment(T[] data, int normKeyLen, TypeComparator<T> comparator) {
@@ -336,7 +334,39 @@ public abstract class ComparatorTestBase<T> {
 		}
 	}
 
+	@Test
+	public void testNormalizedKeyReadWriter() {
+		try {
+			T[] data = getSortedData();
+			T reuse = getSortedData()[0];
+
+			TypeComparator<T> comp1 = getComparator(true);
+			if(!comp1.supportsSerializationWithKeyNormalization()){
+				return;
+			}
+			TypeComparator<T> comp2 = comp1.duplicate();
+			comp2.setReference(reuse);
+
+			TestOutputView out = new TestOutputView();
+			TestInputView in;
+
+			for (T value : data) {
+				comp1.setReference(value);
+				comp1.writeWithKeyNormalization(value, out);
+				in = out.getInputView();
+				comp1.readWithKeyDenormalization(reuse, in);
+				
+				assertTrue(comp1.compareToReference(comp2) == 0);
+			}
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+			fail("Exception in test: " + e.getMessage());
+		}
+	}
+
 	// --------------------------------------------------------------------------------------------
+
 	protected void deepEquals(String message, T should, T is) {
 		assertEquals(should, is);
 	}
@@ -372,7 +402,7 @@ public abstract class ComparatorTestBase<T> {
 		// Write data into a outputView
 		serializer.serialize(value, out);
 
-        // This are the same tests like in the serializer
+		// This are the same tests like in the serializer
 		// Just look if the data is really there after serialization, before testing comparator on it
 		TestInputView in = out.getInputView();
 		assertTrue("No data available during deserialization.", in.available() > 0);
